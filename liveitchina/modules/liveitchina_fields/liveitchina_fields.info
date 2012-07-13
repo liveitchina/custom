@@ -1,0 +1,19 @@
+name = LiveitChina Core Fields
+description = LiveitChina fields for Profile and User
+package = LiveitChina
+version = 7.x-1.0
+core = 7.x
+
+dependencies[] = entity
+dependencies[] = taxonomy
+dependencies[] = i18n
+dependencies[] = file
+dependencies[] = list
+dependencies[] = pcp
+dependencies[] = date
+dependencies[] = image
+dependencies[] = date_api
+dependencies[] = date_popup
+dependencies[] = fivestar
+dependencies[] = locale
+dependencies[] = addressfield

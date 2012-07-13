@@ -1,0 +1,29 @@
+ <?php
+/*
+ * Implements hook_field_attach_presave();
+ * f
+ * Add automatic value for field_map;
+ * /
+function user_liveitchina_field_attach_presave($entity_type, $entity){
+  //check if it's a profile2 and have field_map
+  $lang = 'und';
+  if ($entity_type == 'taxonomy' && isset($entity->field_map)){
+    $lang_field = (isset($entity->field_map[$lang])) ? $lang: 'und';
+    //get the value of district
+    if ($district = field_get_items('profile2', $entity, 'field_district')){
+      $city = field_get_items('profile2', $entity, 'field_city');
+      $district_tid = $district[0]['tid'];
+      $city_tid = $city[0]['tid'];
+      $load_term = array($district_tid, $city_tid);
+      $address = taxonomy_term_load_multiple($load_term);
+      $text_address = $address[$district_tid]->name . ', ' . $address[$city_tid]->name;
+      //print_r($text_address);
+      //exit;
+      $map = og_school_get_map($text_address);
+      $entity->field_map[$lang_field][0] = $map;
+      //print_r($entity);
+      //exit;
+    }
+  }
+}
+//*/

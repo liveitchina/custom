@@ -1,0 +1,323 @@
+<?php
+/**
+* Implementation of hook_apachesolr_modify_query().
+*/
+function apachesolr_liveitchina_apachesolr_query_alter($query) {
+  global $language;
+
+  //Filter by language
+  //$query->addFilter('ss_language', $language->language);
+  
+  //Show only if status is true
+  $query->addFilter('bs_status', TRUE);
+
+  //Parameters
+  $query->addParam('fl', 'bundle');
+  $query->addParam('fl', 'user_role');
+  switch (arg(1)){
+    case 'site':
+      $paramFields = array(
+        'sm_lang_offered',
+        'tutor_price',
+        'sm_lang_offered',
+        'sm_lang_wanted',
+        'user_avatar',
+        'rating',
+        'ts_teaches',
+        'fs_rating',
+        'ts_learning',
+        'im_field_district',
+        'sm_vid_language',
+        'ts_view_mode',
+        'im_field_lang_offered',
+        'is_logo',
+        'ts_summary',
+        'sm_field_price',
+        'im_field_city',
+      );
+      foreach ($paramFields as $paramField){
+        $query->addParam('fl', $paramField);
+      }
+      break;
+    case 'news-and-happenings':
+      $query->addParam('fl', 'ts_view_mode');
+      $query->addFilter('ss_bundle', 'news');
+      break;
+  }
+}
+
+/**
+ * Template preprocess for apachesolr search results.
+ *
+ */
+function apachesolr_liveitchina_preprocess_search_result(&$variables) {
+  $cost = array(0 => '' , 1 => '$', 2 => '$$', 3 => '$$$', 4 => '$$$$', 5 => '$$$$$');
+  // If this search result is coming from our module, we want to improve the
+  // template potential to make life easier for themers.
+  $result = $variables['result'];
+  $variables['theme_hook_suggestions'][] = 'search_result__'. $result['bundle'];
+  $variables['cost'] = $cost[0];
+
+  switch ($result['bundle']){
+    case 'article':
+    case 'video':
+    case 'person_of_the_week':
+    case 'photo':
+      $variables['snippet'] = $result['fields']['ts_view_mode'];
+    break;
+  }
+}
+
+function _apachesolr_liveitchina_get_connect($result){
+  global $user;
+  $var = variable_get('profile_role_relationship', array());
+  list(, $requestee) = explode('/', $result['fields']['path']);
+  $requestee_obj = user_load($requestee);
+  $relationship = $var[$result['bundle']]['rtid'];
+  $relationships = user_relationships_get_requestable_rtypes($user, $requestee_obj);
+  //check if already connected
+  $connect_url = url('connect/' . $requestee . '/request/'. $relationship, array('absolute'=> TRUE));
+  if ($user->uid){
+    return l('Add to list','#') . ctools_modal_text_button(t('Connect'), $connect_url, t('Connect'), 'ctools-modal-modal-popup-medium');
+  }
+  else{
+   return l('Add to list','#') . l(t('Connect'),'signup');
+  }
+}
+
+function apachesolr_liveitchina_preprocess_search_results(&$vars) {
+  if ($vars['search_page']->page_id == 'news_and_happenings'){
+    drupal_add_css(path_to_theme() . '/ds_layouts/liveitchina_teaser/liveitchina_teaser.css', 'theme');
+  }
+}
+
+function apachesolr_liveitchina_facetapi_facet_info(array $searcher_info) {
+  $facets = array();
+  $facets['filter_language'] = array(
+    'label' => t('Language'),
+    'description' => t('Filter by Language offered.'),
+    'field' => 'filter_language',
+    'field alias' => 'language',
+    'field api name' => FALSE,
+    'map callback' => 'facetapi_map_taxonomy_terms',
+    'default widget' => 'facetapi_checkbox_links',
+  );
+  $facets['im_field_city'] = array(
+    'label' => t('Location'),
+    'description' => t('Filter by location.'),
+    'field' => 'im_field_city',
+    'field alias' => 'city',
+    'field api name' => 'im_field_city',
+    'map callback' => 'facetapi_map_taxonomy_terms',
+    'default widget' => 'facetapi_checkbox_links',
+  );
+  $facets['filter_area'] = array(
+    'label' => t('Area'),
+    'description' => t('Filter by Area.'),
+    'field' => 'filter_area',
+    'field alias' => 'area',
+    'field api name' => 'filter_area',
+    'map callback' => 'facetapi_map_taxonomy_terms',
+    'default widget' => 'facetapi_checkbox_links',
+  );
+  $facets['im_field_district'] = array(
+    'label' => t('District'),
+    'description' => t('Filter by District.'),
+    'field' => 'im_field_district',
+    'field alias' => 'district',
+    'field api name' => 'im_field_district',
+    'map callback' => 'facetapi_map_taxonomy_terms',
+    'default widget' => 'facetapi_checkbox_links',
+  );
+  $facets['bundle'] = array(
+    'label' => t('Method'),
+    'description' => t('Filter by Method.'),
+    'field' => 'bundle',
+    'field alias' => 'method',
+    'field api name' => 'bundle',
+    'map callback' => 'apachesolr_liveitchina_facetapi_map_bundle',
+    'default widget' => 'facetapi_checkbox_links',
+  );
+  return $facets;
+}
+
+/**
+ * Map callback for bundle.
+ */
+function apachesolr_liveitchina_facetapi_map_bundle(array $values) {
+  $map = array(
+    'exchange_partner'=> t('Exchange Partner'),
+    'tutor'=> t('Tutor'),
+    'school'=> t('School'),
+  );
+  return $map;
+}
+
+/**
+ * Map callback for bundle.
+ */
+function apachesolr_liveitchina_facetapi_cost_bundle(array $values) {
+  $cost = array(
+    0 => '' ,
+    1 => '$',
+    2 => '$$',
+    3 => '$$$',
+    4 => '$$$$',
+    5 => '$$$$$'
+  );
+  return array_intersect_key($cost, array_flip($values));
+}
+
+/*
+ * Reindex profile if profile save
+* */
+function apachesolr_liveitchina_user_update(&$edit, $account, $category) {
+  $table = apachesolr_get_indexer_table('profile2');
+  $profiles = profile2_load_by_user($account);
+  foreach ($profiles as $profile) {
+    switch (db_driver()) {
+      case 'mysql' :
+        $table = db_escape_table($table);
+        $query = "UPDATE {{$table}} pi
+        SET pi.changed = :changed
+        WHERE pi.entity_id = :pid";
+        $result = db_query($query, array(':changed' => REQUEST_TIME,
+            ':pid' => $profile->pid,
+        ));
+        break;
+      default :
+        $update = db_update($table)
+          ->condition('entity_id', array($profile->pid), 'IN')
+          ->fields(array('changed' => REQUEST_TIME))
+          ->execute();
+    }
+  }
+}
+
+function apachesolr_liveitchina_profile2_update($profile) {
+  if ($profile->type == 'user'){
+    $empty = array();
+    apachesolr_liveitchina_user_update($empty, $profile, 'account');
+  }
+}
+
+//*/
+
+/*
+ *  Facet bonus
+ *  
+* */
+function apachesolr_liveitchina_facet_items_alter(&$build, &$settings) {
+  foreach($build as $key => $item) {
+    if (isset($build[$key]["#count"])){
+      $build[$key]["#count"] = NULL;
+    }
+  }
+}
+
+/**
+ * Implements hook_facetapi_widgets().
+ */
+function apachesolr_liveitchina_facetapi_widgets() {
+  return array(
+      'apachesolr_liveitchina_facetapi_select' => array(
+          'handler' => array(
+              'label' => t('Select'),
+              'class' => 'LiveitChinaFacetapiSelect',
+              'query types' => array('term', 'date'),
+          ),
+      ),
+  );
+}
+
+/**
+ * Implements hook_forms().
+ *
+ * Set callbacks for select facet forms.
+ */
+function apachesolr_liveitchina_forms() {
+  $forms = array();
+  foreach (facetapi_get_searcher_info() as $searcher => $searcher_info) {
+    foreach (facetapi_get_facet_info($searcher) as $facet) {
+      $forms['facetapi_select_' .  $facet['name']]['callback'] = 'facetapi_select_form';
+    }
+  }
+  return $forms;
+}
+
+/**
+ * Widget that renders facets as a list of select box.
+ */
+class LiveitChinaFacetapiSelect extends FacetapiWidget {
+  /**
+   * Overrides constructor to reset the key.
+   */
+  public function __construct($id, array $realm, FacetapiFacet $facet, stdClass $settings) {
+    parent::__construct($id, $realm, $facet, $settings);
+    $this->jsSettings['limit'] = $this->settings->settings['soft_limit'];
+    $this->key = $facet['name'];
+  }
+  
+  /**
+   * Renders the form.
+   */
+  public function execute() {
+    $element = &$this->build[$this->facet['field alias']];
+    $name = array_pop(explode(':', $this->build['#settings']->name));
+    $element = drupal_get_form('facetapi_select_' .  $name, $element);
+    //print_r($element);
+  }
+}
+
+/**
+ * Generate form for facet.
+ */
+function facetapi_select_form($form, &$form_state, $elements) {
+
+  // Build options from facet elements.
+  $options = array('all' => t('- All -'));
+  $default_value = '';
+  foreach ($elements as $element) {
+    if ($element['#active']) {
+      $default_value = serialize($element['#query']);
+    }
+    $options[serialize($element['#query'])] = $element['#markup'];
+  }
+
+  if (count($options) == 1) {
+    return;
+  }
+  
+  $form['select'] = array(
+      '#type' => 'select',
+      '#options' => $options,
+      '#attributes' => array('class' => array('ctools-auto-submit')),
+      '#default_value' => $default_value,
+  );
+  $form['submit'] = array(
+      '#type' => 'submit',
+      '#value' => t('Filter'),
+      '#attributes' => array('class' => array('ctools-use-ajax', 'ctools-auto-submit-click', 'element-hidden')),
+      '#submit' => array('facetapi_select_form_submit'),
+  );
+
+  // Lets add autosubmit js functionality from ctools.
+  $form['#attached']['js'][] = drupal_get_path('module', 'ctools') . '/js/auto-submit.js';
+  // Add javascript that hides Filter button.
+  $form['#attached']['js'][] = drupal_get_path('module', 'apachesolr_liveitchina') . '/js/facetapi-hide-submit.js';
+
+  $form['#attributes']['class'][] = 'facetapi-widget-select-facet';
+
+  return $form;
+}
+
+/**
+ * Submit handler for facet form.
+ */
+function facetapi_select_form_submit($form, &$form_state) {
+  $param = array();
+  if ($form_state['values']['select'] != 'all') {
+    $param = array('query' => unserialize($form_state['values']['select']));
+  }
+  $form_state['redirect'] = array($_GET['q'], $param);
+}

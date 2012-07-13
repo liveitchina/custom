@@ -1,0 +1,894 @@
+<?php
+module_load_include('inc', 'apachesolr', 'apachesolr.index');
+
+function profile2_liveitchina_install() {
+  //create profile2 bundles
+  _profile2_liveitchina_profile_bundles();
+
+  _profile2_liveitchina_profile_role();
+
+  //install exchange partner profile fields
+  foreach (_profile2_liveitchina_partner_installed_instances() as $field_instance) {
+    if ($existing_instance = field_info_instance($field_instance['entity_type'], $field_instance['field_name'], $field_instance['bundle'])) {
+      field_update_instance($field_instance);
+    }
+    else {
+      field_create_instance($field_instance);
+    }
+  }
+
+  //install tutor profile fields
+  foreach (_profile2_liveitchina_tutor_installed_instances() as $field_instance) {
+    if ($existing_instance = field_info_instance($field_instance['entity_type'], $field_instance['field_name'], $field_instance['bundle'])) {
+      field_update_instance($field_instance);
+    }
+    else {
+      field_create_instance($field_instance);
+    }
+  }
+}
+
+function _profile2_liveitchina_profile_bundles(){
+  //$profiles = array('exchange_partner','tutor');
+  $profile_types['exchange_partner'] = array(
+      'type' => 'exchange_partner',
+      'label' => 'Exchange Partner',
+      'data' => array(
+          'registration' => FALSE,
+          'use_page' => TRUE,
+      ),
+      'weight' => 0
+  );
+  $profile_types['tutor'] = array(
+      'type' => 'tutor',
+      'label' => 'Tutor',
+      'data' => array(
+          'registration' => FALSE,
+          'use_page' => TRUE,
+      ),
+      'weight' => 0
+  );
+  $profile_types['user'] = array(
+      'type' => 'user',
+      'label' => 'User Profile',
+      'data' => array(
+          'registration' => FALSE,
+          'use_page' => TRUE,
+      ),
+      'weight' => 0
+  );
+  foreach ($profile_types as $pid => $profile_type){
+    if ($profile = profile2_type_load($profile_type['type'])){
+      $save = true;//just a dummy
+    } 
+    else {
+      profile2_type_save(new ProfileType($profile_type));
+    }
+  }
+}
+
+function _profile2_liveitchina_profile_role(){
+  $profile_roles = array(
+    'exchange_partner' => 'Exchange Partner',
+    'tutor'=> 'Tutor',
+  );
+  
+  $lic_profile = array();
+  
+  foreach ($profile_roles as $profile=>$role){
+    if ($epat = user_role_load_by_name($role)){
+      $lic_profile[$profile] = $epat->rid;
+    } else {
+      $some_role = new stdClass();
+      $some_role->name = $role;
+      user_role_save($some_role);
+      $epat = user_role_load_by_name($role);
+      $lic_profile[$profile] = $epat->rid;
+      $lic_profile_role[$profile] = array('rid'=> $epat->rid,'name'=> $epat->name);
+    }
+  }
+
+  variable_set('liveitchina_profile_role', $lic_profile);
+  variable_set('profile_role_relationship', $lic_profile_role);
+}
+
+function _profile2_liveitchina_partner_installed_instances(){
+  $instances = array();
+  
+  $instances['partner-field_description'] = array(
+    'bundle' => 'exchange_partner',
+    'default_value' => NULL,
+    'deleted' => '0',
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'inline',
+        'module' => 'text',
+        'settings' => array(),
+        'type' => 'text_default',
+        'weight' => '4',
+      ),
+      'promotions' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'ds_extras_field_template' => '',
+    'entity_type' => 'profile2',
+    'field_name' => 'field_description',
+    'label' => 'Description',
+    'pcp_tag' => 0,
+    'required' => 0,
+    'settings' => array(
+      'text_processing' => '0',
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'text',
+      'settings' => array(
+        'rows' => '5',
+      ),
+      'type' => 'text_textarea',
+      'weight' => '1',
+    ),
+  );
+  $instances['partner-field_summary'] = array(
+      'bundle' => 'exchange_partner',
+      'default_value' => NULL,
+      'deleted' => '0',
+      'description' => '',
+      'display' => array(
+        'default' => array(
+          'label' => 'above',
+          'settings' => array(),
+          'type' => 'hidden',
+          'weight' => '11',
+        ),
+        'promotions' => array(
+          'label' => 'above',
+          'settings' => array(),
+          'type' => 'hidden',
+          'weight' => 0,
+        ),
+      ),
+      'ds_extras_field_template' => 'theme_ds_field_minimal',
+      'entity_type' => 'profile2',
+      'field_name' => 'field_summary',
+      'label' => 'Summary',
+      'pcp_tag' => 1,
+      'required' => 1,
+      'settings' => array(
+        'text_processing' => '0',
+        'user_register_form' => FALSE,
+      ),
+      'widget' => array(
+        'active' => 1,
+        'module' => 'text',
+        'settings' => array(
+          'rows' => '5',
+        ),
+        'type' => 'text_textarea',
+        'weight' => '0',
+      ),
+    );
+  $instances['partner-field_interest'] = array(
+      'bundle' => 'exchange_partner',
+      'default_value' => NULL,
+      'deleted' => '0',
+      'description' => '',
+      'display' => array(
+        'default' => array(
+          'label' => 'above',
+          'module' => 'i18n_taxonomy',
+          'settings' => array(),
+          'type' => 'i18n_taxonomy_term_reference_link',
+          'weight' => 13,
+        ),
+        'promotions' => array(
+          'label' => 'above',
+          'settings' => array(),
+          'type' => 'hidden',
+          'weight' => 0,
+        ),
+      ),
+      'ds_extras_field_template' => '',
+      'entity_type' => 'profile2',
+      'field_name' => 'field_interest',
+      'label' => 'Interest',
+      'pcp_tag' => 0,
+      'required' => 0,
+      'settings' => array(
+        'user_register_form' => FALSE,
+      ),
+      'widget' => array(
+        'active' => 0,
+        'module' => 'taxonomy',
+        'settings' => array(
+          'autocomplete_path' => 'taxonomy/autocomplete',
+          'size' => 60,
+        ),
+        'type' => 'taxonomy_autocomplete',
+        'weight' => '2',
+      ),
+    );
+  $instances['partner-field_lang_offered'] = array(
+      'bundle' => 'exchange_partner',
+      'default_value' => NULL,
+      'deleted' => '0',
+      'description' => '',
+      'display' => array(
+        'default' => array(
+          'label' => 'above',
+          'settings' => array(),
+          'type' => 'hidden',
+          'weight' => '12',
+        ),
+        'promotions' => array(
+          'label' => 'above',
+          'settings' => array(),
+          'type' => 'hidden',
+          'weight' => 0,
+        ),
+      ),
+      'ds_extras_field_template' => '',
+      'entity_type' => 'profile2',
+      'field_name' => 'field_lang_offered',
+      'label' => 'Language offered',
+      'pcp_tag' => 0,
+      'required' => 0,
+      'settings' => array(
+        'user_register_form' => FALSE,
+      ),
+      'widget' => array(
+        'active' => 1,
+        'module' => 'options',
+        'settings' => array(),
+        'type' => 'options_buttons',
+        'weight' => '3',
+      ),
+    );
+  $instances['partner-field_user_partner_offered_year'] = array(
+      'bundle' => 'exchange_partner',
+      'default_value' => NULL,
+      'deleted' => '0',
+      'description' => '',
+      'display' => array(
+        'account' => array(
+          'label' => 'above',
+          'module' => 'list',
+          'settings' => array(),
+          'type' => 'list_default',
+          'weight' => '22',
+        ),
+        'default' => array(
+          'label' => 'above',
+          'settings' => array(),
+          'type' => 'hidden',
+          'weight' => '6',
+        ),
+        'promotions' => array(
+          'label' => 'above',
+          'settings' => array(),
+          'type' => 'hidden',
+          'weight' => 0,
+        ),
+        'search_result' => array(
+          'label' => 'above',
+          'module' => 'list',
+          'settings' => array(),
+          'type' => 'list_default',
+          'weight' => '22',
+        ),
+      ),
+      'ds_extras_field_template' => '',
+      'entity_type' => 'profile2',
+      'field_name' => 'field_user_partner_offered_year',
+      'label' => 'Experience',
+      'pcp_tag' => 1,
+      'required' => 0,
+      'settings' => array(
+        'user_register_form' => FALSE,
+      ),
+      'widget' => array(
+        'active' => 1,
+        'module' => 'options',
+        'settings' => array(),
+        'type' => 'options_select',
+        'weight' => '4',
+      ),
+    );
+  $instances['partner-field_language_wanted'] = array(
+      'bundle' => 'exchange_partner',
+      'default_value' => NULL,
+      'deleted' => '0',
+      'description' => '',
+      'display' => array(
+        'default' => array(
+          'label' => 'above',
+          'module' => 'i18n_taxonomy',
+          'settings' => array(),
+          'type' => 'i18n_taxonomy_term_reference_link',
+          'weight' => 14,
+        ),
+        'promotions' => array(
+          'label' => 'above',
+          'settings' => array(),
+          'type' => 'hidden',
+          'weight' => 0,
+        ),
+      ),
+      'ds_extras_field_template' => '',
+      'entity_type' => 'profile2',
+      'field_name' => 'field_language_wanted',
+      'label' => 'Language wanted',
+      'pcp_tag' => 0,
+      'required' => 0,
+      'settings' => array(
+        'user_register_form' => FALSE,
+      ),
+      'widget' => array(
+        'active' => 1,
+        'module' => 'options',
+        'settings' => array(),
+        'type' => 'options_buttons',
+        'weight' => '6',
+      ),
+    );
+  $instances['partner-field_user_partner_wanted_year'] = array(
+      'bundle' => 'exchange_partner',
+      'default_value' => NULL,
+      'deleted' => '0',
+      'description' => '',
+      'display' => array(
+        'account' => array(
+          'label' => 'above',
+          'module' => 'list',
+          'settings' => array(),
+          'type' => 'list_default',
+          'weight' => '23',
+        ),
+        'default' => array(
+          'label' => 'above',
+          'settings' => array(),
+          'type' => 'hidden',
+          'weight' => '7',
+        ),
+        'promotions' => array(
+          'label' => 'above',
+          'settings' => array(),
+          'type' => 'hidden',
+          'weight' => 0,
+        ),
+        'search_result' => array(
+          'label' => 'above',
+          'module' => 'list',
+          'settings' => array(),
+          'type' => 'list_default',
+          'weight' => '23',
+        ),
+      ),
+      'ds_extras_field_template' => '',
+      'entity_type' => 'profile2',
+      'field_name' => 'field_user_partner_wanted_year',
+      'label' => 'Experience',
+      'pcp_tag' => 1,
+      'required' => 0,
+      'settings' => array(
+        'user_register_form' => FALSE,
+      ),
+      'widget' => array(
+        'active' => 1,
+        'module' => 'options',
+        'settings' => array(),
+        'type' => 'options_select',
+        'weight' => '7',
+      ),
+    );
+  
+  $instances['partner-field_user_partner_availability'] = array(
+      'bundle' => 'exchange_partner',
+      'default_value' => array(
+        0 => array(
+          'value' => 'mon',
+        ),
+      ),
+      'deleted' => '0',
+      'description' => '',
+      'display' => array(
+        'account' => array(
+          'label' => 'above',
+          'module' => 'list',
+          'settings' => array(),
+          'type' => 'list_default',
+          'weight' => '24',
+        ),
+        'default' => array(
+          'label' => 'above',
+          'settings' => array(),
+          'type' => 'hidden',
+          'weight' => '8',
+        ),
+        'promotions' => array(
+          'label' => 'above',
+          'settings' => array(),
+          'type' => 'hidden',
+          'weight' => 0,
+        ),
+        'search_result' => array(
+          'label' => 'above',
+          'module' => 'list',
+          'settings' => array(),
+          'type' => 'list_default',
+          'weight' => '24',
+        ),
+      ),
+      'ds_extras_field_template' => '',
+      'entity_type' => 'profile2',
+      'field_name' => 'field_user_partner_availability',
+      'label' => 'Availability',
+      'pcp_tag' => 0,
+      'required' => 1,
+      'settings' => array(
+        'user_register_form' => FALSE,
+      ),
+      'widget' => array(
+        'active' => 1,
+        'module' => 'options',
+        'settings' => array(),
+        'type' => 'options_buttons',
+        'weight' => '8',
+      ),
+    );
+  $instances['partner-field_user_partner_meeting_loc'] = array(
+      'bundle' => 'exchange_partner',
+      'default_value' => array(
+        0 => array(
+          'value' => '4',
+        ),
+      ),
+      'deleted' => '0',
+      'description' => '',
+      'display' => array(
+        'account' => array(
+          'label' => 'above',
+          'module' => 'list',
+          'settings' => array(),
+          'type' => 'list_default',
+          'weight' => '25',
+        ),
+        'default' => array(
+          'label' => 'above',
+          'settings' => array(),
+          'type' => 'hidden',
+          'weight' => '9',
+        ),
+        'promotions' => array(
+          'label' => 'above',
+          'settings' => array(),
+          'type' => 'hidden',
+          'weight' => 0,
+        ),
+        'search_result' => array(
+          'label' => 'above',
+          'module' => 'list',
+          'settings' => array(),
+          'type' => 'list_default',
+          'weight' => '25',
+        ),
+      ),
+      'ds_extras_field_template' => '',
+      'entity_type' => 'profile2',
+      'field_name' => 'field_user_partner_meeting_loc',
+      'label' => 'Meeting Location',
+      'pcp_tag' => 0,
+      'required' => 1,
+      'settings' => array(
+        'user_register_form' => FALSE,
+      ),
+      'widget' => array(
+        'active' => 1,
+        'module' => 'options',
+        'settings' => array(),
+        'type' => 'options_buttons',
+        'weight' => '9',
+      ),
+    );
+  
+  return $instances;
+}
+function _profile2_liveitchina_tutor_installed_instances(){
+  $instances = array();
+
+  $instances['tutor-field_description'] = array(
+      'bundle' => 'tutor',
+      'default_value' => NULL,
+      'deleted' => '0',
+      'description' => '',
+      'display' => array(
+        'default' => array(
+          'label' => 'above',
+          'module' => 'text',
+          'settings' => array(),
+          'type' => 'text_default',
+          'weight' => 10,
+        ),
+        'promotions' => array(
+          'label' => 'above',
+          'settings' => array(),
+          'type' => 'hidden',
+          'weight' => 0,
+        ),
+      ),
+      'ds_extras_field_template' => '',
+      'entity_type' => 'profile2',
+      'field_name' => 'field_description',
+      'label' => 'Description',
+      'pcp_tag' => 0,
+      'required' => 0,
+      'settings' => array(
+        'text_processing' => '0',
+        'user_register_form' => FALSE,
+      ),
+      'widget' => array(
+        'active' => 1,
+        'module' => 'text',
+        'settings' => array(
+          'rows' => '5',
+        ),
+        'type' => 'text_textarea',
+        'weight' => '1',
+      ),
+    );
+
+  $instances['tutor-field_summary'] = array(
+      'bundle' => 'tutor',
+      'default_value' => NULL,
+      'deleted' => '0',
+      'description' => '',
+      'display' => array(
+        'default' => array(
+          'label' => 'above',
+          'module' => 'text',
+          'settings' => array(),
+          'type' => 'text_default',
+          'weight' => 9,
+        ),
+        'promotions' => array(
+          'label' => 'above',
+          'settings' => array(),
+          'type' => 'hidden',
+          'weight' => 0,
+        ),
+      ),
+      'ds_extras_field_template' => '',
+      'entity_type' => 'profile2',
+      'field_name' => 'field_summary',
+      'label' => 'Summary',
+      'pcp_tag' => 0,
+      'required' => 0,
+      'settings' => array(
+        'text_processing' => '0',
+        'user_register_form' => FALSE,
+      ),
+      'widget' => array(
+        'active' => 1,
+        'module' => 'text',
+        'settings' => array(
+          'rows' => '5',
+        ),
+        'type' => 'text_textarea',
+        'weight' => '0',
+      ),
+    );
+  $instances['tutor-field_interest'] = array(
+      'bundle' => 'tutor',
+      'default_value' => NULL,
+      'deleted' => '0',
+      'description' => '',
+      'display' => array(
+        'default' => array(
+          'label' => 'above',
+          'module' => 'i18n_taxonomy',
+          'settings' => array(),
+          'type' => 'i18n_taxonomy_term_reference_link',
+          'weight' => 12,
+        ),
+        'promotions' => array(
+          'label' => 'above',
+          'settings' => array(),
+          'type' => 'hidden',
+          'weight' => 0,
+        ),
+      ),
+      'ds_extras_field_template' => '',
+      'entity_type' => 'profile2',
+      'field_name' => 'field_interest',
+      'label' => 'Interest',
+      'pcp_tag' => 0,
+      'required' => 0,
+      'settings' => array(
+        'user_register_form' => FALSE,
+      ),
+      'widget' => array(
+        'active' => 0,
+        'module' => 'taxonomy',
+        'settings' => array(
+          'autocomplete_path' => 'taxonomy/autocomplete',
+          'size' => 60,
+        ),
+        'type' => 'taxonomy_autocomplete',
+        'weight' => '2',
+      ),
+    );
+  $instances['tutor-field_lang_offered'] = array(
+      'bundle' => 'tutor',
+      'default_value' => NULL,
+      'deleted' => '0',
+      'description' => '',
+      'display' => array(
+        'default' => array(
+          'label' => 'above',
+          'module' => 'i18n_taxonomy',
+          'settings' => array(),
+          'type' => 'i18n_taxonomy_term_reference_link',
+          'weight' => 11,
+        ),
+        'promotions' => array(
+          'label' => 'above',
+          'settings' => array(),
+          'type' => 'hidden',
+          'weight' => 0,
+        ),
+      ),
+      'ds_extras_field_template' => '',
+      'entity_type' => 'profile2',
+      'field_name' => 'field_lang_offered',
+      'label' => 'Language offered',
+      'pcp_tag' => 0,
+      'required' => 0,
+      'settings' => array(
+        'user_register_form' => FALSE,
+      ),
+      'widget' => array(
+        'active' => 1,
+        'module' => 'options',
+        'settings' => array(),
+        'type' => 'options_buttons',
+        'weight' => '3',
+      ),
+    );
+  $instances['tutor-field_user_tutor_exp_year'] = array(
+      'bundle' => 'tutor',
+      'default_value' => NULL,
+      'deleted' => '0',
+      'description' => '',
+      'display' => array(
+        'default' => array(
+          'label' => 'above',
+          'module' => 'list',
+          'settings' => array(),
+          'type' => 'list_default',
+          'weight' => 4,
+        ),
+        'promotions' => array(
+          'label' => 'above',
+          'settings' => array(),
+          'type' => 'hidden',
+          'weight' => 0,
+        ),
+      ),
+      'ds_extras_field_template' => '',
+      'entity_type' => 'profile2',
+      'field_name' => 'field_user_tutor_exp_year',
+      'label' => 'Experience (Years)',
+      'pcp_tag' => 0,
+      'required' => 0,
+      'settings' => array(
+        'user_register_form' => FALSE,
+      ),
+      'widget' => array(
+        'active' => 1,
+        'module' => 'options',
+        'settings' => array(),
+        'type' => 'options_select',
+        'weight' => '4',
+      ),
+    );
+  $instances['tutor-field_user_tutor_price'] = array(
+      'bundle' => 'tutor',
+      'default_value' => NULL,
+      'deleted' => '0',
+      'description' => '',
+      'display' => array(
+        'default' => array(
+          'label' => 'above',
+          'module' => 'list',
+          'settings' => array(),
+          'type' => 'list_default',
+          'weight' => 5,
+        ),
+        'promotions' => array(
+          'label' => 'above',
+          'settings' => array(),
+          'type' => 'hidden',
+          'weight' => 0,
+        ),
+      ),
+      'ds_extras_field_template' => '',
+      'entity_type' => 'profile2',
+      'field_name' => 'field_user_tutor_price',
+      'label' => 'Price',
+      'pcp_tag' => 1,
+      'required' => 0,
+      'settings' => array(
+        'user_register_form' => FALSE,
+      ),
+      'widget' => array(
+        'active' => 1,
+        'module' => 'options',
+        'settings' => array(),
+        'type' => 'options_select',
+        'weight' => '5',
+      ),
+    );
+  
+  $instances['tutor-field_user_tutor_availability'] = array(
+      'bundle' => 'tutor',
+      'default_value' => NULL,
+      'deleted' => '0',
+      'description' => '',
+      'display' => array(
+        'default' => array(
+          'label' => 'above',
+          'module' => 'list',
+          'settings' => array(),
+          'type' => 'list_default',
+          'weight' => 0,
+        ),
+        'promotions' => array(
+          'label' => 'above',
+          'settings' => array(),
+          'type' => 'hidden',
+          'weight' => 0,
+        ),
+      ),
+      'ds_extras_field_template' => '',
+      'entity_type' => 'profile2',
+      'field_name' => 'field_user_tutor_availability',
+      'label' => 'Availability',
+      'pcp_tag' => 0,
+      'required' => 0,
+      'settings' => array(
+        'user_register_form' => FALSE,
+      ),
+      'widget' => array(
+        'active' => 1,
+        'module' => 'options',
+        'settings' => array(),
+        'type' => 'options_buttons',
+        'weight' => '6',
+      ),
+    );
+  
+  $instances['tutor-field_user_tutor_meeting_loc'] = array(
+      'bundle' => 'tutor',
+      'default_value' => NULL,
+      'deleted' => '0',
+      'description' => '',
+      'display' => array(
+        'default' => array(
+          'label' => 'above',
+          'module' => 'list',
+          'settings' => array(),
+          'type' => 'list_default',
+          'weight' => 7,
+        ),
+        'promotions' => array(
+          'label' => 'above',
+          'settings' => array(),
+          'type' => 'hidden',
+          'weight' => 0,
+        ),
+      ),
+      'ds_extras_field_template' => '',
+      'entity_type' => 'profile2',
+      'field_name' => 'field_user_tutor_meeting_loc',
+      'label' => 'Meeting Location',
+      'pcp_tag' => 0,
+      'required' => 0,
+      'settings' => array(
+        'user_register_form' => FALSE,
+      ),
+      'widget' => array(
+        'active' => 1,
+        'module' => 'options',
+        'settings' => array(),
+        'type' => 'options_buttons',
+        'weight' => '7',
+      ),
+    );
+
+  return $instances;
+}
+//*
+function profile2_liveitchina_update_7100(){
+
+  $relationships[] = (object) array(
+    'name' => 'Exchange Partner',
+    'plural_name' => 'Exchange Partners',
+    'is_oneway' => TRUE,
+    'requires_approval' => TRUE,
+    'expires_val' => 0,
+  );
+  $relationships[] = (object) array(
+    'name' => 'Tutor',
+    'plural_name' => 'Tutors',
+    'is_oneway' => TRUE,
+    'requires_approval' => TRUE,
+    'expires_val' => 0,
+  );
+  foreach ($relationships as $relationship) {
+    if ($rel = user_relationships_type_load(array('name'=> $relationship->name))){
+      $relationship->rtid = $rel->rtid;
+    }
+    user_relationships_type_save($relationship);
+  }
+}
+/*
+ * Add search page dynamically
+ */
+function profile2_liveitchina_update_7101(){
+  //add apachesolr page
+  $settings = array(
+    'apachesolr_search_search_type' => 'custom',
+    'apachesolr_search_search_box' => TRUE,
+    'apachesolr_search_per_page' => 10,
+    'apachesolr_search_browse' => 'results',
+    'apachesolr_search_spellcheck' => TRUE,
+    'apachesolr_search_allow_user_input' => FALSE,
+  );
+  $search_pages = array(
+    array(
+      'page_id' => 'find_exchange_partner',
+      'env_id' => 'solr',
+      'label' => 'Find Exchange Partner',
+      'description' => 'Find Exchange Partner',
+      'page_title' => 'Find Exchange Partner',
+      'search_path' => 'search/exchange-partner',
+    ),
+    array(
+      'page_id' => 'find_tutor',
+      'env_id' => 'solr',
+      'label' => 'Find you Tutor Language',
+      'description' => 'Find you Tutor Language',
+      'page_title' => 'Find your Tutor Language',
+      'search_path' => 'search/tutor',
+    ),
+  );
+  foreach ($search_pages as $search_page){
+    $school_search_page = new stdClass();
+    $school_search_page->page_id = $search_page['page_id'];
+    $school_search_page->env_id = $search_page['env_id'];
+    $school_search_page->label = $search_page['label'];
+    $school_search_page->description = $search_page['description'];
+    $school_search_page->page_title = $search_page['page_title'];
+    $school_search_page->search_path = $search_page['search_path'];
+    $school_search_page->settings = $settings;
+    apachesolr_search_page_save($school_search_page);
+  }
+
+  // Menu rebuild needed to pick up search path.
+  menu_rebuild();
+}
+function profile2_liveitchina_uninstall(){
+  variable_del('liveitchina_profile_role');
+  variable_del('profile_role_relationship');
+}
+
+function profile2_liveitchina_update_7102(){
+  _profile2_liveitchina_profile_role();
+}
+//*/

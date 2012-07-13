@@ -1,0 +1,60 @@
+<?php
+
+function liveitchina_install() {
+  // Set module weight for it to run after core modules
+  db_update('system')
+    ->fields(array('weight'=> 100))
+    ->condition('name', 'liveitchina')
+    ->condition('type', 'module')
+    ->execute();
+  foreach (_liveitchina_set_vars() as $id=>$var){
+    variable_set($id, $var);
+  }
+}
+
+function liveitchina_uninstall(){
+  foreach (_liveitchina_set_vars() as $id=>$var){
+    variable_del($id);
+  }
+}
+
+/**
+ * Helper to preconfigure variables;
+ */
+function _liveitchina_set_vars(){
+  $vars = array(
+    'user_relationships_show_direct_links' => TRUE,
+    'user_relationship_mailer_send_mail' => TRUE,
+    'user_relationships_enable_ajax_popups' => TRUE,
+    'user_relationship_node_access_allowed_types' =>  array('school'),
+    'user_relationships_restrict_privatemsg' => 'all_overridable',
+    'reg_with_pic_enabled' => TRUE,
+    'reg_with_pic_weight' => 10,
+    'user_picture_default' => 'files/default_images/default-user.png',
+    'user_register' => 2,
+  );
+  
+  return $vars;
+}
+
+/**
+ * Exclude sharethis button to page and school node content types.
+ * /
+function liveitchina_update_7000() {
+  // Create an array of node types.
+  $node_type_array = node_type_get_types();
+  $node_type_options = array();
+  foreach ($node_type_array as $k => $v) {
+    $excluded_node = array('page', 'school');
+    if (!in_array($k, $excluded_node)){
+      $node_type_options[] = $k;
+    }
+  }
+  $st_value = implode(',', $node_type_options);
+
+  db_update('st_table')
+    ->fields(array('st_value'=>$st_value))
+    ->condition('st_option','nodeType')
+    ->execute();
+}
+//*/

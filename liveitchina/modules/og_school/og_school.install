@@ -1,0 +1,504 @@
+<?php
+module_load_include('inc', 'apachesolr', 'apachesolr.index');
+
+function og_school_install() {
+  //create node content
+  //_og_school_define_school_content();
+
+  /*/install school profile fields
+  foreach (_og_school_installed_instances() as $field_instance) {
+    if ($existing_instance = field_info_instance($field_instance['entity_type'], $field_instance['field_name'], $field_instance['bundle'])) {
+      field_update_instance($field_instance);
+    }
+    else {
+      field_create_instance($field_instance);
+    }
+  }
+  //*/
+
+  //configure search page for school
+  _og_school_setup_search_page();
+
+  
+}
+
+function _og_school_setup_search_page(){
+  //set apachesolr settings for indexing
+  $env_id = variable_get('apachesolr_default_environment', 'solr');
+  $entity_bundles = apachesolr_get_index_bundles($env_id, 'node');
+  array_push($entity_bundles, 'school');
+  apachesolr_index_set_bundles($env_id, 'node', $entity_bundles);
+  
+  //add apachesolr page
+  $settings = array(
+    'apachesolr_search_search_type' => 'custom',
+    'apachesolr_search_search_box' => TRUE,
+    'apachesolr_search_per_page' => 10,
+    'apachesolr_search_browse' => 'results',
+    'apachesolr_search_spellcheck' => TRUE,
+    'apachesolr_search_allow_user_input' => FALSE,
+  );
+
+  $school_search_page = new stdClass();
+  $school_search_page->page_id = 'find_school';
+  $school_search_page->env_id = 'solr';
+  $school_search_page->label = 'Find your Language School';
+  $school_search_page->description = 'Search for Language School';
+  $school_search_page->page_title = 'Find your Language School';
+  $school_search_page->search_path = 'search/school';
+  $school_search_page->settings = $settings;
+  
+  apachesolr_search_page_save($school_search_page);
+
+  // Menu rebuild needed to pick up search path.
+  menu_rebuild();
+}
+
+function _og_school_define_school_content(){
+  $default_types = _og_school_content_types();
+
+  foreach ($default_types as $type_name => $type_info) {
+    if ($type_info = node_type_load($type_name)) {
+      $type_info->module = 'node';
+      $type_info->custom = 0;
+      $type_info->modified = 0;
+      $type_info->locked = 1;
+      $type_info->og_group_type = 'group';
+      $type_info->node_preview = 0;
+      node_type_update($type_info);
+    }
+  }
+}
+
+function _og_school_content_types(){
+  //create school content type
+  $default_types = array();
+  $default_types['school'] = array(
+    'name' => t('School'),
+    'base' => 'node_content',
+    'description' => t('School Profile'),
+    'has_title' => '1',
+    'title_label' => t('School Name'),
+    'help' => '',
+  );
+
+  return $default_types;
+}
+
+function _og_school_installed_instances(){
+  $instances = array();
+  $instances['school-field_lang_offered'] = array(
+    'bundle' => 'school',
+    'default_value' => NULL,
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => '12',
+      ),
+    ),
+    'entity_type' => 'node',
+    'field_name' => 'field_lang_offered',
+    'label' => 'Language offered',
+    'pcp_tag' => 0,
+    'required' => 0,
+    'settings' => array(
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'options',
+      'settings' => array(),
+      'type' => 'options_buttons',
+      'weight' => '3',
+    ),
+  );/*
+  $instances['school-field_city'] = array(
+    'bundle' => 'school',
+    'default_value' => NULL,
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'i18n_taxonomy',
+        'settings' => array(),
+        'type' => 'i18n_taxonomy_term_reference_link',
+        'weight' => 35,
+      ),
+      'full' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'node',
+    'field_name' => 'field_city',
+    'label' => 'City',
+    'required' => 0,
+    'widget' => array(
+      'active' => 1,
+      'module' => 'options',
+      'settings' => array(),
+      'type' => 'options_select',
+      'weight' => '6',
+    ),
+  );
+  $instances['school-field_district'] = array(
+    'bundle' => 'school',
+    'default_value' => NULL,
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'i18n_taxonomy',
+        'settings' => array(),
+        'type' => 'i18n_taxonomy_term_reference_link',
+        'weight' => 36,
+      ),
+      'full' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'node',
+    'field_name' => 'field_district',
+    'label' => 'District',
+    'required' => 0,
+    'widget' => array(
+      'active' => 1,
+      'module' => 'options',
+      'settings' => array(),
+      'type' => 'options_select',
+      'weight' => '7',
+    ),
+  );
+  $instances['school-field_rating'] = array(
+    'bundle' => 'school',
+    'default_value' => NULL,
+    'entity_type' => 'node',
+    'field_name' => 'field_rating',
+    'label' => 'Rating',
+    'required' => 0,
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'fivestar',
+        'settings' => array(
+          'expose' => TRUE,
+          'style' => 'average',
+          'text' => 'average',
+          'widget' => array(
+            'fivestar_widget' => NULL,
+          ),
+        ),
+        'type' => 'fivestar_formatter_default',
+        'weight' => 34,
+      ),
+    ),
+    'settings' => array(
+      'allow_clear' => 0,
+      'stars' => '5',
+      'target' => 'none',
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'fivestar',
+      'settings' => array(),
+      'type' => 'exposed',
+      'weight' => '33',
+    ),
+  );
+  $instances['school-field_price'] = array(
+    'bundle' => 'school',
+    'default_value' => NULL,
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'list',
+        'settings' => array(),
+        'type' => 'list_default',
+        'weight' => 5,
+      ),
+    ),
+    'entity_type' => 'node',
+    'field_name' => 'field_price',
+    'label' => 'Price',
+    'pcp_tag' => 1,
+    'required' => 0,
+    'widget' => array(
+      'active' => 1,
+      'module' => 'options',
+      'settings' => array(),
+      'type' => 'options_select',
+      'weight' => '5',
+    ),
+  );
+  $instances['school-field_logo'] = array(
+      'bundle' => 'school',
+      'description' => '',
+      'display' => array(
+        'default' => array(
+          'label' => 'above',
+          'module' => 'image',
+          'settings' => array(
+            'image_link' => '',
+            'image_style' => '',
+          ),
+          'type' => 'image',
+          'weight' => 1,
+        ),
+        'teaser' => array(
+          'label' => 'above',
+          'settings' => array(),
+          'type' => 'hidden',
+          'weight' => 0,
+        ),
+      ),
+      'entity_type' => 'node',
+      'field_name' => 'field_logo',
+      'label' => 'School Logo',
+      'required' => 0,
+      'settings' => array(
+        'alt_field' => 0,
+        'file_directory' => 'school',
+        'file_extensions' => 'png gif jpg jpeg',
+        'max_filesize' => '',
+        'max_resolution' => '',
+        'min_resolution' => '',
+        'title_field' => 0,
+      ),
+      'widget' => array(
+        'active' => 1,
+        'module' => 'image',
+        'settings' => array(
+          'preview_image_style' => 'thumbnail',
+          'progress_indicator' => 'throbber',
+        ),
+        'type' => 'image_image',
+        'weight' => '1',
+      ),
+    );
+  $instances['school-field_accomodation'] = array(
+    'bundle' => 'school',
+    'default_value' => array(
+      array(
+        'value' => 0,
+      ),
+    ),
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'list',
+        'settings' => array(),
+        'type' => 'list_default',
+        'weight' => 11,
+      ),
+      'teaser' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'node',
+    'field_name' => 'field_accomodation',
+    'label' => 'Accomodation',
+    'required' => 0,
+    'widget' => array(
+      'active' => 1,
+      'module' => 'options',
+      'settings' => array(
+        'display_label' => 0,
+      ),
+      'type' => 'options_onoff',
+      'weight' => '15',
+    ),
+  );
+  $instances['school-field_category'] = array(
+    'bundle' => 'school',
+    'entity_type' => 'node',
+    'field_name' => 'field_category',
+    'default_value' => NULL,
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'i18n_taxonomy',
+        'settings' => array(),
+        'type' => 'i18n_taxonomy_term_reference_link',
+        'weight' => 2,
+      ),
+      'teaser' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'label' => 'Category',
+    'required' => 0,
+    'widget' => array(
+      'active' => 1,
+      'module' => 'options',
+      'settings' => array(),
+      'type' => 'options_select',
+      'weight' => '2',
+    ),
+  );
+  $instances['school-field_contact'] = array(
+      'bundle' => 'school',
+      'default_value' => NULL,
+      'entity_type' => 'node',
+      'field_name' => 'field_contact',
+      'label' => 'Contact Person',
+      'required' => 0,
+      'description' => '',
+      'display' => array(
+        'default' => array(
+          'label' => 'above',
+          'module' => 'user_reference',
+          'settings' => array(),
+          'type' => 'user_reference_default',
+          'weight' => 12,
+        ),
+        'teaser' => array(
+          'label' => 'above',
+          'settings' => array(),
+          'type' => 'hidden',
+          'weight' => 0,
+        ),
+      ),
+      'widget' => array(
+        'active' => 1,
+        'module' => 'options',
+        'settings' => array(),
+        'type' => 'options_select',
+        'weight' => '16',
+      ),
+  );
+  $instances['school-field_email'] = array(
+      'bundle' => 'school',
+      'entity_type' => 'node',
+      'field_name' => 'field_email',
+      'label' => 'Email',
+      'required' => 0,
+      'default_value' => NULL,
+      'description' => '',
+      'display' => array(
+        'default' => array(
+          'label' => 'above',
+          'module' => 'text',
+          'settings' => array(),
+          'type' => 'text_default',
+          'weight' => 8,
+        ),
+        'teaser' => array(
+          'label' => 'above',
+          'settings' => array(),
+          'type' => 'hidden',
+          'weight' => 0,
+        ),
+      ),
+      'settings' => array(
+        'text_processing' => '0',
+      ),
+      'widget' => array(
+        'active' => 0,
+        'module' => 'html5_tools',
+        'settings' => array(),
+        'type' => 'emailwidget',
+        'weight' => '12',
+      ),
+  );
+  $instances['school-field_telephone'] = array(
+      'bundle' => 'school',
+      'entity_type' => 'node',
+      'field_name' => 'field_telephone',
+      'label' => 'Telephone',
+      'required' => 0,
+      'default_value' => NULL,
+      'description' => '',
+      'display' => array(
+        'default' => array(
+          'label' => 'above',
+          'module' => 'text',
+          'settings' => array(),
+          'type' => 'text_default',
+          'weight' => 7,
+        ),
+      ),
+      'settings' => array(
+        'text_processing' => '0',
+      ),
+      'widget' => array(
+        'active' => 0,
+        'module' => 'html5_tools',
+        'settings' => array(),
+        'type' => 'telwidget',
+        'weight' => '11',
+      ),
+  );
+  $instances['school-field_website'] = array(
+      'bundle' => 'school',
+      'default_value' => NULL,
+      'entity_type' => 'node',
+      'field_name' => 'field_website',
+      'label' => 'Website',
+      'required' => 0,
+      'description' => '',
+      'display' => array(
+        'default' => array(
+          'label' => 'above',
+          'module' => 'text',
+          'settings' => array(),
+          'type' => 'text_default',
+          'weight' => 9,
+        ),
+      ),
+      'settings' => array(
+        'text_processing' => '0',
+      ),
+      'widget' => array(
+        'active' => 0,
+        'module' => 'html5_tools',
+        'settings' => array(),
+        'type' => 'urlwidget',
+        'weight' => '13',
+      ),
+  );//*/
+  return $instances;
+}
+
+function og_school_uninstall(){
+  //delete content type
+  $types = array(); //_og_school_content_types();
+
+  foreach ($types as $node_type=>$type_info){
+    node_type_delete($node_type);
+  }
+
+  //remove search index
+  //set apachesolr settings for indexing
+  $env_id = variable_get('apachesolr_default_environment', 'solr');
+  $entity_bundles = apachesolr_get_index_bundles($env_id, 'node');
+  $profile_entity = array_flip($entity_bundles);
+  unset($profile_entity['school']);
+  $entity_bundles = array_keys($profile_entity);
+  apachesolr_index_set_bundles($env_id, 'node', $entity_bundles);
+}
+
+function og_school_update_7000(){
+  // Set module weight for it to run after core modules
+  db_update('system')
+    ->fields(array('weight'=> 100))
+    ->condition('name', 'og_school')
+    ->condition('type', 'module')
+    ->execute();
+}

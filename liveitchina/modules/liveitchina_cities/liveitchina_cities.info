@@ -1,0 +1,10 @@
+name = LiveitChina City, Area, District
+description = Vocabulary
+package = LiveitChina
+version = 7.x-1.0
+core = 7.x
+
+dependencies[] = entity
+dependencies[] = taxonomy
+dependencies[] = i18n
+dependencies[] = locale

@@ -1,0 +1,47 @@
+
+/*HTML 5 specific*/
+.ds-liveitchina-html5 header,
+.ds-liveitchina-html5 section,
+.ds-liveitchina-html5 aside,
+.ds-liveitchina-html5 footer{
+  display: block;
+}
+
+.ds-liveitchina-html5 {
+  margin-bottom: 15px;
+}
+
+.ds-liveitchina-html5 .group-header {
+  background: #fbd7b7;
+  text-align: right;
+  padding: 7px 10px;
+  clear: both;
+  border-top: 1px solid #DEDEDE;
+  border-left: 1px solid #DEDEDE;
+  border-right: 1px solid #DEDEDE;
+}
+
+.ds-liveitchina-html5 .ds-content{
+  background: #f7f7f7;
+  padding: 20px 0 10px 0;
+  margin: 0;
+  border: 1px solid #dedede;
+}
+.ds-liveitchina-html5 .group-left {
+  text-align: center;
+}
+
+.ds-liveitchina-html5 h2.title {
+  font-size: 16px;
+  color: #FF7C11;
+  margin-bottom: 0;
+}
+
+.ds-liveitchina-html5 .group-right {
+  position: relative;
+}
+
+.ds-liveitchina-html5 .group-footer {
+  clear: both;
+  padding: 0;
+}

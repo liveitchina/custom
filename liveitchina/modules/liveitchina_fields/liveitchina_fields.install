@@ -1,0 +1,1272 @@
+<?php
+
+function liveitchina_fields_install() {
+  //define field_code as field
+  foreach (_liveitchina_fields() as $fid=>$field){
+    if ($existing_field = field_info_field($fid)) {
+      field_update_field($field);
+    }
+    else {
+      field_create_field($field);
+    }
+  }
+}
+
+function _liveitchina_fields(){
+  $fields = array();
+
+  $fields['field_city'] = array(
+      'cardinality' => '1',
+      'entity_types' => array(),
+      'field_name' => 'field_city',
+      'foreign keys' => array(
+          'tid' => array(
+              'columns' => array(
+                  'tid' => 'tid',
+              ),
+              'table' => 'taxonomy_term_data',
+          ),
+      ),
+      'indexes' => array(
+          'tid' => array(
+              0 => 'tid',
+          ),
+      ),
+      'module' => 'taxonomy',
+      'settings' => array(
+          'allowed_values' => array(
+              0 => array(
+                  'vocabulary' => 'city',
+                  'parent' => '0',
+              ),
+          ),
+          'options_list_callback' => 'i18n_taxonomy_allowed_values',
+      ),
+      'type' => 'taxonomy_term_reference',
+  );
+
+  $fields['field_description'] = array(
+      'cardinality' => '1',
+      'entity_types' => array(),
+      'field_name' => 'field_description',
+      'foreign keys' => array(
+          'format' => array(
+              'columns' => array(
+                  'format' => 'format',
+              ),
+              'table' => 'filter_format',
+          ),
+      ),
+      'indexes' => array(
+          'format' => array(
+              0 => 'format',
+          ),
+      ),
+      'module' => 'text',
+      'type' => 'text_long',
+  );
+
+  $fields['field_district'] = array(
+      'cardinality' => '1',
+      'entity_types' => array(),
+      'field_name' => 'field_district',
+      'foreign keys' => array(
+          'tid' => array(
+              'columns' => array(
+                  'tid' => 'tid',
+              ),
+              'table' => 'taxonomy_term_data',
+          ),
+      ),
+      'indexes' => array(
+          'tid' => array(
+              0 => 'tid',
+          ),
+      ),
+      'module' => 'taxonomy',
+      'settings' => array(
+          'allowed_values' => array(
+              0 => array(
+                  'vocabulary' => 'city',
+                  'parent' => '0',
+              ),
+          ),
+          'options_list_callback' => 'i18n_taxonomy_allowed_values',
+      ),
+      'type' => 'taxonomy_term_reference',
+  );
+
+  $fields['field_interest'] = array(
+      'cardinality' => '-1',
+      'entity_types' => array(),
+      'field_name' => 'field_interest',
+      'foreign keys' => array(
+          'tid' => array(
+              'columns' => array(
+                  'tid' => 'tid',
+              ),
+              'table' => 'taxonomy_term_data',
+          ),
+      ),
+      'indexes' => array(
+          'tid' => array(
+              0 => 'tid',
+          ),
+      ),
+      'module' => 'taxonomy',
+      'settings' => array(
+          'allowed_values' => array(
+              0 => array(
+                  'vocabulary' => 'interest',
+                  'parent' => '0',
+              ),
+          ),
+          'options_list_callback' => 'i18n_taxonomy_allowed_values',
+      ),
+      'type' => 'taxonomy_term_reference',
+  );
+
+  $fields['field_rating'] = array(
+      'cardinality' => '1',
+      'entity_types' => array(),
+      'field_name' => 'field_rating',
+      'foreign keys' => array(),
+      'indexes' => array(),
+      'module' => 'fivestar',
+      'settings' => array(
+          'axis' => 'vote',
+      ),
+      'type' => 'fivestar',
+  );
+
+  $fields['field_summary'] = array(
+      'cardinality' => '1',
+      'entity_types' => array(),
+      'field_name' => 'field_summary',
+      'foreign keys' => array(
+          'format' => array(
+              'columns' => array(
+                  'format' => 'format',
+              ),
+              'table' => 'filter_format',
+          ),
+      ),
+      'indexes' => array(
+          'format' => array(
+              0 => 'format',
+          ),
+      ),
+      'module' => 'text',
+      'type' => 'text_long',
+  );
+
+  $fields['field_user_activity'] = array(
+      'cardinality' => '1',
+      'entity_types' => array(),
+      'field_name' => 'field_user_activity',
+      'foreign keys' => array(),
+      'indexes' => array(
+          'value' => array(
+              0 => 'value',
+          ),
+      ),
+      'module' => 'list',
+      'settings' => array(
+          'allowed_values' => array(
+              'reviews' => 'Reviews',
+          ),
+          'allowed_values_function' => '',
+      ),
+      'type' => 'list_text',
+  );
+
+  $fields['field_user_address'] = array(
+      'cardinality' => '1',
+      'entity_types' => array(),
+      'field_name' => 'field_user_address',
+      'foreign keys' => array(
+          'format' => array(
+              'columns' => array(
+                  'format' => 'format',
+              ),
+              'table' => 'filter_format',
+          ),
+      ),
+      'indexes' => array(
+          'format' => array(
+              0 => 'format',
+          ),
+      ),
+      'module' => 'text',
+      'settings' => array(),
+      'translatable' => '0',
+      'type' => 'text_long',
+  );
+
+  $fields['field_user_avatar'] = array(
+      'cardinality' => '1',
+      'entity_types' => array(),
+      'field_name' => 'field_user_avatar',
+      'foreign keys' => array(
+          'fid' => array(
+              'columns' => array(
+                  'fid' => 'fid',
+              ),
+              'table' => 'file_managed',
+          ),
+      ),
+      'indexes' => array(
+          'fid' => array(
+              0 => 'fid',
+          ),
+      ),
+      'module' => 'image',
+      'settings' => array(
+          'default_image' => '17',
+          'uri_scheme' => 'public',
+      ),
+      'type' => 'image',
+  );
+
+  $fields['field_logo'] = array(
+    'cardinality' => '1',
+    'entity_types' => array(),
+    'field_name' => 'field_logo',
+    'foreign keys' => array(
+      'fid' => array(
+        'columns' => array(
+          'fid' => 'fid',
+        ),
+        'table' => 'file_managed',
+      ),
+    ),
+    'indexes' => array(
+      'fid' => array(
+        0 => 'fid',
+      ),
+    ),
+    'module' => 'image',
+    'settings' => array(
+      'default_image' => 0,
+      'profile2_private' => FALSE,
+      'uri_scheme' => 'public',
+    ),
+    'translatable' => '0',
+    'type' => 'image',
+  );
+
+  $fields['field_user_birth_date'] = array(
+      'cardinality' => '1',
+      'entity_types' => array(),
+      'field_name' => 'field_user_birth_date',
+      'foreign keys' => array(),
+      'indexes' => array(),
+      'module' => 'date',
+      'settings' => array(
+          'granularity' => array(
+              'day' => 'day',
+              'hour' => 0,
+              'minute' => 0,
+              'month' => 'month',
+              'second' => 0,
+              'year' => 'year',
+          ),
+          'repeat' => '0',
+          'timezone_db' => '',
+          'todate' => '',
+          'tz_handling' => 'none',
+      ),
+      'type' => 'datetime',
+  );
+
+  $fields['field_user_chinese_name'] = array(
+      'cardinality' => '1',
+      'entity_types' => array(),
+      'field_name' => 'field_user_chinese_name',
+      'foreign keys' => array(
+          'format' => array(
+              'columns' => array(
+                  'format' => 'format',
+              ),
+              'table' => 'filter_format',
+          ),
+      ),
+      'indexes' => array(
+          'format' => array(
+              0 => 'format',
+          ),
+      ),
+      'module' => 'text',
+      'settings' => array(
+          'max_length' => '255',
+      ),
+      'type' => 'text',
+  );
+
+  $fields['field_user_commitment'] = array(
+      'cardinality' => '1',
+      'entity_types' => array(),
+      'field_name' => 'field_user_commitment',
+      'foreign keys' => array(),
+      'indexes' => array(
+          'value' => array(
+              0 => 'value',
+          ),
+      ),
+      'module' => 'list',
+      'settings' => array(
+          'allowed_values' => array(
+              'login-time' => 'Login Time',
+              'reviews' => 'Reviews',
+          ),
+          'allowed_values_function' => '',
+      ),
+      'type' => 'list_text',
+  );
+
+  $fields['field_user_education'] = array(
+      'cardinality' => '1',
+      'entity_types' => array(),
+      'field_name' => 'field_user_education',
+      'foreign keys' => array(
+          'tid' => array(
+              'columns' => array(
+                  'tid' => 'tid',
+              ),
+              'table' => 'taxonomy_term_data',
+          ),
+      ),
+      'indexes' => array(
+          'tid' => array(
+              0 => 'tid',
+          ),
+      ),
+      'module' => 'taxonomy',
+      'settings' => array(
+          'allowed_values' => array(
+              0 => array(
+                  'vocabulary' => 'education',
+                  'parent' => '0',
+              ),
+          ),
+          'options_list_callback' => 'i18n_taxonomy_allowed_values',
+      ),
+      'type' => 'taxonomy_term_reference',
+  );
+
+  $fields['field_user_first_name'] = array(
+      'cardinality' => '1',
+      'entity_types' => array(),
+      'field_name' => 'field_user_first_name',
+      'foreign keys' => array(
+          'format' => array(
+              'columns' => array(
+                  'format' => 'format',
+              ),
+              'table' => 'filter_format',
+          ),
+      ),
+      'indexes' => array(
+          'format' => array(
+              0 => 'format',
+          ),
+      ),
+      'module' => 'text',
+      'settings' => array(
+          'max_length' => '255',
+      ),
+      'type' => 'text',
+  );
+
+  $fields['field_user_gender'] = array(
+      'cardinality' => '1',
+      'entity_types' => array(),
+      'field_name' => 'field_user_gender',
+      'foreign keys' => array(),
+      'indexes' => array(
+          'value' => array(
+              0 => 'value',
+          ),
+      ),
+      'module' => 'list',
+      'settings' => array(
+          'allowed_values' => array(
+              'M' => 'Male',
+              'F' => 'Female',
+          ),
+          'allowed_values_function' => '',
+      ),
+      'type' => 'list_text',
+  );
+
+  $fields['field_language_wanted'] = array(
+      'cardinality' => '-1',
+      'entity_types' => array(),
+      'field_name' => 'field_language_wanted',
+      'foreign keys' => array(
+          'tid' => array(
+              'columns' => array(
+                  'tid' => 'tid',
+              ),
+              'table' => 'taxonomy_term_data',
+          ),
+      ),
+      'indexes' => array(
+          'tid' => array(
+              0 => 'tid',
+          ),
+      ),
+      'module' => 'taxonomy',
+      'settings' => array(
+          'allowed_values' => array(
+              0 => array(
+                  'vocabulary' => 'language',
+                  'parent' => '0',
+              ),
+          ),
+          'options_list_callback' => 'i18n_taxonomy_allowed_values',
+      ),
+      'type' => 'taxonomy_term_reference',
+  );
+
+  $fields['field_user_last_name'] = array(
+      'cardinality' => '1',
+      'entity_types' => array(),
+      'field_name' => 'field_user_last_name',
+      'foreign keys' => array(
+          'format' => array(
+              'columns' => array(
+                  'format' => 'format',
+              ),
+              'table' => 'filter_format',
+          ),
+      ),
+      'indexes' => array(
+          'format' => array(
+              0 => 'format',
+          ),
+      ),
+      'module' => 'text',
+      'settings' => array(
+          'max_length' => '255',
+      ),
+      'type' => 'text',
+  );
+
+  $fields['field_user_learn_exp'] = array(
+      'cardinality' => '1',
+      'entity_types' => array(),
+      'field_name' => 'field_user_learn_exp',
+      'foreign keys' => array(),
+      'indexes' => array(
+          'value' => array(
+              0 => 'value',
+          ),
+      ),
+      'module' => 'list',
+      'settings' => array(
+          'allowed_values' => array(
+              0 => '0',
+              1 => '1',
+              2 => '2',
+              3 => '3',
+              4 => '4',
+              5 => '5',
+              6 => '6',
+              7 => '7',
+              8 => '8',
+              9 => '9',
+              10 => '10',
+              11 => '11',
+              12 => '12',
+              13 => '13',
+              14 => '14',
+              15 => '15',
+          ),
+          'allowed_values_function' => '',
+      ),
+      'type' => 'list_integer',
+  );
+
+  $fields['field_user_middle_name'] = array(
+      'cardinality' => '1',
+      'entity_types' => array(),
+      'field_name' => 'field_user_middle_name',
+      'foreign keys' => array(
+          'format' => array(
+              'columns' => array(
+                  'format' => 'format',
+              ),
+              'table' => 'filter_format',
+          ),
+      ),
+      'indexes' => array(
+          'format' => array(
+              0 => 'format',
+          ),
+      ),
+      'module' => 'text',
+      'settings' => array(
+          'max_length' => '255',
+      ),
+      'type' => 'text',
+  );
+
+  $fields['field_user_nationality'] = array(
+      'cardinality' => '1',
+      'entity_types' => array(),
+      'field_name' => 'field_user_nationality',
+      'foreign keys' => array(
+          'tid' => array(
+              'columns' => array(
+                  'tid' => 'tid',
+              ),
+              'table' => 'taxonomy_term_data',
+          ),
+      ),
+      'indexes' => array(
+          'tid' => array(
+              0 => 'tid',
+          ),
+      ),
+      'module' => 'taxonomy',
+      'settings' => array(
+          'allowed_values' => array(
+              0 => array(
+                  'vocabulary' => 'nationality',
+                  'parent' => '0',
+              ),
+          ),
+          'options_list_callback' => 'i18n_taxonomy_allowed_values',
+      ),
+      'type' => 'taxonomy_term_reference',
+  );
+
+  $fields['field_user_occupation'] = array(
+      'cardinality' => '1',
+      'entity_types' => array(),
+      'field_name' => 'field_user_occupation',
+      'foreign keys' => array(
+          'tid' => array(
+              'columns' => array(
+                  'tid' => 'tid',
+              ),
+              'table' => 'taxonomy_term_data',
+          ),
+      ),
+      'indexes' => array(
+          'tid' => array(
+              0 => 'tid',
+          ),
+      ),
+      'module' => 'taxonomy',
+      'settings' => array(
+          'allowed_values' => array(
+              0 => array(
+                  'vocabulary' => 'occupation',
+                  'parent' => '0',
+              ),
+          ),
+          'options_list_callback' => 'i18n_taxonomy_allowed_values',
+      ),
+      'type' => 'taxonomy_term_reference',
+  );
+
+  $fields['field_user_philosophy'] = array(
+      'cardinality' => '1',
+      'entity_types' => array(),
+      'field_name' => 'field_user_philosophy',
+      'foreign keys' => array(
+          'format' => array(
+              'columns' => array(
+                  'format' => 'format',
+              ),
+              'table' => 'filter_format',
+          ),
+      ),
+      'indexes' => array(
+          'format' => array(
+              0 => 'format',
+          ),
+      ),
+      'module' => 'text',
+      'settings' => array(
+          'max_length' => '255',
+      ),
+      'type' => 'text',
+  );
+
+  $fields['field_user_phone'] = array(
+      'cardinality' => '1',
+      'entity_types' => array(),
+      'field_name' => 'field_user_phone',
+      'foreign keys' => array(
+          'format' => array(
+              'columns' => array(
+                  'format' => 'format',
+              ),
+              'table' => 'filter_format',
+          ),
+      ),
+      'indexes' => array(
+          'format' => array(
+              0 => 'format',
+          ),
+      ),
+      'module' => 'text',
+      'settings' => array(
+          'max_length' => '255',
+      ),
+      'type' => 'text',
+  );
+
+  $fields['field_user_social_twitter'] = array(
+      'cardinality' => '1',
+      'entity_types' => array(),
+      'field_name' => 'field_user_social_twitter',
+      'foreign keys' => array(
+          'format' => array(
+              'columns' => array(
+                  'format' => 'format',
+              ),
+              'table' => 'filter_format',
+          ),
+      ),
+      'indexes' => array(
+          'format' => array(
+              0 => 'format',
+          ),
+      ),
+      'module' => 'text',
+      'settings' => array(
+          'max_length' => '255',
+      ),
+      'type' => 'text',
+  );
+
+  $fields['field_user_social_weibo'] = array(
+      'cardinality' => '1',
+      'entity_types' => array(),
+      'field_name' => 'field_user_social_weibo',
+      'foreign keys' => array(
+          'format' => array(
+              'columns' => array(
+                  'format' => 'format',
+              ),
+              'table' => 'filter_format',
+          ),
+      ),
+      'indexes' => array(
+          'format' => array(
+              0 => 'format',
+          ),
+      ),
+      'module' => 'text',
+      'settings' => array(
+          'max_length' => '255',
+      ),
+      'type' => 'text',
+  );
+
+  $fields['field_user_status'] = array(
+      'cardinality' => '1',
+      'entity_types' => array(),
+      'field_name' => 'field_user_status',
+      'foreign keys' => array(),
+      'indexes' => array(
+          'value' => array(
+              0 => 'value',
+          ),
+      ),
+      'module' => 'list',
+      'settings' => array(
+          'allowed_values' => array(
+              'Single' => 'Single',
+              'Married' => 'Married',
+              'Widowed' => 'Widowed',
+          ),
+          'allowed_values_function' => '',
+      ),
+      'type' => 'list_text',
+  );
+
+  $fields['field_user_title'] = array(
+      'cardinality' => '1',
+      'entity_types' => array(),
+      'field_name' => 'field_user_title',
+      'foreign keys' => array(),
+      'indexes' => array(
+          'value' => array(
+              0 => 'value',
+          ),
+      ),
+      'module' => 'list',
+      'settings' => array(
+          'allowed_values' => array(
+              'mr' => 'Mr.',
+              'ms' => 'Ms.',
+              'mrs' => 'Mrs.',
+          ),
+          'allowed_values_function' => '',
+      ),
+      'type' => 'list_text',
+  );
+  
+  $fields['field_user_status'] = array(
+      'cardinality' => '1',
+      'entity_types' => array(),
+      'field_name' => 'field_user_status',
+      'foreign keys' => array(),
+      'indexes' => array(
+          'value' => array(
+              0 => 'value',
+          ),
+      ),
+      'module' => 'list',
+      'settings' => array(
+          'allowed_values' => _liveitchina_fields_marital_status(),
+          'allowed_values_function' => '',
+      ),
+      'type' => 'list_text',
+  );
+
+  $fields['field_user_website'] = array(
+      'cardinality' => '1',
+      'entity_types' => array(),
+      'field_name' => 'field_user_website',
+      'foreign keys' => array(
+          'format' => array(
+              'columns' => array(
+                  'format' => 'format',
+              ),
+              'table' => 'filter_format',
+          ),
+      ),
+      'indexes' => array(
+          'format' => array(
+              0 => 'format',
+          ),
+      ),
+      'module' => 'text',
+      'settings' => array(
+          'max_length' => '255',
+      ),
+      'translatable' => '0',
+      'type' => 'text',
+  );
+
+  $fields['field_lang_offered'] = array(
+      'cardinality' => '-1',
+      'entity_types' => array(),
+      'field_name' => 'field_lang_offered',
+      'foreign keys' => array(
+          'tid' => array(
+              'columns' => array(
+                  'tid' => 'tid',
+              ),
+              'table' => 'taxonomy_term_data',
+          ),
+      ),
+      'indexes' => array(
+          'tid' => array(
+              0 => 'tid',
+          ),
+      ),
+      'module' => 'taxonomy',
+      'settings' => array(
+          'allowed_values' => array(
+              0 => array(
+                  'vocabulary' => 'language',
+                  'parent' => '0',
+              ),
+          ),
+          'options_list_callback' => 'i18n_taxonomy_allowed_values',
+      ),
+      'type' => 'taxonomy_term_reference',
+  );
+
+  $fields['field_user_tutor_availability'] = array(
+      'cardinality' => '-1',
+      'entity_types' => array(),
+      'field_name' => 'field_user_tutor_availability',
+      'foreign keys' => array(),
+      'indexes' => array(
+          'value' => array(
+              0 => 'value',
+          ),
+      ),
+      'module' => 'list',
+      'settings' => array(
+          'allowed_values' => array(
+              'mon' => 'Monday',
+              'tue' => 'Tuesday',
+              'wed' => 'Wednesday',
+              'thu' => 'Thursday',
+              'fri' => 'Friday',
+              'sat' => 'Saturday',
+              'sun' => 'Sunday',
+          ),
+          'allowed_values_function' => '',
+      ),
+      'translatable' => '0',
+      'type' => 'list_text',
+  );
+
+  $fields['field_user_tutor_exp_year'] = array(
+      'cardinality' => '1',
+      'entity_types' => array(),
+      'field_name' => 'field_user_tutor_exp_year',
+      'foreign keys' => array(),
+      'indexes' => array(
+          'value' => array(
+              0 => 'value',
+          ),
+      ),
+      'module' => 'list',
+      'settings' => array(
+          'allowed_values' => array(
+              0 => '0',
+              1 => '1',
+              2 => '2',
+              3 => '3',
+              4 => '4',
+              5 => '5',
+              6 => '6',
+              7 => '7',
+              8 => '8',
+              9 => '9',
+              10 => '10',
+              11 => '11',
+              12 => '12',
+              13 => '13',
+              14 => '14',
+              15 => '15',
+          ),
+          'allowed_values_function' => '',
+      ),
+      'translatable' => '0',
+      'type' => 'list_text',
+  );
+
+  $fields['field_user_tutor_meeting_loc'] = array(
+      'cardinality' => '1',
+      'entity_types' => array(),
+      'field_name' => 'field_user_tutor_meeting_loc',
+      'foreign keys' => array(),
+      'indexes' => array(
+          'value' => array(
+              0 => 'value',
+          ),
+      ),
+      'module' => 'list',
+      'settings' => array(
+          'allowed_values' => array(
+              0 => 'Neutral',
+              1 => 'My Home',
+              2 => 'Your Home',
+              3 => 'Learning Center',
+              4 => 'No preference',
+          ),
+          'allowed_values_function' => '',
+      ),
+      'type' => 'list_text',
+  );
+
+  $fields['field_user_tutor_price'] = array(
+      'cardinality' => '1',
+      'entity_types' => array(),
+      'field_name' => 'field_user_tutor_price',
+      'foreign keys' => array(),
+      'indexes' => array(
+          'value' => array(
+              0 => 'value',
+          ),
+      ),
+      'module' => 'list',
+      'settings' => array(
+          'allowed_values' => array(
+              1 => '$',
+              2 => '$$',
+              3 => '$$$',
+              4 => '$$$$',
+              5 => '$$$$$',
+          ),
+          'allowed_values_function' => '',
+      ),
+      'type' => 'list_text',
+  );
+  $fields['field_price'] = array(
+    'cardinality' => '1',
+    'entity_types' => array(),
+    'field_name' => 'field_price',
+    'foreign keys' => array(),
+    'indexes' => array(
+      'value' => array(
+        0 => 'value',
+      ),
+    ),
+    'module' => 'list',
+    'settings' => array(
+      'allowed_values' => array(
+        1 => '$',
+        2 => '$$',
+        3 => '$$$',
+        4 => '$$$$',
+        5 => '$$$$$',
+      ),
+      'allowed_values_function' => '',
+    ),
+    'type' => 'list_text',
+  );
+
+  $fields['field_user_partner_availability'] = array(
+      'cardinality' => '-1',
+      'entity_types' => array(),
+      'field_name' => 'field_user_partner_availability',
+      'foreign keys' => array(),
+      'indexes' => array(
+          'value' => array(
+              0 => 'value',
+          ),
+      ),
+      'module' => 'list',
+      'settings' => array(
+          'allowed_values' => array(
+              'mon' => 'Monday',
+              'tue' => 'Tuesday',
+              'wed' => 'Wednesday',
+              'thu' => 'Thursday',
+              'fri' => 'Friday',
+              'sat' => 'Saturday',
+              'sun' => 'Sunday',
+          ),
+          'allowed_values_function' => '',
+      ),
+      'type' => 'list_text',
+  );
+
+  $fields['field_user_partner_meeting_loc'] = array(
+      'cardinality' => '1',
+      'entity_types' => array(),
+      'field_name' => 'field_user_partner_meeting_loc',
+      'foreign keys' => array(),
+      'indexes' => array(
+          'value' => array(
+              0 => 'value',
+          ),
+      ),
+      'module' => 'list',
+      'settings' => array(
+          'allowed_values' => array(
+              0 => 'Neutral',
+              1 => 'My Home',
+              2 => 'Your Home',
+              3 => 'Learning Center',
+              4 => 'No preference',
+          ),
+          'allowed_values_function' => '',
+      ),
+      'type' => 'list_text',
+  );
+
+  $fields['field_user_partner_offered_year'] = array(
+      'cardinality' => '1',
+      'entity_types' => array(),
+      'field_name' => 'field_user_partner_offered_year',
+      'foreign keys' => array(),
+      'indexes' => array(
+          'value' => array(
+              0 => 'value',
+          ),
+      ),
+      'module' => 'list',
+      'settings' => array(
+          'allowed_values' => array(
+              1 => '1',
+              2 => '2',
+              3 => '3',
+              4 => '4',
+              5 => '5',
+              6 => '6',
+              7 => '7',
+              8 => '8',
+              9 => '9',
+              10 => '10',
+              11 => '11',
+              12 => '12',
+              13 => '13',
+              14 => '14',
+              15 => '15',
+          ),
+          'allowed_values_function' => '',
+      ),
+      'type' => 'list_integer',
+  );
+
+  $fields['field_user_partner_wanted_year'] = array(
+      'cardinality' => '1',
+      'entity_types' => array(),
+      'field_name' => 'field_user_partner_wanted_year',
+      'foreign keys' => array(),
+      'indexes' => array(
+          'value' => array(
+              0 => 'value',
+          ),
+      ),
+      'module' => 'list',
+      'settings' => array(
+          'allowed_values' => array(
+              1 => '1',
+              2 => '2',
+              3 => '3',
+              4 => '4',
+              5 => '5',
+              6 => '6',
+              7 => '7',
+              8 => '8',
+              9 => '9',
+              10 => '10',
+              11 => '11',
+              12 => '12',
+              13 => '13',
+              14 => '14',
+              15 => '15',
+          ),
+          'allowed_values_function' => '',
+      ),
+      'type' => 'list_integer',
+  );
+
+  $fields['field_accomodation'] = array(
+    'active' => '1',
+    'cardinality' => '1',
+    'deleted' => '0',
+    'entity_types' => array(),
+    'field_name' => 'field_accomodation',
+    'foreign keys' => array(),
+    'indexes' => array(
+      'value' => array(
+        0 => 'value',
+      ),
+    ),
+    'module' => 'list',
+    'settings' => array(
+      'allowed_values' => array(
+        0 => 'No',
+        1 => 'Yes',
+      ),
+      'allowed_values_function' => '',
+    ),
+    'translatable' => '0',
+    'type' => 'list_boolean',
+  );
+
+  $fields['field_address'] = array(
+    'active' => '1',
+    'cardinality' => '1',
+    'deleted' => '0',
+    'entity_types' => array(),
+    'field_name' => 'field_address',
+    'foreign keys' => array(),
+    'indexes' => array(),
+    'module' => 'addressfield',
+    'translatable' => '0',
+    'type' => 'addressfield',
+  );
+
+  $fields['field_category'] = array(
+    'active' => '1',
+    'cardinality' => '1',
+    'entity_types' => array(),
+    'field_name' => 'field_category',
+    'foreign keys' => array(
+      'tid' => array(
+        'columns' => array(
+          'tid' => 'tid',
+        ),
+        'table' => 'taxonomy_term_data',
+      ),
+    ),
+    'indexes' => array(
+      'tid' => array(
+        0 => 'tid',
+      ),
+    ),
+    'module' => 'taxonomy',
+    'settings' => array(
+      'allowed_values' => array(
+        0 => array(
+          'vocabulary' => 'category',
+          'parent' => '0',
+        ),
+      ),
+      'options_list_callback' => 'i18n_taxonomy_allowed_values',
+    ),
+    'translatable' => '0',
+    'type' => 'taxonomy_term_reference',
+  );
+
+  $fields['field_contact'] = array(
+    'active' => '1',
+    'cardinality' => '1',
+    'entity_types' => array(),
+    'field_name' => 'field_contact',
+    'foreign keys' => array(
+      'uid' => array(
+        'columns' => array(
+          'uid' => 'uid',
+        ),
+        'table' => 'users',
+      ),
+    ),
+    'indexes' => array(
+      'uid' => array(
+        0 => 'uid',
+      ),
+    ),
+    'module' => 'user_reference',
+    'settings' => array(
+      'profile2_private' => FALSE,
+      'referenceable_roles' => array(
+        2 => '2',
+        3 => 0,
+        4 => 0,
+        5 => 0,
+        6 => 0,
+        7 => 0,
+      ),
+      'referenceable_status' => array(
+        0 => 0,
+        1 => '1',
+      ),
+      'view' => array(
+        'args' => array(),
+        'display_name' => '',
+        'view_name' => '',
+      ),
+    ),
+    'translatable' => '0',
+    'type' => 'user_reference', 
+  );
+
+  $fields['field_email'] = array(
+    'active' => '1',
+    'cardinality' => '1',
+    'entity_types' => array(),
+    'field_name' => 'field_email',
+    'foreign keys' => array(
+      'format' => array(
+        'columns' => array(
+          'format' => 'format',
+        ),
+        'table' => 'filter_format',
+      ),
+    ),
+    'indexes' => array(
+      'format' => array(
+        0 => 'format',
+      ),
+    ),
+    'module' => 'text',
+    'settings' => array(
+      'max_length' => '255',
+    ),
+    'translatable' => '0',
+    'type' => 'text',
+  );
+
+  $fields['field_telephone'] = array(
+    'active' => '1',
+    'cardinality' => '1',
+    'entity_types' => array(),
+    'field_name' => 'field_telephone',
+    'foreign keys' => array(
+      'format' => array(
+        'columns' => array(
+          'format' => 'format',
+        ),
+        'table' => 'filter_format',
+      ),
+    ),
+    'indexes' => array(
+      'format' => array(
+        0 => 'format',
+      ),
+    ),
+    'module' => 'text',
+    'settings' => array(
+      'max_length' => '255',
+    ),
+    'translatable' => '0',
+    'type' => 'text',
+  );
+
+  $fields['field_website'] = array(
+      'active' => '1',
+      'cardinality' => '1',
+      'entity_types' => array(),
+      'field_name' => 'field_website',
+      'foreign keys' => array(
+        'format' => array(
+          'columns' => array(
+            'format' => 'format',
+          ),
+          'table' => 'filter_format',
+        ),
+      ),
+      'indexes' => array(
+        'format' => array(
+          0 => 'format',
+        ),
+      ),
+      'module' => 'text',
+      'settings' => array(
+        'max_length' => '255',
+        'profile2_private' => FALSE,
+      ),
+      'translatable' => '0',
+      'type' => 'text',
+  );
+
+  $fields['field_school_name'] = array(
+    'active' => '1',
+    'cardinality' => '1',
+    'entity_types' => array(),
+    'field_name' => 'field_school_name',
+    'foreign keys' => array(
+      'format' => array(
+        'columns' => array(
+          'format' => 'format',
+        ),
+        'table' => 'filter_format',
+      ),
+    ),
+    'indexes' => array(
+      'format' => array(
+        0 => 'format',
+      ),
+    ),
+    'module' => 'text',
+    'settings' => array(
+      'max_length' => '255',
+      'profile2_private' => FALSE,
+    ),
+    'translatable' => '0',
+    'type' => 'text',
+  );
+
+  return $fields;
+}
+
+function liveitchina_fields_uninstall() {
+  // %TODO% now need to purge, in case fields now have no
+  // instances
+}
+
+function _liveitchina_fields_marital_status(){
+  return array(
+      'single' => t('Single'),
+      'married' => t('Married'),
+      'widowed' => t('Widowed'),
+  );
+}

@@ -1,0 +1,38 @@
+/* Static View-only Star Version */
+.fivestar-star div.fivestar-widget-static .star {
+  width: 30px;
+  height: 30px;
+  background: url(star.png) no-repeat 0 0;
+}
+
+.fivestar-star div.fivestar-widget-static .star span.on {
+  background: url(star.png) no-repeat 0 -60px;
+}
+
+.fivestar-star div.fivestar-widget-static .star span.off {
+  background: url(star.png) no-repeat 0 0;
+}
+
+/* Javascript Star Version */
+.fivestar-star div.fivestar-widget .cancel,
+.fivestar-star div.fivestar-widget .star {
+  width: 30px;
+  height: 30px;
+}
+.fivestar-star div.fivestar-widget .cancel,
+.fivestar-star div.fivestar-widget .cancel a {
+  background: url(delete.png) no-repeat 0 0;
+}
+
+.fivestar-star div.fivestar-widget .star,
+.fivestar-star div.fivestar-widget .star a {
+  background: url(star.png) no-repeat 0 0;
+}
+
+.fivestar-star div.fivestar-widget div.on a {
+  background-position: 0 -30px;
+}
+.fivestar-star div.fivestar-widget div.hover a,
+.fivestar-star div.rating div a:hover {
+  background-position: 0 -30px;
+}

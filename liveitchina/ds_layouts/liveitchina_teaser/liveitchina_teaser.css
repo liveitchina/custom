@@ -1,0 +1,20 @@
+.ds-liveitchina-html5 section,
+.ds-liveitchina-html5 aside {
+  display: block;
+}
+.liveitchina-teaser {
+}
+
+.liveitchina-teaser .ds-content{
+  padding: 13px;
+}
+.liveitchina-teaser .group-left {
+  width: 30%;
+  float: left;
+}
+
+.liveitchina-teaser .group-right {
+  width: 70%;
+  float: right;
+  position: relative;
+}

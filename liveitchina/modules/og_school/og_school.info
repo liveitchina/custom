@@ -1,0 +1,12 @@
+name = School Profile
+description = School profile using Organic Group.
+package = "LiveitChina"
+core = 7.x
+dependencies[] = user
+dependencies[] = og
+dependencies[] = profile2_liveitchina
+dependencies[] = reply
+;dependencies[] = liveitchina
+
+files[] = og_school.apachesolr.inc
+files[] = og_school.menu.inc

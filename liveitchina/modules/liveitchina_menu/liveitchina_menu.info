@@ -1,0 +1,7 @@
+name = LiveitChina Menus
+description = Menus related to liveitchina
+package = LiveitChina
+version = 7.x-1.0
+core = 7.x
+
+dependencies[] = liveitchina

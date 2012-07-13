@@ -1,0 +1,14 @@
+.ds-form-school .group-left {
+  float: left;
+  width: 69%;
+}
+
+.ds-form-school .group-right {
+  float: right;
+  width: 29%;
+}
+
+.ds-form-school .group-footer {
+  padding-top: 1em;
+  clear: both;
+}

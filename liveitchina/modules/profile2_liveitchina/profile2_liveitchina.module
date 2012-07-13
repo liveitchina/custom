@@ -1,0 +1,545 @@
+<?php
+/**
+ * Implementation of hook_apachesolr_modify_query().
+ */
+function profile2_liveitchina_apachesolr_query_alter($query) {
+  global $language;
+
+  //Show only if status is true
+  $query->addFilter('bs_status', TRUE);
+
+  switch (arg(1)){
+    case 'tutor':
+      $query->addParam('fl', 'user_avatar');
+      $query->addParam('fl', 'fs_rating');
+      $query->addParam('fl', 'im_field_city');
+      $query->addParam('fl', 'sm_vid_language');
+      $query->addParam('fl', 'ts_summary');
+      $query->addParam('fl', 'sm_lang_offered');
+      $query->addParam('fl', 'tutor_price');
+      $query->addFilter('user_role', 6);
+      $query->addParam('fl', 'ts_teaches');
+      break;
+    case 'exchange-partner':
+      $query->addParam('fl', 'user_avatar');
+      $query->addParam('fl', 'fs_rating');
+      $query->addParam('fl', 'im_field_city');
+      $query->addParam('fl', 'sm_vid_language');
+      $query->addParam('fl', 'ts_summary');
+      $query->addParam('fl', 'sm_lang_offered');
+      $query->addParam('fl', 'sm_lang_wanted');
+      $query->addFilter('bundle', 'exchange_partner');
+      $query->addParam('fl', 'ts_learning');
+      $query->addParam('fl', 'ts_teaches');
+      $query->addFilter('user_role', 4);
+      break;
+  }
+}
+
+/**
+ * Template preprocess for apachesolr search results.
+ *
+ */
+function profile2_liveitchina_preprocess_search_result(&$variables) {
+  //$cost = array(0 => '' , 1 => '$', 2 => '$$', 3 => '$$$', 4 => '$$$$', 5 => '$$$$$');
+  // If this search result is coming from our module, we want to improve the
+  // template potential to make life easier for themers.
+  $result = $variables['result'];
+  $fields = $result['fields'];
+  
+  switch ($result['bundle']){
+    case 'tutor':
+      _profile2_liveitchina_result_vars($variables, $result);
+      $variables['user_actions'] = _apachesolr_liveitchina_get_connect($result);
+      $variables['summary'] = (isset($fields['ts_summary']))? $fields['ts_summary']:'';
+      $variables['profile_type'] = $fields['bundle_name'];
+      $variables['teaches'] = $fields['ts_teaches'];
+      $variables['language_offered'] = implode(', ', (array)$fields['sm_lang_offered']);
+      if (is_numeric($fields['tutor_price'])){
+        $variables['cost'] = _liveitchina_price_table($fields['im_field_city'][0], $fields['tutor_price']);//$cost[$fields['tutor_price']];
+      }
+      break;
+    case 'exchange_partner':
+      _profile2_liveitchina_result_vars($variables, $result);
+      $variables['teaches'] = $fields['ts_teaches'];
+      $variables['learning'] = $fields['ts_learning'];
+      $variables['user_actions'] = _apachesolr_liveitchina_get_connect($result);
+      $variables['summary'] = (isset($fields['ts_summary']))? $fields['ts_summary']:'';
+      $variables['profile_type'] = $fields['bundle_name'];
+      $variables['language_offered'] = implode(', ', (array)$fields['sm_lang_offered']);
+      $variables['language_wanted'] = implode(', ', (array)$fields['sm_lang_wanted']);
+      break;
+  }
+}
+
+function _profile2_liveitchina_result_vars(&$vars, &$result){
+  if ($city = $result['fields']['im_field_city'][0]){
+    $vars['cities'] = facetapi_map_taxonomy_terms(array($city));
+    $vars['city'] = $vars['cities'][$city];
+  }
+  else {
+    $vars['city'] = '';
+  }
+  
+  if (!empty($result['fields']['user_avatar'])) {
+    $file_main = file_load($result['fields']['user_avatar']);
+  }
+  else {
+    $avatar = field_info_field('field_user_avatar');
+    $file_main = file_load($avatar['settings']['default_image']);
+  }
+  $vars['image_path'] = $file_main->uri;
+  $vars['image'] = l(
+      theme('image_style',
+          array('style_name' => 'profile_main',
+              'path' => $file_main->uri)
+      ),
+      $result['fields']['path'],
+      array('html' => TRUE)
+  );
+  // Process rating
+  drupal_add_css(drupal_get_path('module', 'fivestar') . '/css/fivestar.css');
+  $fivestar = array(
+      'rating' => ($result['fields']['fs_rating'])?$result['fields']['fs_rating']:0,
+      'stars' => 5,
+      'widget' => array(
+          'name' => 'star',
+          'css' => drupal_get_path('module', 'liveitchina') . '/widget/star/star.css',
+      )
+  );
+  $vars['rating'] = theme('fivestar_static', $fivestar);
+}
+
+function profile2_liveitchina_form_profile2_edit_tutor_form_alter(&$form, &$form_state, $form_id) {
+  drupal_set_title('Promote Yourself as Tutor');
+  _profile2_liveitchina_form_footer($form, 'tutor', $form_state);
+  $form['#attached']['js'] = array(
+    drupal_get_path('module','profile2_liveitchina') . '/js/tutor.js'=> array(
+      'type'=>'file',
+    ),
+  );
+
+}
+
+function profile2_liveitchina_form_profile2_edit_exchange_partner_form_alter(&$form, &$form_state, $form_id) {
+  drupal_set_title('Promote Yourself as Exchange Partner');
+  _profile2_liveitchina_form_footer($form, 'exchange_partner', $form_state);
+  $form['#attached']['js'] = array(
+    drupal_get_path('module','profile2_liveitchina') . '/js/exchange_partner.js'=> array(
+      'type'=>'file',
+    ),
+  );
+}
+
+function profile2_liveitchina_form_profile2_edit_user_form_alter(&$form, &$form_state, $form_id) {
+  $form['#attached']['js'] = array(
+    drupal_get_path('theme','omega_liveitchina') . '/js/profile_learn_exp.js'=> array(
+      'type'=>'file',
+    ),
+  );
+}
+
+function _profile2_liveitchina_form_footer(&$form, $profile_type, $form_state = ''){
+  $user = user_load($form_state['profile2']->uid); //make sure to load the user on form and not the current user.
+  $roles_to_promote = variable_get('liveitchina_profile_role', array());
+  $myroles = $user->roles;
+  
+  //buttons
+  $form['actions']['previews'] = array(
+      '#markup' => l(t('Cancel'), '', array('fragment' => 'cancel', 'attributes' => array('onClick'=> 'history.go(-1); return false;', 'class'=> 'form-submit'))) . 
+                   l(t('Preview in English'), '', array('fragment' => 'english')) . 
+                   l(t('Preview in Chinese'), '', array('fragment' => 'chinese')),
+      '#weight' => 40,
+  );
+  $checkbox_label = t('I agree to the') . ' ' . l(t('Terms and Conditions'), '#');
+  // Adding the checkbox to the fieldset.
+  $form['terms_of_use'] = array(
+    '#prefix' => '<div class="lic-form-sides">',
+    '#suffix' => '</div>',
+    '#type' => 'checkbox',
+    '#title' => $checkbox_label,
+  );
+  $form['#validate'][]= 'profile2_liveitchina_terms_of_use';
+  
+  $form['actions']['submit']['#weight'] = 43;
+  
+  if (isset($roles_to_promote[$profile_type])){
+    $form['actions']['submit']['#value'] = t('Update');
+    $rid = $roles_to_promote[$profile_type];
+    if (array_key_exists($rid, $myroles)){
+      $form['profile2_action'] = array(
+          '#type' => 'hidden',
+          '#value' => 'unpublish',
+      );
+      $form['actions']['unpublish'] = array(
+        '#type' => 'submit',
+        '#value' => t('Unpublish'),
+        '#submit' => array('profile2_liveitchina_promote', 'profile2_form_submit_handler'),
+        '#weight' => 42,
+      );
+    }
+    else {
+      $form['actions']['submit']['#value'] = t('Save');
+      $form['profile2_action'] = array(
+        '#type' => 'hidden',
+        '#value' => 'publish',
+      );
+      $form['actions']['publish'] = array(
+          '#type' => 'submit',
+          '#value' => t('Save and Publish'),
+          '#submit' => array('profile2_liveitchina_promote', 'profile2_form_submit_handler'),
+          '#weight' => 42,
+      );
+    }
+  }
+
+  hide($form['actions']['delete']);
+  //drupal_set_message(print_r($form, true));
+}
+
+function profile2_liveitchina_terms_of_use($form, &$form_state){
+  //drupal_set_message(print_r($form_state['clicked_button'], true));
+  if($form_state['values']['terms_of_use'] == FALSE){
+    form_set_error('terms_of_use', t('You must agree with the terms and conditions.'));
+  }
+}
+
+function profile2_liveitchina_promote(&$form, &$form_state){
+  global $user;
+  $user_profile = user_load($user->uid);
+  $profile = $form_state['profile2'];
+  $role = $profile->type;
+  $roles_to_promote = variable_get('liveitchina_profile_role', array());
+  $myroles = $user_profile->roles;
+  $rolenames = user_roles(TRUE);
+  $rid = $roles_to_promote[$role];
+  
+  switch ($form_state['values']['profile2_action']){
+    case 'unpublish':
+      if (array_key_exists($rid, $myroles)){
+        unset($myroles[$rid]);
+        user_save($user_profile, array('roles' => $myroles));
+        drupal_set_message(t('Your profile @profile has been unpromoted.', array('@profile'=> $profile->label)));
+      }
+      break;
+    case 'publish':
+      if (!array_key_exists($rid, $myroles)){
+        $myroles[$rid] = $rolenames[$rid];
+        user_save($user_profile, array('roles' => $myroles));
+        drupal_set_message(t('Your profile @profile has been promoted.', array('@profile'=> $profile->label)));
+      }
+      break;
+  }
+}
+
+function _profile2_liveitchina_ds_field_user_photo($field) {
+  $user = user_load($field['entity']->uid);
+  $user_picture = array(
+    'style_name' => 'profile_main',
+    'path' => '',
+    'alt' => '',
+  );
+
+  if (is_object($user->picture) && isset($user->picture->fid)) {
+    $file = file_load($user->picture->fid);
+    $user_picture['path'] = $file->uri;
+    $user_picture['alt']  = (isset($user->realname))? $user->realname : $user->name;
+  }
+  else {
+    $avatar = field_info_field('field_user_avatar');
+    $file = file_load($avatar['settings']['default_image']);
+    $user_picture['path'] = $file->uri;
+  }
+
+  return theme('image_style', $user_picture);
+}
+
+function _profile2_liveitchina_ds_profile_rating($field){
+  //return fivestar_get_votes('reply', $id, $tag = 'vote', $uid = NULL);
+  return print_r($field,true);
+}
+
+function _profile2_liveitchina_ds_field_additional_information($field){
+  $entity = $field['entity'];
+  $profile = profile2_load_by_user($entity->uid, $entity->type);
+  $display = array();
+  $display[] = field_view_field('profile2', $profile, 'field_additional_info', 'teaser');
+  $display[] = field_view_field('profile2', $profile, 'field_add_info_tag', 'teaser');
+  $display[] = field_view_field('profile2', $profile, 'field_add_info_text', 'teaser');
+  return render($display);
+}
+
+function _profile2_liveitchina_ds_field_user_edit_profile($field){
+  $user = user_load($field['entity']->uid);
+
+  $profile_roles =  variable_get('profile_role_relationship', array());
+
+  $data = array();
+  $url_params = array(
+    'role' => $field['bundle'],
+    'destination' => 'promotions',
+  );
+
+  if (array_key_exists($profile_roles[$field['entity']->type]['rid'], $user->roles)){ //already publish
+    $data[] = l(t('Unpublish'),
+      'user/' . $user->uid . '/demote',
+      array('query'=> $url_params,
+        'attributes' => array('class'=>
+          array('link-button'),
+        ),
+      )
+    );
+  }
+  else {
+    $data[] = l(t('Publish'),
+      'user/' . $user->uid . '/promote',
+      array('query'=> $url_params,
+        'attributes' => array('class'=>
+          array('link-button'),
+        ),
+      )
+    );
+  }
+
+  $data[] = l(t('Edit'),
+    'profile-' . $field['bundle'] . '/' . $user->uid . '/edit',
+    array('query'=>
+      array('destination'=>'promotions'),
+        'attributes' => array('class'=>
+        array('link-button'),
+      ),
+    )
+  );
+
+  $data[] = '<span class="promote-my-profile">' . t('Do you want to feature this promotion') . '?' . l(t('Email Us'),'#') . '</span>';
+  return implode('', $data);
+}
+
+function _profile2_liveitchina_ds_field_user_profile_name($field){
+  $entity = $field['entity'];
+  $user = user_load($entity->uid);
+  $profile_user = profile2_load_by_user($entity->uid, 'user');
+  $city = _liveitchina_field_get_field('profile2', $profile_user, 'field_city', 'tid');
+  $city_name = facetapi_map_taxonomy_terms(array($city)); 
+  return '<h2 class="block-title">'.
+    l($user->realname, 'profile-'.$entity->type.'/'. $entity->uid) .
+    '<span class="field-city"> ('.$city_name[$city].')</span>'.
+    '</h2>';
+}
+
+function _profile2_liveitchina_ds_profile_teaches($field){
+  $entity = $field['entity'];
+  $profile = profile2_load_by_user($entity->uid, $entity->type);
+  return _profile2_liveitchina_teaches($profile);
+}
+
+function _profile2_liveitchina_ds_profile_learning($field){
+  $entity = $field['entity'];
+  $profile = profile2_load_by_user($entity->uid, $entity->type);
+  return _profile2_liveitchina_learning($profile);
+}
+
+function _profile2_liveitchina_ds_field_user_profile_header($field){
+  return '<h2 class="block-title">' . $field['entity']->label . '</h2>';
+}
+
+function _profile2_liveitchina_ds_user_links($field){
+  $profile = $field['entity'];
+  //array();
+  $links = array();
+  $e = $profile->type;
+  $id = $profile->uid;
+  $links[] = array(
+    'data' => l(t('See Reviews'), 'profile/' . $e . '/' . $id . '/review'),
+  );
+  $links[] = array(
+    'data' => l(t('Write Reviews'), 'profile/' . $e . '/' . $id . '/review', array('fragment'=>'review')),
+  );
+  $links[] = array(
+    'data' => l(t('Add to List'), $_GET["q"], array('fragment'=>'#')),
+  );
+  $links[] = array(
+    'data' => l(t('Send Message'), $_GET["q"], array('fragment'=>'#')),
+  );
+  $data = theme('item_list',
+    array('items' => $links,
+      'attributes' => array('class' => array('profile-view-menu'))
+    )
+  );
+  return $data;
+}
+
+function _profile2_liveitchina_ds_user_match($field){
+  return check_plain('<USER MATCH>');
+}
+
+function _profile2_liveitchina_ds_user_actions($field){
+  global $user;
+  if ($user->uid == 0){
+    return '';
+  }
+  $profile = $field['entity'];
+  $var = variable_get('profile_role_relationship', array());
+  $links = array();
+  //if ($profile->type == 'tutor'){
+    $links[] = array(
+      'data' => l(t('See Availability'), $_GET["q"], array('fragment'=>'#')),
+    );
+  //}
+  //else {
+  
+  //}
+
+  $requestee = $profile->uid;
+  $relationship = $var[$profile->type]['rtid'];
+  $connect_url = 'relationship/' . $requestee . '/request/'. $relationship;
+  $links[] = array(
+      'data' => l(t('Connect'), $connect_url),
+  );
+
+  $data = theme('item_list',
+    array('items' => $links,
+      'attributes' => array(
+        'class' => array(
+          'user-actions',
+          'clearfix'
+        ),
+      ),
+    )
+  );
+  return $data;
+}
+
+function _profile2_liveitchina_ds_user_field($field) {
+  //global $user;
+  $profile = user_load($field['entity']->uid);
+  switch ($field['title']){
+    case 'city':
+      $terms = array();
+      if ($field_values = field_get_items('user', $profile, 'field_city')){
+        foreach($field_values as $field_city){
+          $terms[] = $field_city['tid'];
+        }
+        $terms = _profile2_liveitchina_taxonomy_terms($terms);
+        return implode(',', $terms);
+      }
+      break;
+    default:
+      return $field['title'];
+  }
+}
+
+/**
+ * Map callback for taxonomy terms.
+ */
+function _profile2_liveitchina_taxonomy_terms(array $values) {
+  $map = array();
+  $terms = taxonomy_term_load_multiple($values);
+  foreach ($terms as $term) {
+    $map[$term->tid] = $term->name;
+  }
+  return $map;
+}
+
+function _profile2_liveitchina_role_relationship(){
+  $rels = array();
+
+  $data = variable_get('liveitchina_profile_role', array());
+  $role_rel = array();
+  foreach ($data as $p=>$value){
+    $role_rel[$p]['rid'] = $value;
+    $role = user_role_load($value);
+    $role_rel[$p]['name'] = $role->name;
+    if ($rel = user_relationships_type_load(array('name'=> $role->name))){
+      $role_rel[$p]['rtid'] = $rel->rtid;
+    }
+  }
+
+  variable_set('profile_role_relationship', $role_rel);
+  return $role_rel;
+}
+
+function profile2_liveitchina_form_user_relationships_ui_request_alter(&$form, &$form_state, $form_id) {
+  $var = variable_get('profile_role_relationship', array());
+  
+  if (isset($form['rtid']['#default_value'])){
+    foreach ($var as $p=>$v){
+      if ($v['rtid'] == $form['rtid']['#default_value']){
+        $key = $p;
+      }
+    }
+    if (isset($key)){
+      $form['actions']['cancel']['#href'] = 'profile-' . $key . '/' . $form['requestee']['#value'];
+    }
+    else {
+      $form['actions']['cancel']['#href'] = 'user/' . $form['requestee']['#value'];
+    }
+    //drupal_set_message(print_r($form, true));
+  }
+}
+
+/*
+ * Implements hook_profile2_presave()
+ */
+function profile2_liveitchina_profile2_presave($profile) {
+  if (isset($profile->uid)){
+    $user = user_load($profile->uid);
+    user_save($user);
+  }
+}
+
+function _profile2_liveitchina_teaches( $profile ){
+  $lang_offered = array();
+  $lang_others = array();
+  if ($field_values = field_get_items('profile2', $profile, 'field_lang_offered')){
+    foreach ($field_values as $value) {
+      $lang_offered[] = $value['tid'];
+    }
+  }
+
+  $field_others = ($profile->type == 'tutor')? 'field_tutor_others': 'field_off_exch_other';
+  if ($field_values = field_get_items('profile2', $profile, $field_others)){
+    foreach ($field_values as $value) {
+      $lang_others[] = $value['tid'];
+    }
+  }
+  $lang_display = (count($lang_offered)) ? implode(', ', facetapi_map_taxonomy_terms($lang_offered)): '';
+  $lang_others = (count($lang_others))? ': '. implode(', ', facetapi_map_taxonomy_terms($lang_others)):'';
+  return $lang_display . $lang_others;
+}
+
+function _profile2_liveitchina_learning($profile){
+  $lang_offered = $lang_others = array();
+  if ($field_values = field_get_items('profile2', $profile, 'field_language_wanted')){
+    foreach ($field_values as $value) {
+      $lang_offered[] = $value['tid'];
+    }
+  }
+  $field_others = 'field_wan_exch_other';
+  if ($field_values = field_get_items('profile2', $profile, $field_others)){
+    foreach ($field_values as $value) {
+      $lang_others[] = $value['tid'];
+    }
+  }
+  $lang_display = (count($lang_offered)) ? implode(', ', facetapi_map_taxonomy_terms($lang_offered)): '';
+  $lang_others = (count($lang_others))? ': '. implode(', ', facetapi_map_taxonomy_terms($lang_others)):'';
+  return $lang_display . $lang_others;
+}
+
+function _profile2_liveitchina_ds_profile_cost($field){
+  $entity = $field['entity'];
+  $profile_user = profile2_load_by_user($entity->uid, 'user');
+  $city = _liveitchina_field_get_field('profile2', $profile_user, 'field_city', 'tid');
+  $cost_value = _liveitchina_field_get_field('profile2', $entity, 'field_user_tutor_price', 'value');
+  $price = _liveitchina_price_table($city, $cost_value);
+  return $price;
+}
+
+function _profile2_liveitchina_ds_reviews($field){
+  $entity = $field['entity'];
+  $field_info = field_info_instance($field['entity_type'], "field_review_{$field['bundle']}", $field['bundle']);
+  if ((user_access('administer replies') || 
+      user_access('post '. $field['bundle'] .' reply'))) {
+    return render(drupal_get_form('reply_add_form', $entity->pid, $field_info['id'], 0));
+  }
+}

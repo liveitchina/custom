@@ -1,0 +1,38 @@
+<?php
+function liveitchina_menu_install(){
+  $t = get_t();
+  $menus = _liveitchina_menu_menus();
+
+  foreach($menus as $menu){
+    menu_save($menu);
+    $t($menu['title']);
+    $t($menu['description']);
+  }
+}
+function liveitchina_menu_uninstall(){
+  $menus = _liveitchina_menu_menus();
+
+  foreach($menus as $menu){
+    menu_delete($menu);
+  }
+}
+
+function _liveitchina_menu_menus(){
+  $menus = array();
+  $menus['menu-footer-menu'] = array(
+    'menu_name' => 'menu-footer-menu',
+    'title' => 'Footer Menu',
+    'description' => 'LiveitChina Footer Menus',
+    'language' => 'und',
+    'i18n_mode' => '0',
+  );
+  $menus['menu-liveitchina'] = array(
+    'menu_name' => 'menu-liveitchina',
+    'title' => 'LiveitChina Menu',
+    'description' => 'LiveitChina Menus',
+    'language' => 'und',
+    'i18n_mode' => '0',
+  );
+
+  return $menus;
+}

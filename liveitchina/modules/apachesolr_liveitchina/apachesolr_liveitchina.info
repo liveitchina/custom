@@ -1,0 +1,8 @@
+name = LiveitChina Apachesolr
+description = Apachesolr customs for LiveitChina.
+package = "LiveitChina"
+core = 7.x
+dependencies[] = apachesolr
+dependencies[] = profile2
+dependencies[] = facetapi_bonus
+dependencies[] = modal_forms

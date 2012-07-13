@@ -1,0 +1,569 @@
+<?php
+/**
+ * Implements hook_node_info().
+ * /
+ function og_school_node_info() {
+ $items['school'] = array(
+ 'name' => t('School'),
+ 'base' => 'node_content',
+ 'description' => t('School Profile'),
+ 'has_title' => TRUE,
+ 'title_label' => t('School Name'),
+ 'help' => '',
+ 'node_submitted'=> FALSE,
+ 'og_group_type'=> 'group',
+ );
+
+ return $items;
+ }
+ //*/
+
+module_load_include('inc', 'facetapi', 'facetapi.callbacks');
+
+/**
+ * Implements hook_views_api().
+ */
+function og_school_views_api() {
+  return array(
+    'api' => 3,
+    'path' => drupal_get_path('module', 'og_school'),
+  );
+}
+
+//*
+function og_school_form_school_node_form_alter(&$form, &$form_state, $form_id) {
+  $options_city = _liveitchina_select_city_dropdown_options();
+  $cities = _og_school_get_city();
+  drupal_add_js(array('lic_city'=> $cities), 'setting');
+
+  if (isset($form_state['values']['field_city']['und'][0]['tid'])) {
+    $city_selected = $form_state['values']['field_city']['und'][0]['tid'];
+  }
+  elseif(isset($form['field_city']['und']['#default_value'][0])) {
+    $city_selected = $form['field_city']['und']['#default_value'][0];
+  }
+  else {
+    $city_selected = key($options_city);
+  }
+
+  $area_options = _og_school_district_dropdown_options($city_selected, 'area');
+  $area_selected = '';
+
+  if (isset($form_state['values']['field_area']['und'][0]['tid'])) {
+    $area_selected = $form_state['values']['field_area']['und'][0]['tid'];
+  }
+  elseif(isset($form['field_area']['und']['#default_value'][0])) {
+    $area_selected = $form['field_area']['und']['#default_value'][0];
+  }
+
+  if ($area_selected == ''){
+    $mode = next($area_options);
+    $area_selected = key($area_options);
+  }
+
+  //add #ajax for the city
+  $form['field_city']['und']['#options'] = $options_city;
+  $form['field_city']['und']['#ajax'] = array(
+      'callback' => '_og_school_dependent_dropdown_city_callback',
+      'wrapper' => 'dropdown-select-area-replace',
+  );
+
+  $form['field_area']['#prefix'] = '<div id="dropdown-select-area-replace">';
+  $form['field_area']['#suffix'] = '</div>';
+  $form['field_area']['#attributes']['class'][] = 'enabled-for-ajax';
+  $form['field_area']['und']['#options'] = $area_options;
+  $form['field_area']['und']['#ajax'] = array(
+      'callback' => '_og_school_dependent_dropdown_area_callback',
+      'wrapper' => 'dropdown-select-district-replace',
+  );
+
+  $form['field_district']['#prefix'] = '<div id="dropdown-select-district-replace">';
+  $form['field_district']['#suffix'] = '</div>';
+  $form['field_district']['#attributes']['class'][] = 'enabled-for-ajax';
+  $form['field_district']['und']['#options'] = _og_school_district_dropdown_options($area_selected, 'district');
+
+  $form['#attached']['js'] = array(
+    drupal_get_path('module','og_school') . '/js/others_hide.js'=> array(
+      'type'=>'file',
+    )
+  );
+
+  //hide group field
+  //$form['group_group']['#access'] = FALSE;
+  $form['group_group']['#prefix'] = '<div style="display:none;">';
+  $form['group_group']['#default_value'] = 1;
+  $form['group_group']['#suffix'] = '</div>';
+
+  //$form['group_access']['#access'] = FALSE;
+  $form['group_access']['#prefix'] = '<div style="display:none;">';
+  $form['group_access']['#suffix'] = '</div>';
+  $form['group_access']['und']['#default_value'] = 0;
+
+  //stylize form
+  $form['#attributes']['class'][] = 'lic-form';
+  $form['field_logo']['#prefix'] = '<div class="lic-form-sides lic-form-top clearfix lic-form-bottom">';
+  $form['field_price']['#suffix'] = '</div>';
+  $form_lang = $form['field_address']['#language'];
+  $form['field_address']['#prefix'] = '<div class="lic-form-sides lic-form-top clearfix lic-form-bottom">';
+  $form['field_address']['#suffix'] = '</div>';
+  $form['field_address'][$form_lang][0]['street_block']['thoroughfare']['#title'] = t('Floor/Building');
+  $form['field_address'][$form_lang][0]['street_block']['premise']['#title'] = t('Street');
+  $form['field_additional_info']['#prefix'] = '<div class="lic-form-sides lic-form-top clearfix lic-form-bottom">'.
+    '<h2 class="block-title">'. t('Additional Information') . '</h2>';
+  $form['field_add_info_text']['#suffix'] = '</div>';
+  $form['field_city']['#prefix'] = '<div class="lic-form-sides clearfix lic-lic-dashed lic-form-bottom">';
+  $form['field_telephone']['#suffix'] = '</div>';
+  //*
+  $field_classes = array(
+    //'field_logo' => array('grid-15', 'omega'),
+    //'field_address'=> array('lic-form-sides', 'lic-form-bottom'),
+  );
+  foreach ($field_classes as $field=>$classes){
+    foreach ($classes as $class){
+      $form[$field]['#attributes']['class'][] = $class;
+    }
+  }
+
+  $form['field_review_school']['#access'] = FALSE;
+  $form['user_relationship_node_access']['#access'] = FALSE;
+
+  /*/
+  //print_r(array_keys($form));
+  print_r($form);
+  exit;
+  //*/
+}
+//*
+
+function _og_school_district_dropdown_options($key = '', $text = 'city') {
+  $options = array(''=>t('Select !text.', array('!text'=>$text)));
+  if ($key){
+    $v = taxonomy_vocabulary_machine_name_load('liveitchina_city');
+    $terms = taxonomy_get_tree($v->vid, $key , 1);
+    foreach ($terms as $term) {
+      $options[$term->tid] = $term->name;
+    }
+    return $options;
+  }
+}
+
+function _og_school_dependent_dropdown_city_callback($form, &$form_state) {
+  return $form['field_area'];
+}
+
+function _og_school_dependent_dropdown_area_callback($form, &$form_state) {
+  return $form['field_district'];
+}
+
+/**
+ * Implements hook_default_og_membership_type().
+ * /
+function og_school_default_og_membership_type() {
+  $items = array();
+  $items['school_admin'] = entity_import('og', '{
+    "name" : "school_admin",
+    "description" : "School Administrator",
+    "rdf_mapping" : []
+  }');
+  $items['school_student'] = entity_import('school_student', '{
+    "name" : "school_student",
+    "description" : "School Students",
+    "rdf_mapping" : []
+  }');
+  return $items;
+}
+
+/**
+ * Template preprocess for apachesolr search results.
+ *
+ */
+function og_school_preprocess_search_result(&$vars) {
+  $result = $vars['result'];
+  $fields = $vars['result']['fields'];
+
+  switch ($result['bundle']){
+    case 'school':
+      $vars['image_path']= '';
+      $vars['image'] = '';
+      if (!empty($result['fields']['is_logo'])) {
+        $file_main = file_load($result['fields']['is_logo']);
+      }
+      else {
+        $avatar = field_info_field('field_logo');
+        $file_main = file_load($avatar['settings']['default_image']);
+      }
+
+      if (is_object($file_main)){
+        $vars['image_path'] = $file_main->uri;
+        $vars['image'] = l(
+          theme('image_style',
+            array(
+              'style_name' => 'profile_main',
+              'path' => $file_main->uri
+            )
+          ),
+          $result['fields']['path'],
+          array('html' => TRUE)
+        );
+      }
+
+      // Process rating
+      drupal_add_css(drupal_get_path('module', 'fivestar') . '/css/fivestar.css');
+      $fivestar = array(
+        'rating' => ($fields['fs_rating'])?$fields['fs_rating']:0,
+        'stars' => 5,
+        'widget' => array(
+          'name' => 'star',
+          'css' => drupal_get_path('module', 'liveitchina') . '/widget/star/star.css',
+        )
+      );
+      $vars['city_name'] = '';
+      $vars['city'] ='';
+      $vars['rating'] = theme('fivestar_static', $fivestar);
+      if (!isset($fields['im_field_lang_offered'])){
+        $fields['im_field_lang_offered'] = (array)0;
+      }
+      $vars['teaches'] = facetapi_map_taxonomy_terms($fields['im_field_lang_offered']);
+      $vars['teaches_list'] = implode(', ', $vars['teaches']);
+      if (!isset($fields['sm_field_price'])){
+        $fields['sm_field_price'] = (array)0;
+      }
+      $vars['cost'] = apachesolr_liveitchina_facetapi_cost_bundle($fields['sm_field_price']);
+      $vars['cost_value'] = $vars['cost'][$fields['sm_field_price'][0]];
+      if (isset($fields['im_field_city'])){
+        $vars['city'] = facetapi_map_taxonomy_terms($fields['im_field_city']);
+        $vars['city_name'] = implode(', ', $vars['city']);
+      }
+
+      $entities = entity_load($fields['entity_type'], array($fields['entity_id']));
+      $field = array(
+       'entity_type' => $fields['entity_type'],
+       'entity' => $entities[$fields['entity_id']],
+      );
+      $vars['actions'] = _og_school_ds_school_search($field);
+      $vars['snippet'] = '
+       <div class="liveitchina-teaser node node-school view-mode-search_result clearfix">
+         <div class="ds-content clearfix">
+           <aside class="grid-4 ">
+             <div class="field field-name-field-logo">'.
+               $vars['image'].
+             '</div>
+           </aside>
+           <section class="grid-12 alpha omega">
+             <h2 class="block-title">' . l($fields['label'], $fields['path']) . ' <span class="field-city">('.$vars['city_name'].')</span></h2>
+             <div class="field-name-field-rating">'.
+               $vars['rating'].
+             '</div>
+             <div class="field field-name-field-bundle"><strong>' . $result['type'] . '</strong></div>'.
+             $fields['ts_teaches'].
+             '<div class="field field-name-field-summary">'.
+             $fields['ts_summary'].
+             '</div>
+             <div class="actions">'.
+             $vars['actions'].
+             '</div>
+           </section>
+        </div>
+      </div>';
+    break;
+  }
+}
+
+function _og_school_get_connect($result){
+  global $user;
+  $connect_url = url($_GET['q'], array('absolute'=> TRUE));
+  if ($user->uid != 0){
+    return l('Add to list','#') . ctools_modal_text_button(t('Connect'), $connect_url, t('Connect'), 'ctools-modal-modal-popup-medium');
+  }
+  else{
+    return l('Add to list','#') . l(t('Connect'),'signup');
+  }
+}
+
+function _og_school_ds_school_actions($field){
+  $links['listing'] = array(
+    'data' => l(t('Book'), $_GET['q']),
+  );
+
+  if ($link = _og_school_connect_link($field)){
+    $links['connect'] = array(
+      'data' => render($link),
+    );
+  }
+
+  $data = theme('item_list',
+    array('items' => $links,
+      'attributes' => array('class' => array('school-actions'))
+    )
+  );
+  return $data;
+}
+
+function _og_school_ds_school_search($field){
+  $links['listing'] = array(
+      'data' => l(t('Add to list'), $_GET['q']),
+  );
+
+  if ($link = _og_school_connect_link($field)){
+    $links['connect'] = array(
+        'data' => render($link),
+    );
+  }
+
+  $data = theme('item_list',
+      array('items' => $links,
+          'attributes' => array('class' => array('school-actions'))
+      )
+  );
+  return $data;
+}
+
+function _og_school_ds_reviewer_author($field){
+  $entity = $field['entity'];
+  $author = user_load($entity->uid);
+  return '<strong class="title">'. l($author->realname, 'user/'.$entity->uid ) .'</strong> '. t('says');
+  //return print_r($author, true);//field_view_field('user', $author, );
+}
+
+function _og_school_school_information($field){
+  $entity = $field['entity'];
+  $display = array();
+  $display[] = field_view_field($field['entity_type'], $entity, 'field_additional_info');
+  //$display[] = field_view_field($field['entity_type'], $entity, 'field_add_info_tag');
+  $display[] = field_view_field($field['entity_type'], $entity, 'field_add_info_text');
+  return render($display);
+}
+function _og_school_school_title($field){
+  $entity = $field['entity'];
+  $node = node_load($entity->nid);
+  $city = _liveitchina_field_get_field('node', $node, 'field_city', 'tid');
+  $city_name = facetapi_map_taxonomy_terms(array($city));
+  return '<h2 class="block-title">'. $node->title .
+    '<span class="field-city"> ('.$city_name[$city].')</span>'.
+    '</h2>';
+}
+
+function _og_school_teaches($field){
+  //$entity = $field['entity'];
+  $school_profile = node_load($field['entity']->nid);
+  return og_school_teaches($school_profile);
+}
+
+function og_school_teaches($school_profile){
+  $lang_offered = $lang_others = array();
+  $cost_value = array('value'=>0);
+
+  if ($field_values = field_get_items('node', $school_profile, 'field_lang_offered')){
+    foreach ($field_values as $value) {
+      $lang_offered[] = $value['tid'];
+    }
+  }
+  if ($field_values = field_get_items('node', $school_profile, 'field_lang_others')){
+    foreach ($field_values as $value) {
+      $lang_others[] = $value['tid'];
+    }
+  }
+  if ($field_values = field_get_items('node', $school_profile, 'field_price')){
+    $cost_value = array_pop($field_values);
+  }
+  $city = _liveitchina_field_get_field('node', $school_profile, 'field_city', 'tid');
+  $discount = _liveitchina_field_get_field('node', $school_profile, 'field_discount', 'value');
+
+  $lang_display = (count($lang_offered)) ? implode(', ', facetapi_map_taxonomy_terms($lang_offered)): '';
+  $others_display = (count($lang_others))? ': '. implode(', ', facetapi_map_taxonomy_terms($lang_others)):'';
+  
+  $cost_currency = _liveitchina_price_table($city, $cost_value['value']);
+  $language_display = '<div class="field-label-inline field field-name-field-lang-offered clearfix">
+  <div class="label-inline field-label label-inline">'.t('Teaches').':&nbsp;</div>
+  <div class="field-items">'.$lang_display . $others_display.'</div></div>';
+  $cost_display = '<div class="field field-name-field-price field-type-list-text field-label-inline clearfix">
+  <div class="field-label">'. t('Cost').':&nbsp;</div>
+  <div class="field-items">
+    <div class="field-item even">'.$cost_currency.'</div>'.
+    '<div class="field-item even field-name-field-discount">'.$discount.'</div>'.
+  '</div></div>';
+  //things to do: make the discount available only if featured;
+  return  $language_display . $cost_display;
+}
+
+function _og_school_school_address($field){
+  $entity = $field['entity'];
+  $display = array();
+  $display[] = field_view_field($field['entity_type'], $entity, 'field_map', 'teaser');
+  $display[] = field_view_field($field['entity_type'], $entity, 'field_address', 'teaser');
+  return render($display);
+}
+
+function _og_school_connect_link($field){
+  if ($link = og_school_connect_link($field['entity_type'], $field['entity'])) {   
+   return render($link);
+  }
+  return FALSE;
+}
+
+function _og_school_ds_school_links($field){
+  $links = array();
+    $links[] = array(
+    'data' => l(t('See Reviews'), $_GET["q"], array('fragment'=>'#')),
+  );
+    $links[] = array(
+    'data' => l(t('Write Reviews'), $_GET["q"], array('fragment'=>'#')),
+  );
+    $links[] = array(
+    'data' => l(t('Add to List'), $_GET["q"], array('fragment'=>'#')),
+  );
+  $links[] = array(
+    'data' => l(t('Send Message'), $_GET["q"], array('fragment'=>'#')),
+  );
+  $data = theme('item_list',
+    array('items' => $links,
+      'attributes' => array('class' => array('profile-view-menu'))
+    )
+  );
+  return $data;
+}
+
+function _liveitchina_select_city_dropdown_options() {
+  $options = array();
+  $v = taxonomy_vocabulary_machine_name_load('liveitchina_city');
+  $terms = taxonomy_get_tree($v->vid, 0 , 1);
+  foreach ($terms as $term) {
+    $options[$term->tid] = $term->name;
+  }
+
+  return $options;
+}
+
+function _og_school_school_administrator($field){
+  $entity = $field['entity'];
+  $user_admin = user_load($entity->uid);
+  //$display = $user_admin['picture']->uri;
+  $styles = array(
+    'style_name' => 'comment_avatar',
+    'path' => $user_admin->picture->uri,
+    'attributes' => array(
+      'class' => 'avatar',
+    ),
+  );
+  $admin_img = theme('image_style', $styles);
+  //print_r($user_admin);
+  //return print_r($user_admin, true);
+  return '<strong>'.t('See Administrator'). '</strong>'.
+  '<div class="dis-admin">'.l($user_admin->realname, 'user/'.$user_admin->uid, array('html'=>true)) . '</div>';
+}
+
+function og_school_connect_link($entity_type, $entity, $account = NULL) {
+  $return = array();
+
+  if (empty($account)) {
+    global $user;
+    $account = clone($user);
+  }
+
+  list($id) = entity_extract_ids($entity_type, $entity);
+  if (($group = og_get_group($entity_type, $id))) {
+    if (!empty($entity->uid) && ($entity->uid == $user->uid)) {
+      // User is the group manager.
+      $return = array(
+        '#type' => 'item',
+        '#markup' => t('School admin'),
+      );
+    }
+    else {
+      // Check if the user is a group member.
+      if (og_is_member($group->gid, 'user', $account, array(OG_STATE_ACTIVE, OG_STATE_PENDING))) {
+        if (og_user_access($group->gid, 'unsubscribe', $account)) {
+          $links['title'] = t('Unsubscribe');
+          $links['href'] = "school/$id/unsubscribe";
+        }
+      }
+      else {
+        if (og_is_member($group->gid, 'user', $account, array(OG_STATE_BLOCKED))) {
+          return;
+        }
+
+        if (og_user_access($group->gid, 'subscribe without approval', $account)) {
+          $links['title'] = t('Connect');
+          $url = "school/$id/connect";
+          if ($account->uid) {
+            $links['href'] = $url;
+          }
+          else {
+            $links['href'] = 'user/login';
+            $links['options'] = array('query' => array('destination' => $url));
+          }
+        }
+        elseif (og_user_access($group->gid, 'subscribe')) {
+          $links['title'] = t('Connect');
+          $url = "school/$id/connect";
+          if ($account->uid) {
+            $links['href'] = $url;
+          }
+          else {
+            $links['href'] = 'user/login';
+            $links['options'] = array('query' => array('destination' => $url));
+          }
+        }
+        else {
+          $return = array(
+            '#type' => 'item',
+            '#markup' => t('This is a closed group. Only a group administrator can add you.'),
+          );
+        }
+      }
+
+      if (!empty($links['title'])) {
+        $links += array('options' => array());
+        $return = array(
+          '#type' => 'link',
+          '#title' => $links['title'],
+          '#href' => $links['href'],
+          '#options' => $links['options'],
+        );
+      }
+    }
+  }
+
+  return $return;
+}
+
+/**
+ * Implements hook_node_insert().
+ *
+ * Add OG administrator role for the creator of the school
+ */
+function og_school_node_insert($node) {
+  if ($group = og_get_group('node', $node->nid)) {
+    og_role_grant($group->gid, $node->uid, '3');
+  }
+}
+
+/**
+ * Implements hook_node_presave().
+ *
+ * Update the map base on the location
+ */
+function og_school_node_presave($node) {
+  $lang = $node->language;
+  $map_field = 'field_map';
+  $address_field = 'field_address';
+  $lang_field = (isset($node->{$map_field}[$lang])) ? $lang: 'und';
+  if ($address = field_get_items('node', $node, $address_field)){
+    if ($address[0]['premise']){
+      $map = _liveitchina_get_map($address[0]['premise']);
+      $node->{$map_field}[$lang_field][0] = $map;
+    }
+  }
+}
+
+function _og_school_get_city() {
+  $city_terms = $options = array();
+
+  $v = taxonomy_vocabulary_machine_name_load('liveitchina_city');
+  $terms = taxonomy_get_tree($v->vid);
+  foreach ($terms as $term) {
+    $parent = $term->parents[0];
+    $city_terms[$parent][$term->tid]['name'] = $term->name;
+  }
+  return $city_terms;
+}

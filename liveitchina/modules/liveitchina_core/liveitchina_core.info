@@ -1,0 +1,14 @@
+name = LiveitChina Core
+description = Core for LiveitChina modules
+package = LiveitChina
+version = 7.x-1.0
+core = 7.x
+
+dependencies[] = apachesolr
+dependencies[] = entity
+dependencies[] = views
+dependencies[] = taxonomy
+dependencies[] = i18n
+dependencies[] = pcp
+dependencies[] = locale
+dependencies[] = syslog

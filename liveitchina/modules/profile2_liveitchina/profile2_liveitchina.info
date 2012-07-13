@@ -1,0 +1,13 @@
+name = LiveitChina Profile2
+description = Profile2 integrations and fields.
+package = "LiveitChina"
+core = 7.x
+dependencies[] = user
+dependencies[] = profile2
+dependencies[] = profile2_page
+dependencies[] = liveitchina_core
+;dependencies[] = liveitchina_fields
+
+files[] = profile2_liveitchina.apachesolr.inc
+files[] = profile2_liveitchina.menu.inc
+files[] = profile2_liveitchina.ds_fields_info.inc

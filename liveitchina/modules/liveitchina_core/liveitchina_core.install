@@ -1,0 +1,447 @@
+<?php
+
+function liveitchina_core_install() {
+  _liveitchina_core_set_defaults();
+  _liveitchina_core_set_vocabularies();
+}
+
+function _liveitchina_core_vocabularies(){
+  $vocabs = array();
+  $vocabs['city'] = array(
+      'name'=> 'City',
+      'description'=> 'LiveitChina default Cities',
+      'help'=> 'Defined cities for LiveitChina.',
+      'i18n_mode' => I18N_MODE_LOCALIZE,
+      'code'=> TRUE,
+  );
+  $vocabs['occupation'] = array(
+      'name'=> 'Occupation',
+      'description'=> 'User Occupation',
+      'help'=> 'List of current user occupation',
+      'i18n_mode' => I18N_MODE_LOCALIZE,
+  );
+  $vocabs['interest'] = array(
+      'name'=> 'Interest',
+      'description'=> 'User Interests',
+      'help'=> 'List of user interest',
+      'i18n_mode' => I18N_MODE_LOCALIZE,
+  );
+  $vocabs['nationality'] = array(
+      'name'=> 'Nationality',
+      'description'=> 'LiveitChina Nationality',
+      'help'=> 'Defined Nationality.',
+      'i18n_mode' => I18N_MODE_LOCALIZE,
+  );
+  $vocabs['language'] = array(
+      'name'=> 'Language',
+      'description'=> 'LiveitChina Language',
+      'help'=> 'Defined Language.',
+      'i18n_mode' => I18N_MODE_LOCALIZE,
+  );/*
+  $vocabs['location'] = array(
+      'name'=> 'Location',
+      'description'=> 'LiveitChina Location',
+      'help'=> 'Defined Location.',
+      'i18n_mode' = I18N_MODE_LOCALIZE,
+  );//*/
+  return $vocabs;
+}
+
+function _liveitchina_core_terms($c){
+  $terms['language'] = array(
+      '01' => array('en'=>'English', 'zh-hant' =>'', 'zh-hans' =>''),
+      '02' => array('en'=>'Cantonese', 'zh-hant' =>'', 'zh-hans' =>''),
+      '03' => array('en'=>'Mandarin', 'zh-hant' =>'', 'zh-hans' =>''),
+      '04' => array('en'=>'Others', 'zh-hant' =>'', 'zh-hans' =>''),
+  );
+  $terms['nationality'] = array(
+      'USA' => array('en'=>'United States of America', 'zh-hant' =>'', 'zh-hans' =>''),
+      'CAN' => array('en'=>'Canada', 'zh-hant' =>'', 'zh-hans' =>''),
+      'GER' => array('en'=>'Germany', 'zh-hant' =>'', 'zh-hans' =>''),
+      'CHN' => array('en'=>'China', 'zh-hant' =>'', 'zh-hans' =>''),
+      'GBR' => array('en'=>'United Kingdon', 'zh-hant' =>'', 'zh-hans' =>''),
+      '999' => array('en'=>'Other', 'zh-hant' =>'', 'zh-hans' =>''),
+  );
+  $terms['location'] = array(
+      '01' => array('en'=>'Neutral', 'zh-hant' =>'', 'zh-hans' =>''),
+      '02' => array('en'=>'My Home', 'zh-hant' =>'', 'zh-hans' =>''),
+      '03' => array('en'=>'Your Home', 'zh-hant' =>'', 'zh-hans' =>''),
+      '04' => array('en'=>'Learning Center', 'zh-hant' =>'', 'zh-hans' =>''),
+  );
+
+  if (array_key_exists($c, $terms)){
+    return $terms[$c];
+  }
+  return array();
+}
+
+function _liveitchina_core_city_cities(){
+  $cities = array(
+      'HKG'=> array(
+          'en'=>'Hong Kong',
+          'zh-hant'=>'香港',
+          'zh-hans'=>'香港'
+      ),
+      'SZN'=> array(
+          'en'=>'Shenzhen',
+          'zh-hant'=>'深圳',
+          'zh-hans'=>'深圳'
+      ),
+      'ZHU'=> array(
+          'en'=>'Zhuhai',
+          'zh-hant'=>'珠海',
+          'zh-hans'=>'珠海'
+      ),
+      'MAC'=> array(
+          'en'=>'Macau',
+          'zh-hant'=>'澳門',
+          'zh-hans'=>'澳门'
+      ),
+      'GZH'=> array(
+          'en'=>'Guangzhou',
+          'zh-hant'=>'广州',
+          'zh-hans'=>'廣州'
+      ),
+  );
+  return $cities;
+}
+
+/*
+ * Return array of district within city
+* if district has index of $c, it will return the specified district else return all district.
+*/
+function _liveitchina_core_city_district($c){
+  $district = array(
+      'HKG' => array(
+          array(
+              'area_code' => '01',
+              'lang'=> array('en'=>'Central and Western','zh-hant' =>'中西區','zh-hans' =>'中西区'),
+          ),
+          array(
+              'area_code' => '01',
+              'lang'=> array('en'=>'Wan Chai','zh-hant' =>'灣仔區', 'zh-hans' =>'湾仔区'),
+          ),
+          array(
+              'area_code' => '01',
+              'lang'=> array('en'=>'Eastern', 'zh-hant' =>'東區', 'zh-hans' =>'东区' ),
+          ),
+          array(
+              'area_code' => '01',
+              'lang'=> array('en'=>'Southern', 'zh-hant' =>'南區', 'zh-hans' =>'南区'),
+          ),
+          array(
+              'area_code' => '02',
+              'lang'=> array('en'=>'Yau Tsim Mong', 'zh-hant' =>'油尖旺區', 'zh-hans' =>'油尖旺区'),
+          ),
+          array(
+              'area_code' => '02',
+              'lang'=> array('en'=>'Sham Shui Po', 'zh-hant' =>'深水埗區', 'zh-hans' =>'深水埗区'),
+          ),
+          array(
+              'area_code' => '02',
+              'lang'=> array('en'=>'Kowloon City', 'zh-hant' =>'九龍城區', 'zh-hans' =>'九龙城区'),
+          ),
+          array(
+              'area_code' => '02',
+              'lang'=> array('en'=>'Wong Tai Sin', 'zh-hant' =>'黃大仙區', 'zh-hans' =>'黄大仙区'),
+          ),
+          array(
+              'area_code' => '02',
+              'lang'=> array('en'=>'Kwun Tong', 'zh-hant' =>'觀塘區', 'zh-hans' =>'观塘区'),
+          ),
+          array(
+              'area_code' => '03',
+              'lang'=> array('en'=>'Kwai Tsing', 'zh-hant' =>'葵青區', 'zh-hans' =>'葵青区'),
+          ),
+          array(
+              'area_code' => '03',
+              'lang'=> array('en'=>'Tsuen Wan', 'zh-hant' =>'荃灣區', 'zh-hans' =>'荃湾区'),
+          ),
+          array(
+              'area_code' => '03',
+              'lang'=> array('en'=>'Tuen Mun', 'zh-hant' =>'屯門區', 'zh-hans' =>'屯门区'),
+          ),
+          array(
+              'area_code' => '03',
+              'lang'=> array('en'=>'Yuen Long', 'zh-hant' =>'元朗區', 'zh-hans' =>'元朗区'),
+          ),
+          array(
+              'area_code' => '03',
+              'lang'=> array('en'=>'North', 'zh-hant' =>'北區', 'zh-hans' =>'北区'),
+          ),
+          array(
+              'area_code' => '03',
+              'lang'=> array('en'=>'Tai Po','zh-hant' =>'大埔區','zh-hans' =>'大埔区'),
+          ),
+          array(
+              'area_code' => '03',
+              'lang'=> array('en'=>'Sha Tin', 'zh-hant' =>'沙田區', 'zh-hans' =>'沙田区'),
+          ),
+          array(
+              'area_code' => '03',
+              'lang'=> array('en'=>'Sai Kung', 'zh-hant' =>'西貢區', 'zh-hans' =>'西贡区'),
+          ),
+          array(
+              'area_code' => '03',
+              'lang'=> array('en'=>'Islands', 'zh-hant' =>'離島區', 'zh-hans' =>'离岛区'),
+          ),
+      ),
+      'SZN'=> array(
+          array(
+              'lang'=> array('en'=>"Bao'an",'zh-hant' =>'寶安','zh-hans' =>'宝安'),
+          ),
+          array(
+              'lang'=> array('en'=>'Futian', 'zh-hant' =>'福田', 'zh-hans' =>'福田'),
+          ),
+          array(
+              'lang'=> array('en'=>'Longgang', 'zh-hant' =>'龍崗', 'zh-hans' =>'龙岗'),
+          ),
+          array(
+              'lang'=> array('en'=>'Luohu', 'zh-hant' =>'羅湖', 'zh-hans' =>'罗湖'),
+          ),
+          array(
+              'lang'=> array('en'=>'Nanshan', 'zh-hant' =>'南山', 'zh-hans' =>'南山'),
+          ),
+          array(
+              'lang'=> array('en'=>'Yantian', 'zh-hant' =>'鹽田', 'zh-hans' =>'盐田'),
+          ),
+      ),
+      'ZHU'=> array(
+          array(
+              'lang'=> array('en'=>'Xiangzhou', 'zh-hant' =>'香洲區', 'zh-hans' =>'香洲区'),
+          ),
+          array(
+              'lang'=> array('en'=>'Doumen', 'zh-hant' =>'斗門區', 'zh-hans' =>'斗门区'),
+          ),
+          array(
+              'lang'=> array('en'=>'Jinwan', 'zh-hant' =>'金灣', 'zh-hans' =>'金湾'),
+          ),
+      ),
+      'MAC'=> array(
+          array(
+              'lang'=> array('en'=>'Macau Peninsula', 'zh-hant' =>'澳門半島', 'zh-hans' =>'澳门半岛'),
+          ),
+          array(
+              'lang'=> array('en'=>'Taipa', 'zh-hant' =>'氹仔', 'zh-hans' =>'凼仔'),
+          ),
+          array(
+              'lang'=> array('en'=>'Cotai', 'zh-hant' =>'路氹', 'zh-hans' =>'路凼'),
+          ),
+          array(
+              'lang'=> array('en'=>'Coloane', 'zh-hant' =>'路環', 'zh-hans' =>'路环'),
+          ),
+      ),
+      'GZH'=> array(
+          array(
+              'lang'=> array('en'=>'Liwan', 'zh-hant' =>'越秀区', 'zh-hans' =>'越秀區'),
+          ),
+          array(
+              'lang'=> array('en'=>'Yuexiu', 'zh-hant' =>'荔湾区', 'zh-hans' =>'荔灣區'),
+          ),
+          array(
+              'lang'=> array('en'=>'Haizhu', 'zh-hant' =>'海珠区', 'zh-hans' =>'海珠區'),
+          ),
+          array(
+              'lang'=> array('en'=>'Tianhe', 'zh-hant' =>'天河区', 'zh-hans' =>'天河區'),
+          ),
+          array(
+              'lang'=> array('en'=>'Baiyun', 'zh-hant' =>'白云区', 'zh-hans' =>'白雲區'),
+          ),
+          array(
+              'lang'=> array('en'=>'Huangpu', 'zh-hant' =>'黄埔区', 'zh-hans' =>'黃埔區'),
+          ),
+          array(
+              'lang'=> array('en'=>'Panyu', 'zh-hant' =>'番禺区', 'zh-hans' =>'番禺區'),
+          ),
+          array(
+              'lang'=> array('en'=>'Huadu', 'zh-hant' =>'花都区', 'zh-hans' =>'花都區'),
+          ),
+          array(
+              'lang'=> array('en'=>'Nansha', 'zh-hant' =>'南沙区', 'zh-hans' =>'南沙區'),
+          ),
+          array(
+              'lang'=> array('en'=>'Luogang', 'zh-hant' =>'萝岗区', 'zh-hans' =>'蘿崗區'),
+          ),
+      ),
+  );
+  if (array_key_exists($c, $district)){
+    return $district[$c];
+  }
+  return array();
+}
+/*
+ * Area within City
+*/
+function _liveitchina_core_city_area($c){
+  $area = array(
+      'HKG'=> array(
+          '01' => array('en'=>'Hong Kong Island', 'zh-hant' =>'香港島', 'zh-hans' =>'香港岛'),
+          '02' => array('en'=>'Kowloon', 'zh-hant' =>'九龍', 'zh-hans' =>'九龙'),
+          '03' => array('en'=>'New Territories', 'zh-hant' =>'新界', 'zh-hans' =>'新界'),
+      ),
+  );
+  if (array_key_exists($c, $area)){
+    return $area[$c];
+  }
+  return array();
+}
+
+/*
+ * Set default variables for liveitchina websites.
+*
+*/
+function _liveitchina_core_set_defaults(){
+  $timezone = variable_get('date_default_timezone', 'Asia/Hong_Kong');
+  $country = variable_get('site_default_country', 'HK');
+  $environment = array(
+      'env_id'=>'solr',
+      'url'=>'http://127.0.0.1:8983/solr/liveitchina.com',
+      'name'=>'localhost server');
+  apachesolr_environment_save($environment);
+
+  variable_set('apachesolr_default_environment', $environment['env_id']);
+  variable_set('date_default_timezone', $timezone);
+  variable_set('site_default_country', $country);
+  variable_set('date_first_day', 0);
+}
+
+/*
+ * Set default vocabularies for liveitchina
+*/
+function _liveitchina_core_set_vocabularies(){
+  $vocabularies = taxonomy_vocabulary_get_names();
+  //$vocab_names = array_keys($vocabularies);
+  $field_instances = array();
+
+  foreach(_liveitchina_core_vocabularies() as $v_name=>$vocabulary){
+    if (array_key_exists($v_name, $vocabularies)) {
+      $vid = $vocabularies[$v_name]->vid;
+    }
+    else {
+      $vocabs_obj = new stdClass();
+      $vocabs_obj->name = st($vocabulary['name']);
+      $vocabs_obj->description = st($vocabulary['description']);
+      $vocabs_obj->machine_name = $v_name;
+      $vocabs_obj->help = st($vocabulary['help']);
+      $vocabs_obj->language = 'und';
+      $vocabs_obj->i18n_mode = $vocabulary['i18n_mode'];
+      taxonomy_vocabulary_save($vocabs_obj);
+      $vid = $vocabs_obj->vid;
+    }
+    if (isset($vocabulary['code'])){
+      $field_instances[$vocabulary['name'].'_code'] = array(
+          'bundle' => $v_name,
+          'default_value' => NULL,
+          'entity_type' => 'taxonomy_term',
+          'field_name' => 'field_code',
+          'label' => st($vocabulary['name'] . ' Code'),
+          'required' => 1,
+          'settings' => array(
+              'text_processing' => '0',
+          ),
+          'widget' => array(
+              'active' => 1,
+              'module' => 'text',
+              'settings' => array(
+                  'size' => '60',
+              ),
+              'type' => 'text_textfield',
+              'weight' => '1',
+          ),
+      );
+    }
+  }
+  $fields['field_code'] = array(
+      'cardinality' => '1',
+      'field_name' => 'field_code',
+      'type' => 'text',
+      'settings' => array(
+          'max_length' => '60',
+      ),
+  );
+
+  //define field_code as field
+  foreach ($fields as $fid=>$field){
+    if ($existing_field = field_info_field($fid)) {
+      field_update_field($field);
+    }
+    else {
+      field_create_field($field);
+    }
+  }
+
+  //add code field on vocabulary above
+  foreach ($field_instances as $fid=>$field_instance) {
+    if ($existing_instance = field_info_instance($field_instance['entity_type'], $fid, $field_instance['bundle'])) {
+      field_update_instance($field_instance);
+    }
+    else {
+      field_create_instance($field_instance);
+    }
+  }
+
+  //add terms to city
+  $vocabulary = taxonomy_vocabulary_machine_name_load('city');
+  $area_tids = array();
+  foreach(_liveitchina_core_city_cities() as $city_code => $city){
+    $term = new stdClass();
+    $term->name = $city['en'];
+    $term->vid = $vocabulary->vid;
+    $term->vocabulary_machine_name = $vocabulary->machine_name;
+    $term->field_code['und'][0]['value'] = $city_code;
+    taxonomy_term_save($term);
+
+    $dist = 1;
+    foreach(_liveitchina_core_city_district($city_code) as $district){
+      $term_district = new stdClass();
+      $term_district->name = $district['lang']['en'];
+      $term_district->vid = $vocabulary->vid;
+      $term_district->vocabulary_machine_name = $vocabulary->machine_name;
+      $term_district->field_code['und'][0]['value'] = $city_code . '-DST-'. $dist;
+      $term_district->parent = $term->tid;
+      taxonomy_term_save($term_district);
+      //temporarily store the area code if set
+      if (isset($district['area_code'])){
+        $city_area = $city_code.$district['area_code'];
+        $area_tids[$city_area][] = $term_district->tid;
+        //$term_district->parent = $area_tids[$city_code][$district['area_code']];
+      }
+      $dist++;
+    }
+
+    foreach(_liveitchina_core_city_area($city_code) as $aid => $area){
+      $term_area= new stdClass();
+      $term_area->name = $area['en'];
+      $term_area->vid = $vocabulary->vid;
+      $term_area->vocabulary_machine_name = $vocabulary->machine_name;
+      $term_area->field_code['und'][0]['value'] = $city_code . '-AREA-'. $aid;
+      $curr_area = $city_code.$aid;
+      if (array_key_exists($curr_area, $area_tids)) {
+        $term_area->parent = $area_tids[$curr_area];
+      }
+      taxonomy_term_save($term_area);
+    }
+  }
+}
+
+/*
+ * Install default languages available for the site
+*/
+function liveitchina_core_update_7001(){
+  $languages = array('en','zh-hant', 'zh-hans');
+  foreach ($languages as $language){
+    $result = db_select('languages','lang')
+    ->fields('lang')
+    ->condition('lang.language', $language, '=')
+    ->execute()
+    ->rowCount();
+    if (!$result){
+      locale_add_language($language);
+    }
+  }
+}
+
+function liveitchina_core_uninstall() {
+  // %TODO% now need to purge, in case fields now have no
+  	// instances
+}

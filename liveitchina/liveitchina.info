@@ -1,0 +1,18 @@
+name = LiveitChina
+description = All codes for LiveitChina site.
+package = "LiveitChina"
+core = 7.x
+dependencies[] = context
+dependencies[] = pcp
+dependencies[] = privatemsg
+dependencies[] = user_relationships
+dependencies[] = ds
+dependencies[] = sharethis
+dependencies[] = i18n
+dependencies[] = profile2_page
+dependencies[] = heartbeat_defaults
+dependencies[] = geocoder
+
+files[] = liveitchina.menu.inc
+files[] = liveitchina.form_alter.inc
+files[] = liveitchina.ds_fields_info.inc
