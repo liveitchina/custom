@@ -1,0 +1,7 @@
+<?php
+/**
+ * @file
+ * Code for the LiveitChina Imagekit feature.
+ */
+
+include_once('liveitchina_imagekit.features.inc');

@@ -1,0 +1,7 @@
+<?php
+/**
+ * @file
+ * Code for the LiveitChina Display feature.
+ */
+
+include_once('liveitchina_display.features.inc');

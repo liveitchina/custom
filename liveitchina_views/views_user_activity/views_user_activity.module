@@ -1,0 +1,36 @@
+<?php
+
+/**
+  * Implements hook_views_api().
+  */
+function views_user_activity_views_api() {
+  return array(
+    'api' => 3,
+    'path' => drupal_get_path('module', 'views_user_activity'),
+  );
+}
+
+/**
+ * Implements hook_ds_fields_info().
+ */
+function views_user_activity_ds_fields_info($entity_type) {
+  $fields = array();
+  $fields['profile2']['profile_user_activity'] = array(
+    'title' => t('Profile User Activity'),
+    'field_type' => DS_FIELD_TYPE_BLOCK,
+    'properties' => array(
+      'block' => 'views|user_activity-block',
+      'block_render' => DS_BLOCK_CONTENT,
+    ),
+  );
+  $fields['user']['profile_user_activity'] = array(
+    'title' => t('User Activity'),
+    'field_type' => DS_FIELD_TYPE_BLOCK,
+    'properties' => array(
+      'block' => 'views|user_activity-block',
+      'block_render' => DS_BLOCK_CONTENT,
+    ),
+  );
+  
+  return $fields;
+}

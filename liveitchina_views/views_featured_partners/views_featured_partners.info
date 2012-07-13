@@ -1,0 +1,7 @@
+name = Views Featured Partners
+description = Default Views for Featured Partners
+package = "LiveitChina Views"
+version = 7.x-1.0
+core = 7.x
+
+dependencies[] = views

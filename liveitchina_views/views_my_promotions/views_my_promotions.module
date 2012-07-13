@@ -1,0 +1,48 @@
+<?php
+
+/**
+  * Implements hook_views_api().
+  */
+function views_my_promotions_views_api() {
+  return array(
+    'api' => 3,
+    'path' => drupal_get_path('module', 'views_my_promotions'),
+  );
+}
+
+/**
+ * Implements hook_ds_fields_info().
+ * /
+function views_my_promotions_ds_fields_info($entity_type) {
+  $fields = array();
+
+  $fields['profile2']['profile_connection_partner'] = array(
+    'title' => t('Connections - Exchange Partner'),
+    'field_type' => DS_FIELD_TYPE_BLOCK,
+    'properties' => array(
+      'block' => 'views|profile_connections-partners',
+      'block_render' => DS_BLOCK_CONTENT,
+    ),
+  );
+
+  $fields['profile2']['profile_connection_tutor'] = array(
+    'title' => t('Connections - Tutor'),
+    'field_type' => DS_FIELD_TYPE_BLOCK,
+    'properties' => array(
+      'block' => 'views|profile_connections-tutor',
+      'block_render' => DS_BLOCK_CONTENT,
+    ),
+  );
+
+  $fields['profile2']['profile_connection_school'] = array(
+    'title' => t('Connections - School'),
+    'field_type' => DS_FIELD_TYPE_BLOCK,
+    'properties' => array(
+      'block' => 'views|profile_connections-school',
+      'block_render' => DS_BLOCK_CONTENT,
+    ),
+  );
+
+  return $fields;
+}
+//*/

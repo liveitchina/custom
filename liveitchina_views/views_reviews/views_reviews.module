@@ -1,0 +1,37 @@
+<?php
+
+/**
+  * Implements hook_views_api().
+  */
+function views_reviews_views_api() {
+  return array(
+    'api' => 3,
+    'path' => drupal_get_path('module', 'views_reviews'),
+  );
+}
+
+/**
+ * Implements hook_ds_fields_info().
+ */
+function views_reviews_ds_fields_info($entity_type) {
+  $fields = array();
+  $fields['profile2']['display_reviews'] = array(
+    'title' => t('Profile Display Reviews'),
+    'field_type' => DS_FIELD_TYPE_BLOCK,
+    'properties' => array(
+      'block' => 'views|reviews-profile',
+      'block_render' => DS_BLOCK_CONTENT,
+    ),
+  );
+  /*
+  $fields['user']['profile_user_activity'] = array(
+    'title' => t('User Activity'),
+    'field_type' => DS_FIELD_TYPE_BLOCK,
+    'properties' => array(
+      'block' => 'views|user_activity-block',
+      'block_render' => DS_BLOCK_CONTENT,
+    ),
+  );
+  */
+  return $fields;
+}

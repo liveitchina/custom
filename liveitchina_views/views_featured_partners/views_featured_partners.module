@@ -1,0 +1,30 @@
+<?php
+
+/**
+  * Implements hook_views_api().
+  */
+function views_featured_partners_views_api() {
+  return array(
+    'api' => 3,
+    'path' => drupal_get_path('module', 'views_featured_partners'),
+  );
+}
+
+/**
+ * Implements hook_ds_fields_info().
+ * /
+function views_school_activity_ds_fields_info($entity_type) {
+  $fields = array();
+
+  $fields['node']['school_activity'] = array(
+    'title' => t('School - Recent activity'),
+    'field_type' => DS_FIELD_TYPE_BLOCK,
+    'properties' => array(
+      'block' => 'views|school_activity-block',
+      'block_render' => DS_BLOCK_CONTENT,
+    ),
+  );
+
+  return $fields;
+}
+//*/

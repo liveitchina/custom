@@ -1,0 +1,28 @@
+<?php
+
+/**
+  * Implements hook_views_api().
+  */
+function views_term_map_views_api() {
+  return array(
+    'api' => 3,
+    'path' => drupal_get_path('module', 'views_term_map'),
+  );
+}
+
+/**
+ * Implements hook_ds_fields_info().
+ */
+function views_term_map_ds_fields_info($entity_type) {
+  $fields = array();
+  $fields['profile2']['profile_user_map'] = array(
+    'title' => t('User Map'),
+    'field_type' => DS_FIELD_TYPE_BLOCK,
+    'properties' => array(
+      'block' => 'views|term_map-block_district',
+      'block_render' => DS_BLOCK_CONTENT,
+    ),
+  );
+
+  return $fields;
+}

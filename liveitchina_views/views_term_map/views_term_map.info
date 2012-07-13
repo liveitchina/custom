@@ -1,0 +1,10 @@
+name = Views Term Map
+description = Default Views for displaying map for the user
+package = "LiveitChina Views"
+version = 7.x-1.0
+core = 7.x
+
+dependencies[] = views
+dependencies[] = ds
+dependencies[] = reply
+dependencies[] = profile2
