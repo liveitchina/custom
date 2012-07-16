@@ -320,7 +320,7 @@ function _og_school_school_title($field){
   $city_name = facetapi_map_taxonomy_terms(array($city));
   $district_name = facetapi_map_taxonomy_terms(array($district));
   return '<h2 class="block-title">'. $node->title .
-    '<span class="field-city"> ('.$district_name[$district] . ', ' . $city_name[$city].')</span>'.
+    '<span class="field-city"> ('. $city_name[$city] . ', ' . $district_name[$district] .')</span>'.
     '</h2>';
 }
 
