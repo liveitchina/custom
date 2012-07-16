@@ -574,13 +574,17 @@ function _liveitchina_ds_field_user_photo($field, $style_name ='profile_main') {
  * Alter Facet Filter Area Block
 */
 function liveitchina_block_view_facetapi_VOJ9ksCUAL6pTreW03urQ6m89C59IxTG_alter(&$data, $block) {
-  if (isset($_GET['f'][0])){
-    list($filter,) = explode(':', $_GET['f'][0]);
-    if ($filter != 'city') {
-      unset($data['content']);
+  $data['subject'] = t('Division');
+  $hide = TRUE;
+  $searchCity = (isset($_GET["f"])) ? $_GET["f"] : array();
+  foreach ($searchCity as $city){
+    list($searchLabel, $searchValue) = explode(":", $city);
+    //display only if the value is HONGKONG;
+    if (strtolower($searchLabel) == "city" && $searchValue == 158){
+      $hide = FALSE;
     }
   }
-  else {
+  if ($hide){
     unset($data['content']);
   }
 }
@@ -589,13 +593,16 @@ function liveitchina_block_view_facetapi_VOJ9ksCUAL6pTreW03urQ6m89C59IxTG_alter(
  * Alter Facet Filter District Block
  */
 function liveitchina_block_view_facetapi_wOER33SIuigH29qN7r2xP6n0omobQ4Nf_alter(&$data, $block) {
-  if (isset($_GET['f'][0])){
-    list($filter,) = explode(':', $_GET['f'][0]);
-    if ($filter != 'city') {
-      unset($data['content']);
+  $hide =TRUE;
+  $data['subject'] = t('District');
+  $searchCity = (isset($_GET["f"])) ? $_GET["f"] : array();
+  foreach ($searchCity as $city){
+    list($searchLabel, $searchValue) = explode(":", $city);
+    if (strtolower($searchLabel) == "city"){
+      $hide = FALSE;
     }
   }
-  else {
+  if ($hide){
     unset($data['content']);
   }
 }
