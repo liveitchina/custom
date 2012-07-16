@@ -217,8 +217,7 @@ function og_school_preprocess_search_result(&$vars) {
           'css' => drupal_get_path('module', 'liveitchina') . '/widget/star/star.css',
         )
       );
-      $vars['city_name'] = '';
-      $vars['city'] ='';
+      $vars['city_name'] = $vars['city'] = $vars['district_name'] = $vars['district'] = '';
       $vars['rating'] = theme('fivestar_static', $fivestar);
       if (!isset($fields['im_field_lang_offered'])){
         $fields['im_field_lang_offered'] = (array)0;
@@ -234,6 +233,10 @@ function og_school_preprocess_search_result(&$vars) {
         $vars['city'] = facetapi_map_taxonomy_terms($fields['im_field_city']);
         $vars['city_name'] = implode(', ', $vars['city']);
       }
+      if (isset($fields['im_field_district'])){
+        $vars['district'] = facetapi_map_taxonomy_terms($fields['im_field_district']);
+        $vars['district_name'] = implode(', ', $vars['district']);
+      }
 
       $entities = entity_load($fields['entity_type'], array($fields['entity_id']));
       $field = array(
@@ -241,30 +244,6 @@ function og_school_preprocess_search_result(&$vars) {
        'entity' => $entities[$fields['entity_id']],
       );
       $vars['actions'] = _og_school_ds_school_search($field);
-      $vars['snippet'] = '
-       <div class="liveitchina-teaser node node-school view-mode-search_result clearfix">
-         <div class="ds-content clearfix">
-           <aside class="grid-4 ">
-             <div class="field field-name-field-logo">'.
-               $vars['image'].
-             '</div>
-           </aside>
-           <section class="grid-12 alpha omega">
-             <h2 class="block-title">' . l($fields['label'], $fields['path']) . ' <span class="field-city">('.$vars['city_name'].')</span></h2>
-             <div class="field-name-field-rating">'.
-               $vars['rating'].
-             '</div>
-             <div class="field field-name-field-bundle"><strong>' . $result['type'] . '</strong></div>'.
-             $fields['ts_teaches'].
-             '<div class="field field-name-field-summary">'.
-             $fields['ts_summary'].
-             '</div>
-             <div class="actions">'.
-             $vars['actions'].
-             '</div>
-           </section>
-        </div>
-      </div>';
     break;
   }
 }
@@ -337,9 +316,11 @@ function _og_school_school_title($field){
   $entity = $field['entity'];
   $node = node_load($entity->nid);
   $city = _liveitchina_field_get_field('node', $node, 'field_city', 'tid');
+  $district = _liveitchina_field_get_field('node', $node, 'field_district', 'tid');
   $city_name = facetapi_map_taxonomy_terms(array($city));
+  $district_name = facetapi_map_taxonomy_terms(array($district));
   return '<h2 class="block-title">'. $node->title .
-    '<span class="field-city"> ('.$city_name[$city].')</span>'.
+    '<span class="field-city"> ('.$district_name[$district] . ', ' . $city_name[$city].')</span>'.
     '</h2>';
 }
 
