@@ -567,3 +567,13 @@ function _og_school_get_city() {
   }
   return $city_terms;
 }
+
+function _og_school_school_title_feat($field){
+	$entity = $field['entity'];
+	$node = node_load($entity->nid);
+	$city = _liveitchina_field_get_field('node', $node, 'field_city', 'tid');
+	$city_name = facetapi_map_taxonomy_terms(array($city));
+	return '<h2 class="block-title">'. l($node->title,'school/' . $node->title) .
+    '<span class="field-city"> ('.$city_name[$city].')</span>'.
+    '</h2>';
+}

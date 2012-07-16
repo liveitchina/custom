@@ -394,3 +394,14 @@ function _user_liveitchina_ds_profile_desc($field){
   $desc = _liveitchina_field_get_field('profile2', $profile_user, 'field_summary', 'value');
   return $desc;
 }
+
+function _user_liveitchina_name_title($field){
+	$entity = $field['entity'];
+	$user_profile = user_load($entity->uid);
+	$profile_user = profile2_load_by_user($entity->uid, 'user');
+	$city = _liveitchina_field_get_field('profile2', $profile_user, 'field_city', 'tid');
+	$city_name = facetapi_map_taxonomy_terms(array($city));
+	return '<h2 class="block-title">'. l($user_profile->realname, 'profile-user/' . $user_profile->uid) .
+	    '<span class="field-city"> ('.$city_name[$city].')</span>'.
+	    '</h2>';
+}

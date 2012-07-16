@@ -33,5 +33,11 @@ function user_liveitchina_ds_fields_info($entity_type) {
           'field_type' => DS_FIELD_TYPE_FUNCTION,
           'function' => '_user_liveitchina_ds_profile_desc',
   );
+  
+  $fields['user']['user_title'] = array(
+        'title' => 'User - Name Title',
+        'field_type' => DS_FIELD_TYPE_FUNCTION,
+        'function' => '_user_liveitchina_name_title',
+  );
   return $fields;
 }

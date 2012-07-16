@@ -44,6 +44,10 @@ function og_school_ds_fields_info($entity_type) {
     'field_type' => DS_FIELD_TYPE_FUNCTION,
     'function' => '_og_school_ds_reviewer_author',
   );
-
+  $fields['node']['school_title_feat'] = array(
+        'title' => 'School - Title Featured',
+        'field_type' => DS_FIELD_TYPE_FUNCTION,
+        'function' => '_og_school_school_title_feat',
+  );
   return $fields;
 }
