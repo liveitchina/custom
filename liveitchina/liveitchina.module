@@ -574,7 +574,7 @@ function _liveitchina_ds_field_user_photo($field, $style_name ='profile_main') {
  * Alter Facet Filter Area Block
 */
 function liveitchina_block_view_facetapi_VOJ9ksCUAL6pTreW03urQ6m89C59IxTG_alter(&$data, $block) {
-  $data['subject'] = t('Division');
+  $data['subject'] = t('Division'). ':';
   $hide = TRUE;
   $searchCity = (isset($_GET["f"])) ? $_GET["f"] : array();
   foreach ($searchCity as $city){
@@ -594,7 +594,7 @@ function liveitchina_block_view_facetapi_VOJ9ksCUAL6pTreW03urQ6m89C59IxTG_alter(
  */
 function liveitchina_block_view_facetapi_wOER33SIuigH29qN7r2xP6n0omobQ4Nf_alter(&$data, $block) {
   $hide =TRUE;
-  $data['subject'] = t('District');
+  $data['subject'] = t('District') . ':';
   $searchCity = (isset($_GET["f"])) ? $_GET["f"] : array();
   foreach ($searchCity as $city){
     list($searchLabel, $searchValue) = explode(":", $city);
@@ -608,13 +608,13 @@ function liveitchina_block_view_facetapi_wOER33SIuigH29qN7r2xP6n0omobQ4Nf_alter(
 }
 
 function liveitchina_block_view_facetapi_3IHTw7DdTZX1DkaTSxdUQpWnwQJGuBIx_alter(&$data, $block) {
-  $data['subject'] = t('Language');
+  $data['subject'] = t('Language'). ':';
 }
 function liveitchina_block_view_facetapi_GiIy4zr9Gu0ZSa0bumw1Y9qIIpIDf1wu_alter(&$data, $block) {
-  $data['subject'] = t('Method');
+  $data['subject'] = t('Method'). ':';
 }
 function liveitchina_block_view_facetapi_8NiHeeHn1euMEuNXgw3WAb6Qh3uBSQe4_alter(&$data, $block) {
-  $data['subject'] = t('Select Location');
+  $data['subject'] = t('Select Location'). ':';
 }
 
 function _liveitchina_get_map($address){
