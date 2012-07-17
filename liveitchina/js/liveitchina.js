@@ -1,5 +1,7 @@
 (function ($) {
   $(document).ready(function(){
+    var isSchool = Drupal.settings.lic_search.school;
+
     $(".show-menu").click(function(e){
         e.preventDefault();
         if($(".show-menu").hasClass("menu-open")){
@@ -20,5 +22,9 @@
             $("ul#display-menu.children").hide();
         }
     });
+    
+    if (isSchool){
+      $('#region-content h1#page-title').append('<a class="back" href="'+ Drupal.settings.lic_search.url +'"> ' + Drupal.t('Promote my School') + '</a>');
+    }
   });
 })(jQuery);

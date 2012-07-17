@@ -543,14 +543,7 @@ function _profile2_liveitchina_ds_reviews($field){
     return render(drupal_get_form('reply_add_form', $entity->pid, $field_info['id'], 0));
   }
 }
-/*
-function profile2_liveitchina_profile2_view($profile, $view_mode, $langcode) {
 
-  if ($profile->type == 'tutor' && $view_mode =='page'){
-    $profile->content['#attached']['js'][] = drupal_get_path('module','profile2_liveitchina') . '/js/testme.js';
-  }
-}
-//*/
 function profile2_liveitchina_profile2_view_alter(&$build) {
   $profile = array('tutor', 'exchange_partner');
   if (in_array($build['#bundle'], $profile) && $build['#view_mode'] =='page'){
