@@ -184,12 +184,12 @@ function og_school_preprocess_search_results(&$vars) {
   );
 
   if ($vars['search_page']->page_id == 'find_school'){
-    $my_settings = array(
+    $school_search = array(
       'school'=> TRUE,
       'url' => url('node/add/school'),
     );
   }
-  drupal_add_js(array('lic_search' => $school_search), 'setting');
+  drupal_add_js(array('lic' => $school_search), 'setting');
 }
 
 /**
