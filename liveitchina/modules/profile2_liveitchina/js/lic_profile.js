@@ -1,7 +1,7 @@
 (function ($) {
-  Drupal.behaviors.profile2_liveitchina = {
+  Drupal.behaviors.lic_profile = {
     attach: function(context) {
-      $('#region-content h1#page-title', context).appendTo('<a class="back" href="#"> Back</a>');
+      $('#region-content h1#page-title', context).append('<a class="back" href="#"> Back</a>');
       $('a.back').click(function(){
           parent.history.back();
           return false;
