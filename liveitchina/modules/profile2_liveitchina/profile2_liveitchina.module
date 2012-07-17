@@ -552,7 +552,8 @@ function profile2_liveitchina_profile2_view($profile, $view_mode, $langcode) {
 }
 //*/
 function profile2_liveitchina_profile2_view_alter(&$build) {
-  if ($build['#bundle'] == 'tutor' && $build['#view_mode'] =='page'){
+  $profile = array('tutor', 'exchange_partner');
+  if (in_array($build['#bundle'], $profile) && $build['#view_mode'] =='page'){
     $build['#attached']['js'][] = drupal_get_path('module','profile2_liveitchina') . '/js/lic_profile.js';
   }
 }
