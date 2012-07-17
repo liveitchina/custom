@@ -322,6 +322,7 @@ function _user_liveitchina_ds_actions($field){
   if ($user->uid == 0){
     return '';
   }
+
   $profile = $field['entity'];
   $var = variable_get('profile_role_relationship', _profile2_liveitchina_role_relationship());
   $links = array();
@@ -330,7 +331,7 @@ function _user_liveitchina_ds_actions($field){
     );
 
   $requestee = $profile->uid;
-  $relationship = $var[$profile->type]['rtid'];
+  $relationship = 6;//$var[$profile->type]['rtid'];
   $connect_url = 'relationship/' . $requestee . '/request/'. $relationship;
   $links[] = array(
       'data' => l(t('Connect'), $connect_url),
