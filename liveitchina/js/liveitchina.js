@@ -1,8 +1,16 @@
 (function ($) {
   Drupal.behaviors.liveitchina = {
     attach: function(context) {
-      var isProfileBack = Drupal.settings.lic.profile_back;
-      var isSchool = Drupal.settings.lic.school;
+      var isProfileBack = false;
+      var isSchool = false;
+      //alert(typeof Drupal.settings.lic_profile);
+
+      if (typeof Drupal.settings.lic_profile != 'undefined'){
+        isProfileBack = Drupal.settings.lic_profile.back;
+      }
+      if (typeof Drupal.settings.lic != 'undefined'){
+        isSchool = Drupal.settings.lic.school;
+      }
 
       if (isProfileBack) {
         $('#region-content h1#page-title', context).append('<a class="back" href="#"> << ' + Drupal.t('Back to Search Results') + '</a>');

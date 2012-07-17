@@ -179,17 +179,17 @@ function og_school_default_og_membership_type() {
  */
 function og_school_preprocess_search_results(&$vars) {
   $school_search = array(
-    'school'=> FALSE,
-    'url'=>'#'
+    'school' => FALSE,
+    'url' => '#',
   );
 
   if ($vars['search_page']->page_id == 'find_school'){
     $school_search = array(
-      'school'=> TRUE,
+      'school' => TRUE,
       'url' => url('node/add/school'),
     );
   }
-  drupal_add_js(array('lic' => $school_search), 'setting');
+  drupal_add_js(array('lic'=>$school_search), 'setting');
 }
 
 /**
