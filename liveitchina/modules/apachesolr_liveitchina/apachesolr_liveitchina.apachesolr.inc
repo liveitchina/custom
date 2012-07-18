@@ -21,7 +21,7 @@ function apachesolr_liveitchina_apachesolr_query_alter($query) {
       'sm_lang_offered',
       'sm_lang_wanted',
       'user_avatar',
-      'rating',
+      'fs_rating',
       'ts_teaches',
       'fs_rating',
       'ts_learning',
@@ -67,7 +67,7 @@ function apachesolr_liveitchina_apachesolr_query_prepare($query) {
     'title' => t('Most recent'),
     'default' => 'desc',
   ));
-  $query->setAvailableSort('rating', array(
+  $query->setAvailableSort('fs_rating', array(
     'title' => t('Ratings'),
     'default' => 'desc',
   )
