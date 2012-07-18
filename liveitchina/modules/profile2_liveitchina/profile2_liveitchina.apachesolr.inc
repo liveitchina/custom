@@ -1,5 +1,42 @@
 <?php
 /**
+ * Implementation of hook_apachesolr_modify_query().
+ */
+function profile2_liveitchina_apachesolr_query_alter($query) {
+  global $language;
+
+  //Show only if status is true
+  $query->addFilter('bs_status', TRUE);
+
+  switch (arg(1)){
+    case 'tutor':
+      $query->addParam('fl', 'user_avatar');
+      $query->addParam('fl', 'fs_rating');
+      $query->addParam('fl', 'im_field_city');
+      $query->addParam('fl', 'sm_vid_language');
+      $query->addParam('fl', 'ts_summary');
+      $query->addParam('fl', 'sm_lang_offered');
+      $query->addParam('fl', 'tutor_price');
+      $query->addFilter('user_role', 6);
+      $query->addParam('fl', 'ts_teaches');
+      break;
+    case 'exchange-partner':
+      $query->addParam('fl', 'user_avatar');
+      $query->addParam('fl', 'fs_rating');
+      $query->addParam('fl', 'im_field_city');
+      $query->addParam('fl', 'sm_vid_language');
+      $query->addParam('fl', 'ts_summary');
+      $query->addParam('fl', 'sm_lang_offered');
+      $query->addParam('fl', 'sm_lang_wanted');
+      $query->addFilter('bundle', 'exchange_partner');
+      $query->addParam('fl', 'ts_learning');
+      $query->addParam('fl', 'ts_teaches');
+      $query->addFilter('user_role', 4);
+      break;
+  }
+}
+
+/**
  * Implements hook_apachesolr_index_document_build_ENTITY_TYPE().
  *
  * Adds book module support

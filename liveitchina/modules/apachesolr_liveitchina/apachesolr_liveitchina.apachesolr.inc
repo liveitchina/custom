@@ -23,7 +23,6 @@ function apachesolr_liveitchina_apachesolr_query_alter($query) {
       'user_avatar',
       'fs_rating',
       'ts_teaches',
-      'fs_rating',
       'ts_learning',
       'im_field_district',
       'sm_vid_language',
@@ -54,34 +53,53 @@ function apachesolr_liveitchina_apachesolr_query_alter($query) {
  */
 
 function apachesolr_liveitchina_apachesolr_query_prepare($query) {
+  //default sort order by score
+  $sort = array('score', 'desc');
+
+  //reset the available sort
   $query->removeAvailableSort('ds_created');
   $query->removeAvailableSort('sort_name');
   $query->removeAvailableSort('bundle');
   $query->removeAvailableSort('sort_label');
   
-  $query->setAvailableSort('sort_label', array(
-    'title' => t('Name'),
-    'default' => 'asc',
-  ));
-  $query->setAvailableSort('ds_created', array(
-    'title' => t('Most recent'),
-    'default' => 'desc',
-  ));
-  $query->setAvailableSort('fs_rating', array(
-    'title' => t('Ratings'),
-    'default' => 'desc',
-  )
+  $sorts['sort_label'] = array(
+    'title'=> 'Name',
+    'default'=> 'asc',
   );
+  $sorts['ds_created'] = array(
+    'title'=> 'Most recent',
+    'default'=> 'desc',
+  );
+  $sorts['fs_rating'] = array(
+    'title'=> 'Ratings',
+    'default'=> 'desc',
+  );
+  
+  foreach ($sorts as $sortKey=>$sortDetail){
+    $query->setAvailableSort($sortKey, array(
+      'title' => t($sortDetail['title']),
+      'default' => $sortDetail['default'],
+      )
+    );
+  }
   //Most relevant
   
   switch (arg(1)){
-   case 'tutor':
-    $query->setAvailableSort('tutor_price', array(
-      'title' => t('Most affordable'),
-      'default' => 'desc',
-      )
-    );
-    break;
+    case 'tutor':
+      $query->setAvailableSort('tutor_price', array(
+        'title' => t('Most affordable'),
+        'default' => 'desc',
+        )
+      );
+      $sort = array('tutor_price', 'desc');
+      break;
+    case 'school':
+      $query->setAvailableSort('sm_field_school_price', array(
+        'title' => t('Most affordable'),
+        'default' => 'desc',
+        )
+      );
+      break;
   }
   
   //sort for login Exchange Partner
@@ -96,11 +114,9 @@ function apachesolr_liveitchina_apachesolr_query_prepare($query) {
   // There is an existing sort
   if (isset($_GET['solrsort'])) {
    $sort = explode(' ', $_GET['solrsort']);
-   $query->setSolrsort($sort[0], $sort[1]);
   }
-  else {
-   $query->setSolrsort('score','dsc');
-  }
+
+  $query->setSolrsort($sort[0],$sort[1]);
 }
 
 /**

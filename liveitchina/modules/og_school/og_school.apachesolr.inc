@@ -22,24 +22,6 @@ function og_school_apachesolr_query_alter($query) {
 }
 
 /**
- * Implementation of hook_apachesolr_query_prepare().
- */
-
-function og_school_apachesolr_query_prepare($query) {
-  switch (arg(1)){
-   case 'school':
-     $query->setAvailableSort(
-     'sm_field_school_price',
-     array(
-       'title' => t('Most affordable'),
-       'default' => 'desc',
-     )
-     );
-    break;
-  }
-}
-
-/**
  * Implements hook_apachesolr_index_document_build_node().
  */
 function og_school_apachesolr_index_document_build_node(ApacheSolrDocument $document, $node, $env_id) {
