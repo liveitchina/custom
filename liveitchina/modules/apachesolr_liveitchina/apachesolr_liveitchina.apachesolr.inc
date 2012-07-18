@@ -93,7 +93,7 @@ function apachesolr_liveitchina_apachesolr_query_prepare($query) {
       );
       $sort = array('tutor_price', 'desc');
       break;
-    case 'exchange_partner':
+    case 'exchange-partner':
       $sort = array('fs_rating', 'desc');
       break;
     case 'site':
