@@ -271,7 +271,7 @@ function _og_school_get_connect($result){
   global $user;
   $connect_url = url($_GET['q'], array('absolute'=> TRUE));
   if ($user->uid != 0){
-    return l('Add to list','#') . ctools_modal_text_button(t('Connect'), $connect_url, t('Connect'), 'ctools-modal-modal-popup-medium');
+    return flag_create_link('bookmarks', $user->uid) . ctools_modal_text_button(t('Connect'), $connect_url, t('Connect'), 'ctools-modal-modal-popup-medium');
   }
   else{
     return l('Add to list','#') . l(t('Connect'),'signup');
