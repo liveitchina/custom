@@ -93,12 +93,19 @@ function apachesolr_liveitchina_apachesolr_query_prepare($query) {
       );
       $sort = array('tutor_price', 'desc');
       break;
+    case 'exchange_partner':
+      $sort = array('fs_rating', 'desc');
+      break;
+    case 'site':
+      $sort = array('fs_rating', 'desc');
+      break;
     case 'school':
       $query->setAvailableSort('sm_field_school_price', array(
         'title' => t('Most affordable'),
         'default' => 'desc',
         )
       );
+      $sort = array('fs_rating', 'desc');
       break;
   }
   
