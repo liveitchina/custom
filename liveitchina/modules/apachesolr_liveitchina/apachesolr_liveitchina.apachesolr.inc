@@ -1,5 +1,55 @@
 <?php
 /**
+ * Implementation of hook_apachesolr_query_alter().
+ */
+function apachesolr_liveitchina_apachesolr_query_alter($query) {
+  global $language;
+  //Filter by language
+  //$query->addFilter('ss_language', $language->language);
+  
+  //Show only if status is true
+  $query->addFilter('bs_status', TRUE);
+  
+  //Parameters
+  $query->addParam('fl', 'bundle');
+  $query->addParam('fl', 'user_role');
+  switch (arg(1)){
+    case 'site':
+      $paramFields = array(
+      'sm_lang_offered',
+      'tutor_price',
+      'sm_lang_offered',
+      'sm_lang_wanted',
+      'user_avatar',
+      'rating',
+      'ts_teaches',
+      'fs_rating',
+      'ts_learning',
+      'im_field_district',
+      'sm_vid_language',
+      'ts_view_mode',
+      'im_field_lang_offered',
+      'is_logo',
+      'ts_summary',
+      'sm_field_price',
+      'im_field_city',
+      );
+      foreach ($paramFields as $paramField){
+        $query->addParam('fl', $paramField);
+      }
+      //$query->addParam('qf','bundle_name^4000');
+      //$query->addParam('qf','ts_teaches^10');
+      //$query->addParam('qf','ts_learning^10');
+
+      break;
+    case 'news-and-happenings':
+      $query->addParam('fl', 'ts_view_mode');
+      $query->addFilter('ss_bundle', 'news');
+      break;
+  }
+}
+
+/**
  * Implementation of hook_apachesolr_query_prepare().
  */
 
@@ -49,7 +99,7 @@ function apachesolr_liveitchina_apachesolr_query_prepare($query) {
    $query->setSolrsort($sort[0], $sort[1]);
   }
   else {
-   $query->setSolrsort('sort_label','asc');
+   $query->setSolrsort('score','dsc');
   }
 }
 
