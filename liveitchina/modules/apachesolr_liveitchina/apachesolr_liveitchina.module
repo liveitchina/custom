@@ -3,11 +3,10 @@
  * Implementation of hook_preprocess_search_results().
  */
 function apachesolr_liveitchina_preprocess_search_results(&$vars) {
+  //global $user;
   if ($vars['search_page']->page_id == 'news_and_happenings'){
     drupal_add_css(path_to_theme() . '/ds_layouts/liveitchina_teaser/liveitchina_teaser.css', 'theme');
   }
-  //print_r($vars);
-  //exit;
 }
 
 /**

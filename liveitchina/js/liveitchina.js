@@ -11,6 +11,13 @@
       if (typeof Drupal.settings.lic != 'undefined'){
         isSchool = Drupal.settings.lic.school;
       }
+      if (typeof Drupal.settings.lic_search != 'undefined'){
+        isProfileSearch = Drupal.settings.lic_search.profile;
+      }
+      
+      if (isProfileSearch) {
+        $('#region-content h1#page-title').append('<a class="back" href="'+ Drupal.settings.lic_search.url +'"> ' + Drupal.t('Promote profile') + '</a>');
+      }
 
       if (isProfileBack) {
         $('#region-content h1#page-title', context).append('<a class="back" href="#"> << ' + Drupal.t('Back to Search Results') + '</a>');
