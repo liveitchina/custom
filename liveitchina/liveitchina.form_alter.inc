@@ -10,6 +10,10 @@ function liveitchina_form_reply_add_form_alter(&$form, &$form_state, $form_id) {
   $form['metatags']['#access'] = FALSE;
   $form['field_rating']['#access'] = FALSE;
   array_unshift($form['#submit'], 'liveitchina_cast_review_vote_submit');
+  $form['review_link'] = array(
+    '#markup' => '<a id="write-review-link" class="element-invisible">'. t('Write Review').'</a>',
+    '#weight'=> -1,
+  );
 }
 
 function liveitchina_form_search_block_form_alter(&$form, &$form_state, $form_id) {
