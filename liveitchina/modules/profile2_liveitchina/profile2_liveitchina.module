@@ -328,17 +328,18 @@ function _profile2_liveitchina_ds_user_links($field){
   $links = array();
   $e = $profile->type;
   $id = $profile->uid;
+  $inline_link = $_GET["q"];
   $links[] = array(
-    'data' => l(t('See Reviews'), 'profile/' . $e . '/' . $id . '/review'),
+    'data' => l(t('See Reviews'), $inline_link, array('fragment'=>'read-review-link')),
   );
   $links[] = array(
-    'data' => l(t('Write Reviews'), 'profile/' . $e . '/' . $id . '/review', array('fragment'=>'review')),
+    'data' => l(t('Write Reviews'), $inline_link, array('fragment'=>'write-review-link')),
   );
   $links[] = array(
-    'data' => l(t('Add to List'), $_GET["q"], array('fragment'=>'#')),
+    'data' => l(t('Add to List'), $inline_link, array('fragment'=>'#')),
   );
   $links[] = array(
-    'data' => l(t('Send Message'), $_GET["q"], array('fragment'=>'#')),
+    'data' => l(t('Send Message'), $inline_link, array('fragment'=>'#')),
   );
   $data = theme('item_list',
     array('items' => $links,
