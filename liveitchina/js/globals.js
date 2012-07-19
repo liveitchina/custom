@@ -23,15 +23,16 @@ jQuery(document).ready(function () {
         });
 
         link.text("+").bind('click',function(index, value){
-          jQuery(this).siblings('.block-content, .view').slideToggle('slow');
-          var parent = jQuery(this).parent('.block-slider');
-          if (parent.hasClass('toggle-open')){
-            parent.removeClass('toggle-open').addClass('toggle-close');
-          }
-          else{
-            parent.removeClass('toggle-close').addClass('toggle-open');
-          }
-          return false;
+          event.preventDefault();
+          jQuery(this).siblings('.block-content, .view').slideToggle('slow', function(){
+            var parent = jQuery(this).parent('.block-slider');
+            if (parent.hasClass('toggle-open')){
+              parent.removeClass('toggle-open').addClass('toggle-close');
+            }
+            else{
+              parent.removeClass('toggle-close').addClass('toggle-open');
+            }
+          });
         });
 
         jQuery(this).append(link).addClass('toggle-open');
@@ -44,7 +45,15 @@ jQuery(document).ready(function () {
     event.preventDefault();
     var hashId = this.hash;
     if (hashId == '#write-review-link'){
-      jQuery(hashId).parents('form').parent('.block-content').slideToggle('slow');
+      jQuery(hashId).parents('form').parent('.block-content').slideToggle('slow', function(){
+        if (jQuery(this).hasClass('toggle-open')){
+          jQuery(this).parent('.block-slider').removeClass('toggle-open').addClass('toggle-close');
+        }
+        else{
+          jQuery(this).parent('.block-slider').removeClass('toggle-close').addClass('toggle-open');
+        }
+
+      });
     }
     jQuery('html,body').animate({scrollTop:jQuery(this.hash).offset().top}, 500);
   });
