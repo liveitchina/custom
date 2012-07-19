@@ -330,10 +330,22 @@ function _profile2_liveitchina_ds_user_links($field){
   $id = $profile->uid;
   $inline_link = $_GET["q"];
   $links[] = array(
-    'data' => l(t('See Reviews'), $inline_link, array('fragment'=>'read-review-link')),
+    'data' => l( t('See Reviews'), $inline_link, array(
+      'attributes' => array(
+        'class'=> array('hscroller-link'),
+      ),
+      'fragment'=>'read-review-link'
+    )
+    )
   );
   $links[] = array(
-    'data' => l(t('Write Reviews'), $inline_link, array('fragment'=>'write-review-link')),
+    'data' => l(t('Write Reviews'), $inline_link, array(
+      'attributes' => array(
+        'class'=> array('hscroller-link'),
+      ),
+      'fragment'=>'write-review-link',
+    )
+    )
   );
   $links[] = array(
     'data' => l(t('Add to List'), $inline_link, array('fragment'=>'#')),

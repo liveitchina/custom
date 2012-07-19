@@ -404,10 +404,22 @@ function _og_school_connect_link($field){
 function _og_school_ds_school_links($field){
   $links = array();
     $links[] = array(
-    'data' => l(t('See Reviews'), $_GET["q"], array('fragment'=>'read-review-link')),
+    'data' => l(t('See Reviews'), $_GET["q"], array(
+      'attributes' => array(
+        'class'=> array('hscroller-link'),
+      ),
+      'fragment'=>'read-review-link'
+    )
+    ),
   );
     $links[] = array(
-    'data' => l(t('Write Reviews'), $_GET["q"], array('fragment'=>'write-review-link')),
+    'data' => l(t('Write Reviews'), $_GET["q"], array(
+      'attributes' => array(
+        'class'=> array('hscroller-link'),
+      ),
+      'fragment'=>'write-review-link'
+    )
+    ),
   );
     $links[] = array(
     'data' => l(t('Add to List'), $_GET["q"], array('fragment'=>'#')),
