@@ -2,6 +2,7 @@
   Drupal.behaviors.liveitchina = {
     attach: function(context) {
       var isProfileBack = false;
+      var isProfileSearch = false;
       var isSchool = false;
       //alert(typeof Drupal.settings.lic_profile);
 
