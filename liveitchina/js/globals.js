@@ -1,11 +1,11 @@
 jQuery(document).ready(function () {
-      jQuery('#block-locale-language .block-content ul').each(function(){
-        var list=jQuery(this),
-        sortform = jQuery(document.createElement('form')).insertBefore(jQuery(this).hide()).attr('id','form-switcher-locale');
-        select = jQuery(document.createElement('select')).appendTo(sortform);
-        select.change(function(){
-            window.location = jQuery(this).val();
-        });
+  jQuery('#block-locale-language .block-content ul').each(function(){
+    var list=jQuery(this),
+    sortform = jQuery(document.createElement('form')).insertBefore(jQuery(this).hide()).attr('id','form-switcher-locale');
+    select = jQuery(document.createElement('select')).appendTo(sortform);
+    select.change(function(){
+      window.location = jQuery(this).val();
+    });
         jQuery('>li a', this).each(function(){
           var target=jQuery(this).attr('target'),
           option=jQuery(document.createElement('option'))
@@ -39,4 +39,13 @@ jQuery(document).ready(function () {
           jQuery('.slider-button',this).trigger('click');
         }
       });
+      
+  jQuery('.hscroller-link').click(function(event){
+    event.preventDefault();
+    var hashId = this.hash;
+    if (hashId == '#write-review-link'){
+      jQuery(hashId).parents('form').parent('.block-content').slideToggle('slow');
+    }
+    jQuery('html,body').animate({scrollTop:jQuery(this.hash).offset().top}, 500);
+  });
 });
