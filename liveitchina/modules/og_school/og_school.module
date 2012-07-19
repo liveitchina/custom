@@ -577,3 +577,14 @@ function _og_school_school_title_feat($field){
     '<span class="field-city"> ('.$city_name[$city].')</span>'.
     '</h2>';
 }
+
+function _og_school_liveitchina_ds_reviews($field){
+  $entity = $field['entity'];
+  $entity_type = $field['entity_type'];
+  $bundle = $field['bundle'];
+  $field_info = field_info_instance($entity_type, "field_review_{$bundle}", $bundle);
+  if ((user_access('administer replies') ||
+    user_access('post '. $bundle .' reply'))) {
+    return render(drupal_get_form('reply_add_form', $entity->vid, $field_info['id'], 0));
+  }
+}
