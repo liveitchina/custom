@@ -248,6 +248,7 @@ function liveitchina_ds_field_theme_functions_info() {
   return array('theme_liveit_list_field' => t('List comma separated'));
 }
 
+
 function theme_liveit_list_field($variables) {
   $output = '';
 
@@ -295,6 +296,15 @@ function _liveitchina_ds_field_user_profile_name($field){
   return $data->realname;
 }
 
+function _liveitchina_ds_sharethis($field){
+  $content = '<div class="liveitchina-sharethis-link">'.l('Share This', $_GET['q'], array(
+    'attributes' => array('class'=>array('liveitchina-sharethis')),
+  ));
+  $content .= sharethis_block_contents();
+  $content .= '</div>';
+
+  return $content;
+}
 /**
  * Implements hook_user_insert().
  */
@@ -334,6 +344,22 @@ function liveitchina_preprocess_node(&$vars) {
   $vars['theme_hook_suggestions'][] = 'node__' . $node->type;
   $vars['theme_hook_suggestions'][] = 'node__' . $node->type . '__' . $vars['view_mode'];
   //print_r($vars);
+}
+
+/**
+ * Implements hook_preprocess_block()
+ */
+function liveitchina_preprocess_block(&$vars) {
+  /*/$block = $vars['block'];
+  //print "<h1>$block->bid</h1>";
+  
+  switch ($block->bid){
+    case 'sharethis_block':
+      print_r($vars);
+      exit;
+    break;
+  }
+  //*/
 }
 
 function liveitchina_debug($form, $key = false){

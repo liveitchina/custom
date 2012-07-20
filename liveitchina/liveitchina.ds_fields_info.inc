@@ -27,6 +27,16 @@ function liveitchina_ds_fields_info($entity_type) {
     'field_type' => DS_FIELD_TYPE_FUNCTION,
     'function' => '_liveitchina_ds_page_title',
   );
+  $fields['node']['liveitchina_sharethis'] = array(
+    'title' => 'LiveitChina ShareThis',
+    'field_type' => DS_FIELD_TYPE_FUNCTION,
+    'function' => '_liveitchina_ds_sharethis',
+  );
+  $fields['profile2']['liveitchina_sharethis'] = array(
+    'title' => 'LiveitChina ShareThis',
+    'field_type' => DS_FIELD_TYPE_FUNCTION,
+    'function' => '_liveitchina_ds_sharethis',
+  );
   return $fields;
 }
 
