@@ -104,6 +104,9 @@ function apachesolr_liveitchina_apachesolr_query_prepare($query) {
       );
       $sort = array('fs_rating', 'desc');
       break;
+    case 'news-and-happenings':
+      $sort = array('ds_created', 'desc');
+      break;
   }
   
   //sort for login Exchange Partner
