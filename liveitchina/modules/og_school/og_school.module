@@ -501,7 +501,7 @@ function og_school_connect_link($entity_type, $entity, $account = NULL) {
             $links['href'] = $url;
           }
           else {
-            $links['href'] = 'user/login';
+            $links['href'] = 'user/register';
             $links['options'] = array('query' => array('destination' => $url));
           }
         }
@@ -512,7 +512,7 @@ function og_school_connect_link($entity_type, $entity, $account = NULL) {
             $links['href'] = $url;
           }
           else {
-            $links['href'] = 'user/login';
+            $links['href'] = 'user/register';
             $links['options'] = array('query' => array('destination' => $url));
           }
         }
