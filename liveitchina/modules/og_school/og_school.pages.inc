@@ -17,7 +17,8 @@ function og_school_promote_profiles($type){
     return $user_promote_form;
   }
   else {
-    return drupal_get_form('user_login');
+    //return drupal_get_form('user_login');
+  	return drupal_get_form('user_register_form');
   }
 }
 
