@@ -416,3 +416,7 @@ function _user_liveitchina_name_title($field){
 	    '<span class="field-city"> ('.$city_name[$city].')</span>'.
 	    '</h2>';
 }
+
+function user_liveitchina_form_user_register_form_alter(&$form, &$form_state, $form_id){
+  $form['#prefix'] = '<div class="register-preface">LiveItChina.com is a social media platform for language learners. A free service that lets users share their unbiased learning experience. Find local teachers, ideal language exchange partners, compare, review and book courses at language schools. Learn a language and sign up for free!</div>';
+}
