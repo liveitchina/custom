@@ -101,7 +101,8 @@ function liveitchina_block_view($delta = '') {
       $block['content'] = liveitchina_account_menu_block();
       break;
     case 'login_user':
-    	$block['content'] = drupal_get_form('user_login');
+      $block['subject'] = t('Members Login');
+      $block['content'] = drupal_get_form('user_login_block');
       break;
   }
   //print_r ($user);
