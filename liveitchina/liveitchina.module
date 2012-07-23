@@ -680,8 +680,8 @@ function _liveitchina_field_get_field($entity_type, $entity, $field, $index='val
 }
 
 function _liveitchina_price_table($city, $cost = 0){
-  if ($city == 0){
-    return '';
+  if ($city == 0 || $cost == ''){
+    return '-';
   }
 
   $sign = (in_array($city, array(158, 193)))? 'HK': 'RMB';
