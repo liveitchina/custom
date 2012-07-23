@@ -243,7 +243,7 @@ function _profile2_liveitchina_ds_field_additional_information($field){
   $profile = profile2_load_by_user($entity->uid, $entity->type);
   $display = array();
   $display[] = field_view_field('profile2', $profile, 'field_additional_info', 'teaser');
-  $display[] = field_view_field('profile2', $profile, 'field_add_info_tag', 'teaser');
+  //$display[] = field_view_field('profile2', $profile, 'field_add_info_tag', 'teaser');
   $display[] = field_view_field('profile2', $profile, 'field_add_info_text', 'teaser');
   return render($display);
 }
