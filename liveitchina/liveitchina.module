@@ -63,6 +63,10 @@ function liveitchina_block_info() {
     'info' => t('Account Menu'), //The name that will appear in the block list.
     'cache' => DRUPAL_NO_CACHE, //No cache
   );
+  $blocks['login_user'] = array(
+    'info' => t('Login Module Block'),//The name that will appear in the block list.
+    'cache' => DRUPAL_NO_CACHE, //No cache
+  );
   return $blocks;
 }
 
@@ -95,6 +99,9 @@ function liveitchina_block_view($delta = '') {
       break;
     case 'account_menu':
       $block['content'] = liveitchina_account_menu_block();
+      break;
+    case 'login_user':
+    	$block['content'] = drupal_get_form('user_login');
       break;
   }
   //print_r ($user);
