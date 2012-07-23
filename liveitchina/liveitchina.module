@@ -12,6 +12,9 @@ function liveitchina_init() {
   drupal_add_js($path . '/js/globals.js', array('weight' => 1));
 }
 
+/**
+ * Implements hook_field_formatter_info().
+ */
 function liveitchina_field_formatter_info() {
   return array(
     'taxonomy_term_comma_separated' => array(
@@ -21,26 +24,26 @@ function liveitchina_field_formatter_info() {
   );
 }
 
-function liveitchina_field_formatter_view($entity_type, $entity, $field, $instance, $langcode, $items, $display) {
+function liveitchina_field_formatter_prepare_view($entity_type, $entities, $field, $instances, $langcode, &$items, $displays) {
+  return taxonomy_field_formatter_prepare_view($entity_type, $entities, $field, $instances, $langcode, $items, $displays);
+}
+
+/**
+ * Implements hook_field_formatter_view().
+ */
+function liveitchina_field_formatter_view ($entity_type, $entity, $field, $instance, $langcode, $items, $display) {
   $element = array();
-  $output = '';
+  $language = i18n_language_interface();
+
   switch ($display['type']) {
-    // Override check plain
     case 'taxonomy_term_comma_separated':
-      $terms[] = taxonomy_term_load_multiple(array(),array('tid'=>$items));
+      $terms = array();
       foreach ($items as $delta => $item) {
-        //$name = ($item['tid'] != 'autocreate' ? $item['taxonomy_term']->name : $item['name']);
-        $lists[] = $terms[0][$item['tid']]->name;
+        $name = ($item['tid'] != 'autocreate' ? i18n_taxonomy_term_name($item['taxonomy_term'], $language->language): $item['name']);
+        $terms[] = check_plain($name);
       }
-      
-      if($lists){
-        $output .= '<div class="field-items">';
-        $output .= implode(', ', $lists);
-        $output .= '</div>';
-      }
-      
-      $element[0] = array(
-        '#markup' => $output,
+      $element[] = array(
+        '#markup' => implode(', ', $terms),
       );
     break;
   }
