@@ -5,12 +5,28 @@
 function profile2_liveitchina_preprocess_search_results(&$vars) {
   //global $user;
   $page_id = $vars['search_page']->page_id;
-  if (in_array($page_id, array('find_tutor','find_exchange_partner'))){
-    $link = str_replace('find_','',$page_id);
-    $profile_search = array(
-      'profile' => TRUE,
-      'url' => url("promote/$link"),
-    );
+  $profile_search = array();
+
+  switch ($page_id){
+    case 'find_tutor':
+    case 'find_exchange_partner':
+      $link = str_replace('find_','',$page_id);
+      $label = ($link == 'tutor') ? 'Tutor': 'Exchange Partner';
+      $profile_search = array(
+        'profile' => TRUE,
+        'url' => url("promote/$link"),
+        'label'=> t('Promote myself as '. $label),
+      );
+      break;
+    case 'core_search':
+      $profile_search = array(
+        'profile' => TRUE,
+        'url' => url("node/5"), //promote yourself page
+        'label'=> t('Promote yourself'),
+      );
+      break;
+  }
+  if (count($profile_search)){
     drupal_add_js(array('lic_search'=>$profile_search), 'setting');
   }
 }

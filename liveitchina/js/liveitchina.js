@@ -17,7 +17,7 @@
       }
       
       if (isProfileSearch) {
-        $('#region-content h1#page-title').append('<a class="back" href="'+ Drupal.settings.lic_search.url +'"> ' + Drupal.t('Promote profile') + '</a>');
+        $('#region-content h1#page-title').append('<a class="back" href="'+ Drupal.settings.lic_search.url +'"> ' + Drupal.settings.lic_search.label + '</a>');
       }
 
       if (isProfileBack) {
