@@ -10,6 +10,7 @@ define('LIVEITCHINA_USER_REGISTRATION_LAST_STEP', 2);
 function liveitchina_init() {
   $path = drupal_get_path('module', 'liveitchina');
   drupal_add_js($path . '/js/globals.js', array('weight' => 1));
+  drupal_add_js(drupal_get_path('module', 'liveitchina') . '/js/liveitchina.js', array('group' => 'JS_THEME'));
 }
 
 /**
@@ -114,7 +115,6 @@ function liveitchina_block_view($delta = '') {
 
 function liveitchina_account_menu_block(){
   global $user;
-  drupal_add_js(drupal_get_path('module', 'liveitchina') . '/js/liveitchina.js', array('group' => 'JS_THEME'));
   $user_fields = profile2_load_by_user($user, 'user');
   
   if ($firstname = field_get_items('profile2', $user_fields, 'field_user_first_name')){
