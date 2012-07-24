@@ -327,20 +327,29 @@ function _user_liveitchina_ds_actions($field){
   $profile = $field['entity'];
   $var = variable_get('profile_role_relationship', _profile2_liveitchina_role_relationship());
   $links = array();
-    $links[] = array(
-      'data' => l(t('See Availability'), $_GET["q"], array('fragment'=>'#')),
-    );
-
+  
   $requestee = $profile->uid;
   $relationship = 6;//$var[$profile->type]['rtid'];
   $connect_url = 'relationship/' . $requestee . '/request/'. $relationship;
   
   if ($user->uid){
+    ///*
     $links[] = array(
+              'data' => l(t('See Availability'), $_GET["q"], array('fragment'=>'#')),
+    );
+    //*/
+    $links[] = array(
+      //'data' => l(t('See Availability'), $_GET["q"], array('fragment'=>'#')),
       'data' => l(t('Connect'), $connect_url),
     );
+    
   }
   else{
+  	///*
+  	$links[] = array(
+  	          'data' => l(t('See Availability'), 'user/register'),
+  	);
+  	//*/
     $links[] = array(
       'data' => l(t('Connect'), 'user/register'),
     );
@@ -407,12 +416,27 @@ function _user_liveitchina_ds_profile_desc($field){
 }
 
 function _user_liveitchina_name_title($field){
-	$entity = $field['entity'];
-	$user_profile = user_load($entity->uid);
-	$profile_user = profile2_load_by_user($entity->uid, 'user');
-	$city = _liveitchina_field_get_field('profile2', $profile_user, 'field_city', 'tid');
-	$city_name = facetapi_map_taxonomy_terms(array($city));
-	return '<h2 class="block-title">'. l($user_profile->realname, 'profile-user/' . $user_profile->uid) .
-	    '<span class="field-city"> ('.$city_name[$city].')</span>'.
-	    '</h2>';
+  $entity = $field['entity'];
+  $user_profile = user_load($entity->uid);
+  $profile_user = profile2_load_by_user($entity->uid, 'user');
+  $city = _liveitchina_field_get_field('profile2', $profile_user, 'field_city', 'tid');
+  $city_name = facetapi_map_taxonomy_terms(array($city));
+  return '<h2 class="block-title">'. l($user_profile->realname, 'profile-tutor/' . $user_profile->uid) .
+      '<span class="field-city"> ('.$city_name[$city].')</span>'.
+      '</h2>';
+}
+
+function _user_liveitchina_name_title_exchange_partner($field){
+  $entity = $field['entity'];
+  $user_profile = user_load($entity->uid);
+  $profile_user = profile2_load_by_user($entity->uid, 'user');
+  $city = _liveitchina_field_get_field('profile2', $profile_user, 'field_city', 'tid');
+  $city_name = facetapi_map_taxonomy_terms(array($city));
+  return '<h2 class="block-title">'. l($user_profile->realname, 'profile-exchange_partner/' . $user_profile->uid) .
+        '<span class="field-city"> ('.$city_name[$city].')</span>'.
+        '</h2>';
+}
+
+function user_liveitchina_form_user_register_form_alter(&$form, &$form_state, $form_id){
+  $form['#prefix'] = '<div class="register-preface">LiveItChina.com is a social media platform for language learners. A free service that lets users share their unbiased learning experience. Find local teachers, ideal language exchange partners, compare, review and book courses at language schools. Learn a language and sign up for free!</div>';
 }
