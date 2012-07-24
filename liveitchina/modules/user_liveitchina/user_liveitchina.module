@@ -327,20 +327,29 @@ function _user_liveitchina_ds_actions($field){
   $profile = $field['entity'];
   $var = variable_get('profile_role_relationship', _profile2_liveitchina_role_relationship());
   $links = array();
-    $links[] = array(
-      'data' => l(t('See Availability'), $_GET["q"], array('fragment'=>'#')),
-    );
-
+  
   $requestee = $profile->uid;
   $relationship = 6;//$var[$profile->type]['rtid'];
   $connect_url = 'relationship/' . $requestee . '/request/'. $relationship;
   
   if ($user->uid){
+    ///*
     $links[] = array(
+              'data' => l(t('See Availability'), $_GET["q"], array('fragment'=>'#')),
+    );
+    //*/
+    $links[] = array(
+      //'data' => l(t('See Availability'), $_GET["q"], array('fragment'=>'#')),
       'data' => l(t('Connect'), $connect_url),
     );
+    
   }
   else{
+  	///*
+  	$links[] = array(
+  	          'data' => l(t('See Availability'), 'user/register'),
+  	);
+  	//*/
     $links[] = array(
       'data' => l(t('Connect'), 'user/register'),
     );

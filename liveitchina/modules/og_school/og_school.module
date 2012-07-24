@@ -279,10 +279,19 @@ function _og_school_get_connect($result){
 }
 
 function _og_school_ds_school_actions($field){
-  $links['listing'] = array(
+  global $user;
+  
+  if ($user->uid){
+    $links['listing'] = array(
     'data' => l(t('Book'), $_GET['q']),
-  );
-
+    );
+  }
+  else{
+    $links['listing'] = array(
+        'data' => l(t('Book'), 'user/register'),
+    );
+  }
+  
   if ($link = _og_school_connect_link($field)){
     $links['connect'] = array(
       'data' => render($link),
