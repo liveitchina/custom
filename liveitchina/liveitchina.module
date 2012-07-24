@@ -8,12 +8,12 @@ module_load_include('inc', 'liveitchina', 'liveitchina.form_alter');
 
 /**
  * Implementation of hook_init()
- */
+ * /
 function liveitchina_init() {
   $path = drupal_get_path('module', 'liveitchina');
   drupal_add_js($path . '/js/globals.js', array('weight' => 1));
   drupal_add_js($path . '/js/liveitchina.js', array('group' => 'JS_THEME'));
-}
+}//*/
 
 /**
  * Implements hook_field_formatter_info().

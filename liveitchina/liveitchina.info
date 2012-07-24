@@ -16,3 +16,6 @@ dependencies[] = geocoder
 files[] = liveitchina.menu.inc
 files[] = liveitchina.form_alter.inc
 files[] = liveitchina.ds_fields_info.inc
+
+scripts[] = "js/globals.js"
+scripts[] = "js/liveitchina.js"
