@@ -1,8 +1,10 @@
 <?php
-module_load_include('inc', 'liveitchina', 'liveitchina.form_alter');
-//testing commit
 define('DEFAULT_SEARCH_TERM','');
 define('LIVEITCHINA_USER_REGISTRATION_LAST_STEP', 2);
+
+global $liveitchina_js_config;
+
+module_load_include('inc', 'liveitchina', 'liveitchina.form_alter');
 
 /**
  * Implementation of hook_init()
@@ -10,7 +12,7 @@ define('LIVEITCHINA_USER_REGISTRATION_LAST_STEP', 2);
 function liveitchina_init() {
   $path = drupal_get_path('module', 'liveitchina');
   drupal_add_js($path . '/js/globals.js', array('weight' => 1));
-  drupal_add_js(drupal_get_path('module', 'liveitchina') . '/js/liveitchina.js', array('group' => 'JS_THEME'));
+  drupal_add_js($path . '/js/liveitchina.js', array('group' => 'JS_THEME'));
 }
 
 /**

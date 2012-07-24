@@ -383,20 +383,13 @@ function _profile2_liveitchina_ds_user_match($field){
 
 function _profile2_liveitchina_ds_user_actions($field){
   global $user;
-  if ($user->uid == 0){
-    return '';
-  }
+
   $profile = $field['entity'];
   $var = variable_get('profile_role_relationship', array());
   $links = array();
-  //if ($profile->type == 'tutor'){
     $links[] = array(
       'data' => l(t('See Availability'), $_GET["q"], array('fragment'=>'#')),
     );
-  //}
-  //else {
-  
-  //}
 
   $requestee = $profile->uid;
   $relationship = $var[$profile->type]['rtid'];
