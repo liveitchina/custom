@@ -43,7 +43,7 @@ function _apachesolr_liveitchina_get_connect($result){
     return l('Add to list','#') . ctools_modal_text_button(t('Connect'), $connect_url, t('Connect'), 'ctools-modal-modal-popup-medium');
   }
   else{
-   return l('Add to list','#') . l(t('Connect'),'signup');
+   return l('Add to list','user/register') . l(t('Connect'),'user/register');
   }
 }
 
