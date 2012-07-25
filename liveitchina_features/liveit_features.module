@@ -1,0 +1,7 @@
+<?php
+/**
+ * @file
+ * Code for the Liveit Features feature.
+ */
+
+include_once 'liveit_features.features.inc';
