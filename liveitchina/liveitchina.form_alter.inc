@@ -44,7 +44,7 @@ function liveitchina_form_search_block_form_alter(&$form, &$form_state, $form_id
     '#type' => 'container',
     '#attributes' => array(
       'class' => array(
-        'grid-4 omega'
+        'grid-8 omega'
       ),
     )
   );
@@ -64,7 +64,7 @@ function liveitchina_form_search_block_form_alter(&$form, &$form_state, $form_id
     '#type' => 'container',
     '#attributes' => array(
       'class' => array(
-        'grid-2 omega'
+        'grid-4 omega'
       ),
     )
   );
@@ -81,7 +81,7 @@ function liveitchina_form_search_block_form_alter(&$form, &$form_state, $form_id
   );
   $form['actions']['#attributes'] = array(
     'class' => array(
-      'grid-1 omega'
+      'grid-2 omega'
     )
   );
   $form['actions']['submit']['#value'] = t('Go');
