@@ -330,7 +330,7 @@ function _user_liveitchina_ds_actions($field){
   
   $requestee = $profile->uid;
   $relationship = 6;//$var[$profile->type]['rtid'];
-  $connect_url = 'relationship/' . $requestee . '/request/'. $relationship;
+  $connect_url = 'connect/' . $requestee . '/request/'. $relationship;
   
   if ($user->uid){
     ///*
@@ -345,11 +345,9 @@ function _user_liveitchina_ds_actions($field){
     
   }
   else{
-  	///*
-  	$links[] = array(
-  	          'data' => l(t('See Availability'), 'user/register'),
-  	);
-  	//*/
+    $links[] = array(
+      'data' => l(t('See Availability'), 'user/register'),
+    );
     $links[] = array(
       'data' => l(t('Connect'), 'user/register'),
     );
