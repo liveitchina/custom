@@ -438,3 +438,27 @@ function _user_liveitchina_name_title_exchange_partner($field){
 function user_liveitchina_form_user_register_form_alter(&$form, &$form_state, $form_id){
   $form['#prefix'] = '<div class="register-preface">LiveItChina.com is a social media platform for language learners. A free service that lets users share their unbiased learning experience. Find local teachers, ideal language exchange partners, compare, review and book courses at language schools. Learn a language and sign up for free!</div>';
 }
+
+function _user_liveitchina_rating_tutor($field){
+  $entity = $field['entity'];
+  $user_profile = user_load($entity->uid);
+  $profile_user = profile2_load_by_user($entity->uid, 'tutor');
+  $format = array('type' => 'fivestar_formatter_default',
+                  'label' => 'hidden',
+                  'settings' => array('text'=>'none',
+                                      'expose' => 0,
+                                      'widget' => array('fivestar_widget'=> drupal_get_path('module','liveitchina') . '/widget/star/star.css')));
+  return render(field_view_field('profile2', $profile_user, 'field_rating',$format));
+}
+
+function _user_liveitchina_rating_exchange_partner($field){
+  $entity = $field['entity'];
+  $user_profile = user_load($entity->uid);
+  $profile_user = profile2_load_by_user($entity->uid, 'exchange_partner');
+  $format = array('type' => 'fivestar_formatter_default',
+                  'label' => 'hidden',
+                  'settings' => array('text'=>'none',
+                                      'expose' => 0,
+                                      'widget' => array('fivestar_widget'=> drupal_get_path('module','liveitchina') . '/widget/star/star.css')));
+	return render(field_view_field('profile2', $profile_user, 'field_rating',$format));
+}

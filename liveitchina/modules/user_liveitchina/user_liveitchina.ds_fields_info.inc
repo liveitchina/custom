@@ -43,5 +43,15 @@ function user_liveitchina_ds_fields_info($entity_type) {
           'field_type' => DS_FIELD_TYPE_FUNCTION,
           'function' => '_user_liveitchina_name_title_exchange_partner',
   );
+  $fields['user']['tutor_rating'] = array(
+            'title' => 'Tutor - Rating ',
+            'field_type' => DS_FIELD_TYPE_FUNCTION,
+            'function' => '_user_liveitchina_rating_tutor',
+  );
+  $fields['user']['exchange_partner_rating'] = array(
+              'title' => 'Exchange Partner - Rating ',
+              'field_type' => DS_FIELD_TYPE_FUNCTION,
+              'function' => '_user_liveitchina_rating_exchange_partner',
+  );
   return $fields;
 }
