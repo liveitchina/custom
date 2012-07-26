@@ -1,0 +1,28 @@
+<?php
+module_load_include('inc', 'user_relationships_ui', 'user_relationships_ui.pages');
+
+/*
+ * Implements hook_menu().
+ */
+function user_relationships_liveitchina_menu() {
+  $items['user/%user/connections'] = array(
+    'title' => 'My Connections',
+    'access callback' => 'user_relationships_ui_check_access',
+    'access arguments' => array('view', 1),
+    'page callback' => 'user_relationships_liveitchina_page',
+    'page arguments' => array(1),
+    'file' => 'user_relationships_liveitchina.pages.inc',
+    'type' => MENU_LOCAL_TASK,
+  );
+
+  return $items;
+}
+
+/*
+ * Implements hook_user_relationships_ui_table_row_alter().
+*/
+function user_relationships_liveitchina_user_relationships_ui_table_row_alter(&$row, $relationship, $account) {
+  $row[2] = ur_tt("user_relationships:rtid:$relationship->rtid:name", $relationship->name);
+  //print_r($row);
+  //exit;
+}

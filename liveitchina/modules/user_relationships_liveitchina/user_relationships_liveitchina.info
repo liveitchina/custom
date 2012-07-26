@@ -1,0 +1,12 @@
+name = User Relationship for LiveitChina
+description = Defines the relationship of users on LiveitChina.com site.
+package = "LiveitChina"
+core = 7.x
+dependencies[] = user
+dependencies[] = privatemsg
+dependencies[] = reg_with_pic
+dependencies[] = user_relationships
+dependencies[] = user_relationship_mailer
+dependencies[] = user_relationship_node_access
+dependencies[] = user_relationship_privatemsg
+dependencies[] = liveitchina_core
