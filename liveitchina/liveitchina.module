@@ -117,6 +117,9 @@ function liveitchina_block_view($delta = '') {
 
 function liveitchina_account_menu_block(){
   global $user;
+  if (!user_is_logged_in()){
+    return '';
+  }
   $user_fields = profile2_load_by_user($user, 'user');
   
   if ($firstname = field_get_items('profile2', $user_fields, 'field_user_first_name')){
