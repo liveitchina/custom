@@ -132,3 +132,58 @@ function liveitchina_user_register_form_alter_weight($elements) {
   $elements['actions']['#weight'] = -10;
   return $elements;
 }
+
+/**
+ * hook_form_alter() to catch the approval form
+ */
+function liveitchina_form_liveitchina_user_relationships_ui_request_alter(&$form, $form_state, $form_id) {
+  // In case the form is an error form which the UI module has encountered
+  if (!isset($form['error']) && !variable_get('user_relationships_elaborations_api_only', FALSE)) {
+    // Make sure that the select box holding the relationship types is above the elaboration textarea.
+    $form['rtid']['#weight'] = -10;
+    // Adding text area to elaborate when creating a new relationship with another user.
+    $form['elaboration'] = array(
+        '#type' => 'textarea',
+        '#title' => t('Comments'),
+        '#rows' => 3,
+        '#cols' => 50,
+        '#description' => t('Add more details about your relationship. Both parties will be able to view these comments.'),
+        '#weight' => 5,
+    );
+    $form['#submit'][] = 'user_relationship_elaborations_request_submit';
+  }
+}
+
+/**
+ * hook_form_alter() to catch the approval form
+ * /
+function liveitchina_form_alter(&$form, $form_state, $form_id) {
+  switch ($form_id) {
+    case 'user_relationships_ui_pending_requested':
+      if (!variable_get('user_relationships_elaborations_api_only', FALSE)) {
+        $form['elaboration'] = array(
+            '#type'           => 'textarea',
+            '#title'          => t('Comments'),
+            '#default_value'  => isset($form_state['values']['elaboration']) ? $form_state['values']['elaboration'] : user_relationships_get_elaboration($form['rid']['#value']),
+            '#description'    => t('Add more details about your relationship. Both parties will be able to view these comments.')
+        );
+        $form['#submit'][] = 'user_relationship_elaborations_submit';
+      }
+      break;
+    
+    case 'user_relationships_admin_settings':
+      $form['user_relationships_elaborations'] = array(
+      '#type'   => 'fieldset',
+      '#title'  => t('Elaborations'),
+      '#weight' => 0,
+      '#group' => 'settings',
+      );
+      $form['user_relationships_elaborations']['user_relationships_elaborations_api_only'] = array(
+          '#type'           => 'checkbox',
+          '#title'          => t('Do not use the elaborations UI'),
+          '#description'    => t('Check this if you only need the API provided by the UR-Elaborations module'),
+          '#default_value'  => variable_get('user_relationships_elaborations_api_only', FALSE),
+      );
+      break;
+  }
+}//*/
