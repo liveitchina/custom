@@ -395,7 +395,7 @@ function _profile2_liveitchina_ds_user_actions($field){
 
   $requestee = $profile->uid;
   $relationship = $var[$profile->type]['rtid'];
-  $connect_url = 'relationship/' . $requestee . '/request/'. $relationship;
+  $connect_url = 'connect/' . $requestee . '/request/'. $relationship;
   $links[] = array(
       'data' => l(t('Connect'), $connect_url),
   );

@@ -25,10 +25,10 @@ function liveitchina_menu() {
     'type' => MENU_CALLBACK,
     'access callback' => 'user_relationships_ui_check_access',
     'access arguments' => array('request'),
-    'page callback' => 'modal_forms_connect',
+    'page callback' => 'modal_forms_connect_ajax',
     'page arguments' => array(1),
-    'file' => 'user_relationships_ui.forms.inc',
-    'file path' => drupal_get_path('module', 'user_relationships_ui'),
+//    'file' => 'user_relationships_ui.forms.inc',
+//    'file path' => drupal_get_path('module', 'user_relationships_ui'),
     'modal'=> TRUE,
   );
 

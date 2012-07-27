@@ -73,6 +73,15 @@ function liveitchina_block_info() {
     'info' => t('Login Module Block'),//The name that will appear in the block list.
     'cache' => DRUPAL_NO_CACHE, //No cache
   );
+  $blocks['todays_promotion'] = array(
+    'info' => t('Featured promotions'),
+    'cache' => DRUPAL_CACHE_PER_PAGE, //No cache
+  );
+  $block['share_this'] = array(
+    'info' => t('Sharethis Footer'),
+    'cache'=> DRUPAL_CACHE_PER_PAGE,
+  );
+  
   return $blocks;
 }
 
@@ -110,8 +119,25 @@ function liveitchina_block_view($delta = '') {
       $block['subject'] = t('Members Login');
       $block['content'] = drupal_get_form('user_login_block');
       break;
+    case 'todays_promotion':
+      $block['content'] = t('Today\'s Promotions');
+      break;
+    case 'share_this':
+      $block['content'] = '<ul class="share">
+        <li>
+          <span  class="st_facebook_large"></span>
+          <span  class="st_twitter_large"></span>
+          <span  class="st_email_large"></span>
+          <span  class="st_sina_large"></span>
+        </li>
+      </ul>
+      <div class="push"></div>
+      <script type="text/javascript">var switchTo5x=true;</script>
+      <script type="text/javascript" src="http://w.sharethis.com/button/buttons.js"></script>
+      <script type="text/javascript">stLight.options({publisher:"fc9c6124-783e-462c-b6f2-946cadffd8a3"});</script>';
+      break;
   }
-  //print_r ($user);
+
   return $block;
 }
 
@@ -378,19 +404,6 @@ function liveitchina_preprocess_block(&$vars) {
   //*/
 }
 
-function liveitchina_debug($form, $key = false){
-  $arr = array();
-  foreach ($form as $fid=>$a){
-    $arr[] = $fid;
-  }
-  if ($key){
-   drupal_set_message(print_r($arr, true));
-  }
-  else {
-    drupal_set_message(print_r($form, true));
-  }
-}
-
 function _liveitchina_ds_page_title($field) {
   return '<h1 id="page-title" class="title">'. t("Today's News and Happenings") .'</h1>';
 }
@@ -515,13 +528,27 @@ function _liveitchina_add_picture_to_user($form, &$form_state){
 }
 
 /**
+ * Ajax handler function that is utilized to display the form
+ * in a popup rather than having the full page reload for the users
+ */
+function modal_forms_connect_ajax($requestee) {
+  $form = drupal_get_form('liveitchina_user_relationships_ui_request', $requestee);
+  if (isset($_GET['ajax'])) {
+    print drupal_render($form);
+  }
+  else {
+    return $form;
+  }
+}
+
+/**
  * A modal user register callback.
  */
 function modal_forms_connect($requestee, $js = NULL) {
   // Fall back if $js is not set.
 
   if (!$js) {
-    return drupal_get_form('user_relationships_ui_request', $requestee);
+    return drupal_get_form('liveitchina_user_relationships_ui_request', $requestee);
   }
 
   ctools_include('modal');
@@ -531,7 +558,7 @@ function modal_forms_connect($requestee, $js = NULL) {
     'ajax' => TRUE,
     'requestee' => $requestee,
   );
-  $output = ctools_modal_form_wrapper('user_relationship_ui_request_modal_form', $form_state);
+  $output = ctools_modal_form_wrapper('liveitchina_user_relationship_ui_request_modal_form', $form_state);
   if (!empty($form_state['executed'])) {
   // We'll just overwrite the form output if it was successful.
     $output = array();
@@ -547,11 +574,9 @@ function modal_forms_connect($requestee, $js = NULL) {
   exit;
 }
 
-function user_relationship_ui_request_modal_form($form, &$form_state){
+function liveitchina_user_relationship_ui_request_modal_form($form, &$form_state){
   $requestee = $form_state['requestee'];
-  //unset($form_state['requestee']);
-  module_load_include('inc', 'user_relationships_ui', 'user_relationships_ui.forms');
-  $form = drupal_get_form('user_relationships_ui_request', $requestee);
+  $form = drupal_get_form('liveitchina_user_relationships_ui_request', $requestee);
   
   return $form;
 }
@@ -793,32 +818,132 @@ function liveitchina_preprocess_replies(&$vars) {
   $vars['links']['#access']= FALSE;
 }
 
-/**
- * Implements theme_preprocess_reply().
- */
-function liveitchina_preprocess_reply(&$vars) {
-  //$vars['links']['#access']= FALSE;
-}
-/*
-function liveitchina_field_widget_properties_alter(&$widget, $context) {
-  $field = $context['field'];
-  if ($field['field_name'] == 'field_rating') {
-    $widget['settings']['widget']['fivestar_widget'] = 'star';
-  }
-}
-/*
-function liveitchina_preprocess_fivestar_formatter_default($vars) {
-  $vars['element']['#widget']['name'] = 'star';
-  print_r($vars);
-  exit;
-}
-//*/
 function liveitchina_field_widget_info_alter(&$info) {
   $path = drupal_get_path('module', 'liveitchina');
   $info['stars']['settings']['widget']['fivestar_widget'] = $path . '/widget/star/star.css';
 }
-/*
-function liveitchina_field_formatter_prepare_view($entity_type, $entities, $field, $instances, $langcode, &$items, $displays) {
-  print_r($field);
-  exit;
-}*/
+
+/**
+ * Request a new relationship with another user
+ */
+function liveitchina_user_relationships_ui_request($form, &$form_state, $requestee) {
+  global $user;
+  $requester = $user;
+
+  drupal_set_title(t('Request relationship'));
+
+  $script = '<script type="text/javascript">setTimeout(\'Drupal.user_relationships_ui.hidePopup()\', 10000);</script>';
+  if (empty($requestee->name)) {
+    $form['error'] = array(
+      '#prefix' => '<div>',
+      '#suffix' => '</div>',
+      '#markup' => user_relationships_get_message('non_existent_user') . $script
+    );
+    return $form;
+  }
+  elseif ($user->uid == $requestee->uid) {
+    $form['error'] = array(
+      '#prefix' => '<div>',
+      '#suffix' => '</div>',
+      '#markup' => user_relationships_get_message('self_request') . $script
+    );
+    return $form;
+  }
+  elseif (!variable_get('user_relationships_allow_multiple', TRUE) &&
+           user_relationships_load(array('between' => array($requester->uid, $requestee->uid)), array('count' => TRUE))) {
+    $form['error'] = array(
+      '#prefix' => '<div>',
+      '#suffix' => '</div>',
+      '#markup' => user_relationships_get_message('too_many_relationships') . $script
+    );
+    return $form;
+  }
+  // This is the default which means we will display the form
+  $form = liveitchina_user_relationships_ui_request_form($requester, $requestee, $form_state);
+  if (!isset($form['rtid'])) {
+    $data['error'] = array(
+      '#prefix' => '<div>',
+      '#suffix' => '</div>',
+      '#markup' => user_relationships_get_message('too_many_relationships') . $script
+    );
+    return $data;
+  }
+  else {
+    if ($form['rtid']['#default_value']) {
+      $relationship = user_relationships_type_load($form['rtid']['#default_value']);
+    }
+    // Respect destination param if given.
+    if (isset($_GET['destination'])) {
+      $dest = $_GET['destination'];
+    }
+    else {
+      $dest = "user/$requestee->uid";
+    }
+    $form = confirm_form(
+      $form,
+      t('Request relationship'),
+      $dest,
+      isset($relationship) ?
+      ($relationship->requires_approval
+       ? t('Are you sure you want to send a new %rel_name request to !name?', array('%rel_name' => ur_tt("user_relationships:rtid:$relationship->rtid:name", $relationship->name), '%rel_plural_name' => ur_tt("user_relationships:rtid:$relationship->rtid:plural_name", $relationship->plural_name), '!name' => theme('username', array('account' => $requestee))))
+       : t("Are you sure you want to become !name's %rel_name?", array('!name' => theme('username', array('account' => $requestee)), '%rel_name' => ur_tt("user_relationships:rtid:$relationship->rtid:name", $relationship->name)))) :
+      '',
+      t('Send'), t('Cancel'),
+      'user_relationships_request_confirm'
+    );
+    return $form;
+  }
+}
+
+/**
+ * Request new user to user relationship
+ * @param $requester user object for the requesting user
+ * @param $requestee user object for the target user
+ * @param $form_values array $form['values'] when called from form_alter()
+ */
+function liveitchina_user_relationships_ui_request_form($requester, $requestee, $form_values = NULL) {
+  $relationships = user_relationships_get_requestable_rtypes($requester, $requestee);
+  //try to find out desired relationship type
+  $default_relationship = NULL;
+  if (isset($form_values['rtid'])) {//given through form
+    $default_relationship = $form_values['rtid'];
+  }
+  elseif (is_numeric(arg(3)) && user_relationships_type_load(arg(3))) {//given through URL arguments, e.g. relationship/{uid}/request/{rtid}
+    $default_relationship = arg(3);
+  }
+  elseif (count($relationships) == 1) {//preselect the only one.
+    $rtids = array_keys($relationships);
+    $default_relationship = $rtids[0];
+  }
+
+  //verify default relationship may be requested
+  $default_relationship = isset($relationships[$default_relationship]) ? $default_relationship : NULL;
+
+  if (count($relationships)) {
+    //hide control if the relationship is chosen
+    if ($default_relationship && variable_get('user_relationships_show_direct_links', 1)) {
+      $form['rtid'] = array(
+        '#type' => 'hidden',
+        '#default_value' => $default_relationship,
+      );
+    }
+    else {
+      $form['rtid'] = array(
+        '#title'          => t('What type of relationship are you requesting with !name?', array('!name' => theme('username', array('account' => $requestee)))),
+        '#type'           => 'radios',
+        '#options'        => $relationships,
+        '#default_value'  => $default_relationship,
+      );
+    }
+  }
+  $form['requester'] = array(
+    '#type'   => 'value',
+    '#value'  => $requester->uid,
+  );
+  $form['requestee'] = array(
+    '#type'   => 'value',
+    '#value'  => $requestee->uid,
+  );
+
+  return $form;
+}
