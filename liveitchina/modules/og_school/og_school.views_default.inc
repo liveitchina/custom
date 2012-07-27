@@ -196,7 +196,7 @@ function og_school_views_default_views() {
   
   /* Display: Page */
   $handler = $view->new_display('page', 'Page', 'page');
-  $handler->display->display_options['path'] = 'user/%user/relationships/school';
+  $handler->display->display_options['path'] = 'user/%user/connections/school';
   $handler->display->display_options['menu']['type'] = 'tab';
   $handler->display->display_options['menu']['title'] = 'School';
   $handler->display->display_options['menu']['description'] = 'School Connections';

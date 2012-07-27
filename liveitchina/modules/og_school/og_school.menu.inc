@@ -42,5 +42,5 @@ function og_school_menu_alter(&$items) {
   $items['search/school']['weight'] = -49;
   $items['search/school/%menu_tail']['type'] = MENU_NORMAL_ITEM;
   //drupal_set_message(print_r($items, true));
-  $items['user/%user/relationship/school']['type'] = MENU_LOCAL_TASK;
+  $items['user/%user/connections/school']['type'] = MENU_LOCAL_TASK;
 }
