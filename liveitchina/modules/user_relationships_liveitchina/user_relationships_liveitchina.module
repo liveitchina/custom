@@ -5,6 +5,8 @@ module_load_include('inc', 'user_relationships_ui', 'user_relationships_ui.pages
  * Implements hook_menu().
  */
 function user_relationships_liveitchina_menu() {
+  $items = array();
+
   $items['user/%user/connections'] = array(
     'title' => 'My Connections',
     'access callback' => 'user_relationships_ui_check_access',
@@ -12,8 +14,9 @@ function user_relationships_liveitchina_menu() {
     'page callback' => 'user_relationships_liveitchina_page',
     'page arguments' => array(1),
     'file' => 'user_relationships_liveitchina.pages.inc',
-    'type' => MENU_NORMAL_ITEM,
+    'type' => MENU_LOCAL_TASK,
   );
+
   $items['user/%user/connections/list'] = array(
     'title' => 'All Connections',
     'type' => MENU_DEFAULT_LOCAL_TASK,
@@ -21,6 +24,35 @@ function user_relationships_liveitchina_menu() {
     'access callback' => 'user_relationships_ui_check_access',
     'access arguments' => array('view', 1),
   );
+
+  $items['user/%user/connections/received'] = array(
+    'title' => 'Received requests',
+    'title callback' => 'user_relationships_ui_title_callback_pending',
+    'title arguments' => array('requestee_id', 1),
+    'access callback' => 'user_relationships_ui_check_access',
+    'access arguments' => array('approve', 1),
+    'type' => MENU_NORMAL_ITEM,
+    'weight' => -9,
+    'page callback' => 'user_relationships_pending_requests_page',
+    'page arguments' => array('requestee_id', 1),
+    'file' => 'user_relationships_ui.pages.inc',
+    'file path'=> drupal_get_path('module', 'user_relationships_ui'),
+  );
+
+  $items['user/%user/connections/sent'] = array(
+    'title' => 'Sent requests',
+    'title callback' => 'user_relationships_ui_title_callback_pending',
+    'title arguments' => array('requester_id', 1),
+    'access callback' => 'user_relationships_ui_check_access',
+    'access arguments' => array('request', 1),
+    'type' => MENU_NORMAL_ITEM,
+    'weight' => -8,
+    'page callback' => 'user_relationships_pending_requests_page',
+    'page arguments' => array('requester_id', 1),
+    'file' => 'user_relationships_ui.pages.inc',
+    'file path'=> drupal_get_path('module', 'user_relationships_ui'),
+  );
+
   $rels = user_relationships_types_load();
   foreach ($rels as $rtid => $relationship) {
     $items["user/%user/connections/{$rtid}"] = array(
@@ -37,6 +69,12 @@ function user_relationships_liveitchina_menu() {
   return $items;
 }
 
+/**
+ * Implements hook_menu_alter().
+ */
+function user_relationships_liveitchina_menu_alter(&$items) {
+  $items['user/%user/connections']['type'] = MENU_NORMAL_ITEM;
+}
 /*
  * Implements hook_user_relationships_ui_table_row_alter().
 */
