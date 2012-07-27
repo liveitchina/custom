@@ -20,7 +20,7 @@ function user_relationships_liveitchina_page($account = NULL, $rtid = NULL) {
    return MENU_NOT_FOUND;
   }
 
-  $args = array('user' => $account->uid, 'approved' => TRUE);
+  $args = array('requester_id' => $account->uid, 'approved' => TRUE);
   $relationship_type = NULL;
   if (!empty($rtid)) {
    $relationship_type = user_relationships_type_load($rtid);
@@ -33,12 +33,12 @@ function user_relationships_liveitchina_page($account = NULL, $rtid = NULL) {
     $args['exclude_rtids'] = $hidden;
    }
   }
-  
+
   $options = array(
     'include_user_info' => TRUE,
     'paging' => variable_get('user_relationships_relationships_per_page', 16),
   );
-  
+
   $relationships = user_relationships_load($args, $options);
   
   if ($account->uid == $user->uid) {
