@@ -850,7 +850,9 @@ function liveitchina_user_relationships_ui_request($form, &$form_state, $request
     return $form;
   }
   elseif (!variable_get('user_relationships_allow_multiple', TRUE) &&
-           user_relationships_load(array('between' => array($requester->uid, $requestee->uid)), array('count' => TRUE))) {
+           user_relationships_load(
+             array('between' => array($requester->uid, $requestee->uid)),
+             array('count' => TRUE))) {
     $form['error'] = array(
       '#prefix' => '<div>',
       '#suffix' => '</div>',
@@ -946,4 +948,19 @@ function liveitchina_user_relationships_ui_request_form($requester, $requestee, 
   );
 
   return $form;
+}
+
+function user_relationships_is_connected($requester, $requestee, $rtid){
+
+  $param = array(
+    'requester_id' => $requester,
+    'approved'=> TRUE,
+    'between' => array($requester, $requestee),
+    'rtid'=> array($rtid),
+  );
+
+  $ret = user_relationships_load(
+             $param,
+             array('count' => TRUE));
+  return ($ret) ? TRUE: FALSE;
 }

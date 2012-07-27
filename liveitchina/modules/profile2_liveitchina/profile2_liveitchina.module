@@ -395,10 +395,17 @@ function _profile2_liveitchina_ds_user_actions($field){
 
   $requestee = $profile->uid;
   $relationship = $var[$profile->type]['rtid'];
-  $connect_url = 'connect/' . $requestee . '/request/'. $relationship;
-  $links[] = array(
-      'data' => l(t('Connect'), $connect_url),
-  );
+  $rel = user_relationships_is_connected($user->uid, $requestee, $relationship);
+  if ($rel){
+    $links[] = array(
+      'data' => l(t('Disconnect'), 'connect/' . $requestee . '/request/'. $relationship.'/remove'),
+    );
+  }
+  else {
+    $links[] = array(
+      'data' => l(t('Connect'), 'connect/' . $requestee . '/request/'. $relationship),
+    );
+  }
 
   $data = theme('item_list',
     array('items' => $links,

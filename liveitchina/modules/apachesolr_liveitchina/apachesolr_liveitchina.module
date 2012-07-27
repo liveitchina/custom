@@ -36,15 +36,30 @@ function _apachesolr_liveitchina_get_connect($result){
   list(, $requestee) = explode('/', $result['fields']['path']);
   $requestee_obj = user_load($requestee);
   $relationship = $var[$result['bundle']]['rtid'];
-  $relationships = user_relationships_get_requestable_rtypes($user, $requestee_obj);
-  //check if already connected
-  $connect_url = url('connect/' . $requestee . '/request/'. $relationship, array('absolute'=> TRUE));
+  //$relationships = user_relationships_get_requestable_rtypes($user, $requestee_obj);
+
+  $links = array();
   if ($user->uid){
-    return l('Add to list','#') . ctools_modal_text_button(t('Connect'), $connect_url, t('Connect'), 'ctools-modal-modal-popup-medium');
+
+    $links[] = l('Add to list','#');
+    $rel = user_relationships_is_connected($user->uid, $requestee, $relationship);
+
+    if ($rel){
+      $connect_url = url('connect/' . $requestee . '/request/'. $relationship, array('absolute'=> TRUE));
+      $links[] = ctools_modal_text_button(t('Disconnect'), $connect_url, t('Connect'), 'ctools-modal-modal-popup-medium');
+    }
+    else {
+      $connect_url = url('connect/' . $requestee . '/request/'. $relationship, array('absolute'=> TRUE));
+      $links[] = ctools_modal_text_button(t('Connect'), $connect_url, t('Connect'), 'ctools-modal-modal-popup-medium');
+    }
   }
   else{
-   return l('Add to list','user/register') . l(t('Connect'),'user/register');
+    $links[] = l('Add to list','user/register');
+    $links[] = l(t('Connect'),'user/register');
   }
+
+  $rendered_links = implode('', $links);
+  return $rendered_links;
 }
 
 function apachesolr_liveitchina_facetapi_facet_info(array $searcher_info) {
