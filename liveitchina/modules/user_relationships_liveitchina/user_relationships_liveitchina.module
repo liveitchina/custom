@@ -12,8 +12,27 @@ function user_relationships_liveitchina_menu() {
     'page callback' => 'user_relationships_liveitchina_page',
     'page arguments' => array(1),
     'file' => 'user_relationships_liveitchina.pages.inc',
-    'type' => MENU_LOCAL_TASK,
+    'type' => MENU_NORMAL_ITEM,
   );
+  $items['user/%user/connections/list'] = array(
+    'title' => 'All Connections',
+    'type' => MENU_DEFAULT_LOCAL_TASK,
+    'weight' => -10,
+    'access callback' => 'user_relationships_ui_check_access',
+    'access arguments' => array('view', 1),
+  );
+  $rels = user_relationships_types_load();
+  foreach ($rels as $rtid => $relationship) {
+    $items["user/%user/connections/{$rtid}"] = array(
+      'title' => $relationship->plural_name ? $relationship->plural_name : $relationship->name,
+      'type' => MENU_LOCAL_TASK,
+      'access callback' => 'user_relationships_ui_check_access',
+      'access arguments' => array('view', 1, 3),
+      'page callback' => 'user_relationships_liveitchina_page',
+      'page arguments' => array(1, 3),
+      'file' => 'user_relationships_liveitchina.pages.inc',
+    );
+  }
 
   return $items;
 }

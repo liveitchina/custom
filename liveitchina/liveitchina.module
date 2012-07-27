@@ -219,11 +219,11 @@ function liveitchina_account_block() {
       'class' => array('leaf'),
     );
     $menu[] = array(
-      'data' => l(t('My Connections'), "user/$user->uid/relationships"),
+      'data' => l(t('My Connections'), "user/$user->uid/connections"),
       'class' => array('leaf','collapsible'),
       'children' => array(
-        l(t('Sent Requests'), "user/{$user->uid}/relationships/sent"),
-        l(t('Pending Requests'), "user/{$user->uid}/relationships/received"),
+        l(t('Sent Requests'), "user/{$user->uid}/connections/sent"),
+        l(t('Pending Requests'), "user/{$user->uid}/connections/received"),
       ),
     );
     $menu[] = array(
