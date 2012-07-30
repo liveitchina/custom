@@ -911,6 +911,7 @@ function liveitchina_user_relationships_ui_request_form($requester, $requestee, 
     '#type'   => 'value',
     '#value'  => $requestee->uid,
   );
+  //print_r($relationships);exit;
 
   return $form;
 }
