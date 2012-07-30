@@ -39,26 +39,21 @@ function _apachesolr_liveitchina_get_connect($result){
   //$relationships = user_relationships_get_requestable_rtypes($user, $requestee_obj);
 
   $links = array();
-  if ($user->uid){
 
     $links[] = l('Add to list','#');
-    $rel = user_relationships_is_connected($user->uid, $requestee, $relationship);
+    $rel = user_relationships_is_connected($user, $requestee, $relationship);
+    $connect_label = liveitchina_get_connect_label($relationship);
 
     if ($rel){
       $connect_url = url('connect/' . $requestee . '/request/'. $relationship, array('absolute'=> TRUE));
       //$links[] = ctools_modal_text_button(t('Disconnect'), $connect_url, t('Disconnect'), 'ctools-modal-modal-popup-medium');
-      $links[] = l(t('Already connected'), $connect_url);
+      $links[] = l(t($connect_label), $connect_url);
     }
     else {
       $connect_url = url('connect/' . $requestee . '/request/'. $relationship, array('absolute'=> TRUE));
       //$links[] = ctools_modal_text_button(t('Connect'), $connect_url, t('Connect'), 'ctools-modal-modal-popup-medium');
-      $links[] = l(t('Connect'), $connect_url);
+      $links[] = l( t( $connect_label ), $connect_url);
     }
-  }
-  else{
-    $links[] = l('Add to list','user/register');
-    $links[] = l(t('Connect'),'user/register');
-  }
 
   $rendered_links = implode('', $links);
   return $rendered_links;

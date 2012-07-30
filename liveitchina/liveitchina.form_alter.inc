@@ -154,6 +154,18 @@ function liveitchina_form_liveitchina_user_relationships_ui_request_alter(&$form
   }
 }
 
+function liveitchina_form_webform_client_form_27_alter(&$form, &$form_state, $form_id) {
+  $form['actions']['submit']['#prefix'] = '<input class="form-submit webform-cancel" type="button" value="Cancel" onClick="history.go(-1)"/>';
+}
+
+function liveitchina_form_user_profile_form_alter(&$form, &$form_state, $form_id){
+  $form['picture']['#access'] = false;
+}
+
+function liveitchina_form_profile2_edit_user_form_alter(&$form, &$form_state, $form_id) {
+  $form['#submit'][] = '_liveitchina_add_picture_to_user';
+}
+
 /**
  * hook_form_alter() to catch the approval form
  * /

@@ -16,18 +16,26 @@ function liveitchina_menu() {
     'title' => 'Connect',
     'page callback' => 'liveitchina_user_relationships_ui_request_ajax',
     'page arguments' => array(1, 3),
-    'access callback' => 'user_relationships_ui_check_access',
-    'access arguments' => array('request'),
+    'access callback' => TRUE,//'user_relationships_ui_check_access',
+    //'access arguments' => array('request'),
     'type' => MENU_CALLBACK,
   );
   $items['connect/%user/request'] = array(
     'title' => 'Create a relationship',
     'type' => MENU_CALLBACK,
-    'access callback' => 'user_relationships_ui_check_access',
-    'access arguments' => array('request'),
+    'access callback' => TRUE,//'user_relationships_ui_check_access',
+    //'access arguments' => array('request'),
     'page callback' => 'liveitchina_user_relationships_ui_request_ajax',
     'page arguments' => array(1),
     'modal'=> TRUE,
+  );
+  $items['user/%user/connections/%user_relationships/remove'] = array(
+    'title' => 'Remove relationship',
+    'type' => MENU_CALLBACK,
+    'access callback' => 'user_relationships_ui_check_access',
+    'access arguments' => array('delete', 1),
+    'page callback' => 'liveitchina_user_relationships_ui_remove_ajax',
+    'page arguments' => array(1, 3),
   );
 
   return $items;

@@ -81,11 +81,19 @@ function user_relationships_liveitchina_menu_alter(&$items) {
 */
 function user_relationships_liveitchina_user_relationships_ui_table_row_alter(&$row, $relationship, $account) {
   $row[2] = ur_tt("user_relationships:rtid:$relationship->rtid:name", $relationship->name);
-  //print_r($row);
+  //unset($row[3]); // remove operation
+  //print_r($relationship);
   //exit;
 }
 
+/**
+ * Implements hook_user_relationships_ui_table_header_alter().
+ */
 function user_relationships_liveitchina_user_relationships_ui_table_header_alter(&$header, $edit_access) {
-  //$insert_index = array_search(t('Relationship'), $header) + 1;
+  $insert_index = array_search(t('Operations'), $header);
+  $header[$insert_index] = t('Action');
+  $insert_index = array_search(t('Comments'), $header);
+  $header[$insert_index] = t('Message');
+  //print_r($header); exit;
   //$header = array_merge(array_slice($header, 0, $insert_index), array(t('Message')), array_slice($header, $insert_index));
 }
