@@ -319,11 +319,7 @@ function _user_liveitchina_ds_display($field){
 
 function _user_liveitchina_ds_actions($field){
   global $user;
-/*
-  if ($user->uid == 0){
-    return '';
-  }
-//*/
+
   $profile = $field['entity'];
   $var = variable_get('profile_role_relationship', _profile2_liveitchina_role_relationship());
   $links = array();

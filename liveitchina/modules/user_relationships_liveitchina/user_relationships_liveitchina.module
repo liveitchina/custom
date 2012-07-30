@@ -86,6 +86,6 @@ function user_relationships_liveitchina_user_relationships_ui_table_row_alter(&$
 }
 
 function user_relationships_liveitchina_user_relationships_ui_table_header_alter(&$header, $edit_access) {
-  $insert_index = array_search(t('Relationship'), $header) + 1;
-  $header = array_merge(array_slice($header, 0, $insert_index), array(t('Message')), array_slice($header, $insert_index));
+  //$insert_index = array_search(t('Relationship'), $header) + 1;
+  //$header = array_merge(array_slice($header, 0, $insert_index), array(t('Message')), array_slice($header, $insert_index));
 }
