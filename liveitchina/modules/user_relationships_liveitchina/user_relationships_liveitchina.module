@@ -75,6 +75,7 @@ function user_relationships_liveitchina_menu() {
 function user_relationships_liveitchina_menu_alter(&$items) {
   $items['user/%user/connections']['type'] = MENU_NORMAL_ITEM;
 }
+
 /*
  * Implements hook_user_relationships_ui_table_row_alter().
 */
@@ -82,4 +83,9 @@ function user_relationships_liveitchina_user_relationships_ui_table_row_alter(&$
   $row[2] = ur_tt("user_relationships:rtid:$relationship->rtid:name", $relationship->name);
   //print_r($row);
   //exit;
+}
+
+function user_relationships_liveitchina_user_relationships_ui_table_header_alter(&$header, $edit_access) {
+  $insert_index = array_search(t('Relationship'), $header) + 1;
+  $header = array_merge(array_slice($header, 0, $insert_index), array(t('Message')), array_slice($header, $insert_index));
 }

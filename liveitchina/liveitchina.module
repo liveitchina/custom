@@ -607,10 +607,26 @@ function liveitchina_user_relationships_ui_request($form, &$form_state, $request
        : t("Are you sure you want to become !name's %rel_name?", array('!name' => theme('username', array('account' => $requestee)), '%rel_name' => ur_tt("user_relationships:rtid:$relationship->rtid:name", $relationship->name)))) :
       '',
       t('Send'), t('Cancel'),
-      'user_relationships_request_confirm'
+      'liveitchina_user_relationships_request_confirm'
     );
     return $form;
   }
+}
+
+function liveitchina_user_relationships_ui_request_submit($form, &$form_state) {
+  //#578372 leave all form values in the object for other functions to use
+  $relationship = (object) $form_state['values'];
+  $relationship->requester = user_load($form_state['values']['requester']);
+  $relationship->requestee = user_load($form_state['values']['requestee']);
+  $relationship->type = user_relationships_type_load($form_state['values']['rtid']);
+
+  $relationship = user_relationships_request_relationship($relationship);
+
+  if ($relationship === FALSE) {
+    drupal_set_message(user_relationships_get_message('unknown_error', $relationship));
+  }
+  $form_state['redirect'] = array('profile-user/'.$form_state['values']['requestee']);
+  drupal_set_message(user_relationships_get_message(($relationship->approved ? 'pre_approved' : 'submitted'), $relationship));
 }
 
 function liveitchina_user_relationship_ui_request_modal_form($form, &$form_state){
