@@ -403,7 +403,7 @@ function _profile2_liveitchina_ds_user_actions($field){
   }
   else {
     $links[] = array(
-      'data' => l(t('Connect'), 'connect/' . $requestee . '/request/'. $relationship),
+      'data' => l(t('Connect'), 'relationship/' . $requestee . '/request/'. $relationship),
     );
   }
 

@@ -14,7 +14,7 @@ function liveitchina_menu() {
   );
   $items['connect/%user/request/%/%ctools_js'] = array(
     'title' => 'Connect',
-    'page callback' => 'modal_forms_connect',
+    'page callback' => 'liveitchina_user_relationships_ui_request_ajax',
     'page arguments' => array(1, 3),
     'access callback' => 'user_relationships_ui_check_access',
     'access arguments' => array('request'),
@@ -25,10 +25,8 @@ function liveitchina_menu() {
     'type' => MENU_CALLBACK,
     'access callback' => 'user_relationships_ui_check_access',
     'access arguments' => array('request'),
-    'page callback' => 'modal_forms_connect_ajax',
+    'page callback' => 'liveitchina_user_relationships_ui_request_ajax',
     'page arguments' => array(1),
-//    'file' => 'user_relationships_ui.forms.inc',
-//    'file path' => drupal_get_path('module', 'user_relationships_ui'),
     'modal'=> TRUE,
   );
 
