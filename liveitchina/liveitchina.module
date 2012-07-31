@@ -802,6 +802,8 @@ function liveitchina_get_connect_label($rel_id){
       return LIC_TUTOR_REQUEST_LABEL;
     case 2:
       return LIC_EXPAT_REQUEST_LABEL;
+    default:
+      return 'Get Connected';
   }
  
 }
