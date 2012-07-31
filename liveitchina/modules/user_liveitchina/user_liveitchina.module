@@ -128,20 +128,11 @@ function user_liveitchina_form_user_profile_form_alter(&$form, &$form_state, $fo
     if ($fid == 'metatags'){
       $form[$fid]['#access'] = FALSE;
     }
-  
+
     if (is_array($form[$fid]) && isset($form[$fid]['#type']) && $form[$fid]['#type'] == 'fieldset') {
       $form[$fid]['#collapsible'] = FALSE;
     }
   }
-  //print_r($form);
-  /*
-  $form['#pre_render'][] = 'field_group_build_pre_render';
-  foreach($form as $field=>$form_field){
-    if (is_array($form_field) && isset($form_field['#type']) && ($form_field['#type']=='fieldset')){
-      $form[$field]['#type'] = 'tabs';
-    }
-  }
-  */
 }
 
 function user_liveitchina_form_user_profile_form_alter_weight($elements) {
