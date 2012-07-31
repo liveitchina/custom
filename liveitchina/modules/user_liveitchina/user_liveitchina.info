@@ -8,7 +8,6 @@ dependencies[] = privatemsg
 dependencies[] = reg_with_pic
 dependencies[] = user_relationships
 dependencies[] = user_relationship_mailer
-dependencies[] = user_relationship_node_access
 dependencies[] = user_relationship_privatemsg
 dependencies[] = liveitchina_core
 dependencies[] = liveitchina_menu

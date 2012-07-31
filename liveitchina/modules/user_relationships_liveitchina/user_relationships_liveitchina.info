@@ -6,6 +6,5 @@ dependencies[] = user
 dependencies[] = privatemsg
 dependencies[] = user_relationship_elaborations
 dependencies[] = user_relationship_mailer
-dependencies[] = user_relationship_node_access
 dependencies[] = user_relationship_privatemsg
 dependencies[] = liveitchina_core
