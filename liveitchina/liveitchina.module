@@ -13,6 +13,7 @@ module_load_include('inc', 'liveitchina', 'liveitchina.forms');
 /**
  * Implementation of hook_init()
  * /
+ * 
 function liveitchina_init() {
   $path = drupal_get_path('module', 'liveitchina');
   drupal_add_js($path . '/js/globals.js', array('weight' => 1));
