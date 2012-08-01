@@ -40,7 +40,7 @@ function _apachesolr_liveitchina_get_connect($result){
 
   $links = array();
 
-    $links[] = l('Add to list','#');
+    $links[] = flag_create_link('profile', $requestee);//l('Add to list','#');
     $rel = user_relationships_is_connected($user, $requestee, $relationship);
     $connect_label = liveitchina_get_connect_label($relationship);
 
