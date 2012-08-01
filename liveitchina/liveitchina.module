@@ -125,7 +125,7 @@ function liveitchina_block_view($delta = '') {
       $block['content'] = drupal_get_form('user_login_block');
       break;
     case 'todays_promotion':
-      $block['content'] = t('Today\'s Promotions');
+      $block['content'] = '<h4 class="featured-promotions-block-title">' . t("Today's Promotions") . '</h4>';
       break;
     case 'share_this':
       $block['content'] = '<ul class="share">
