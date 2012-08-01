@@ -286,7 +286,7 @@ function _liveitchina_location(){
   $terms = taxonomy_get_tree($v->vid, 0, 1);
   foreach ($terms as $term) {
     $opt_query = array ('f' => array('city:'.$term->tid));
-    $options[serialize($opt_query)] = $term->name;
+    $options[serialize($opt_query)] = t($term->name);
   }
   return $options;
 }
