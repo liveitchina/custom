@@ -33,14 +33,15 @@ function apachesolr_liveitchina_preprocess_search_result(&$variables) {
 function _apachesolr_liveitchina_get_connect($result){
   global $user;
   $var = variable_get('profile_role_relationship', array());
+  //print_r($result);exit;
   list(, $requestee) = explode('/', $result['fields']['path']);
   $requestee_obj = user_load($requestee);
   $relationship = $var[$result['bundle']]['rtid'];
   //$relationships = user_relationships_get_requestable_rtypes($user, $requestee_obj);
 
   $links = array();
-
-    $links[] = flag_create_link('profile', $requestee);//l('Add to list','#');
+    $entity_id = $result['fields']['entity_id'];
+    $links[] = flag_create_link('profile', $entity_id);//l('Add to list','#');print_r($requestee, true);
     $rel = user_relationships_is_connected($user, $requestee, $relationship);
     $connect_label = liveitchina_get_connect_label($relationship);
 
