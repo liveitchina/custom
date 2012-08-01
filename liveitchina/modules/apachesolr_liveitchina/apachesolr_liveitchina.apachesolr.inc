@@ -91,7 +91,7 @@ function apachesolr_liveitchina_apachesolr_query_prepare($query) {
         'default' => 'desc',
         )
       );
-      $sort = array('tutor_price', 'desc');
+      $sort = array('fs_rating', 'desc');
       break;
     case 'exchange-partner':
       $sort = array('fs_rating', 'desc');
@@ -105,7 +105,7 @@ function apachesolr_liveitchina_apachesolr_query_prepare($query) {
       $sort = array('fs_rating', 'desc');
       break;
     case 'news-and-happenings':
-      $sort = array('ds_created', 'desc');
+      $sort = array('fs_rating', 'desc');
       break;
   }
   
