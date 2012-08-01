@@ -307,8 +307,10 @@ function _og_school_ds_school_actions($field){
 }
 
 function _og_school_ds_school_search($field){
+  $entity_id = $field['entity']->nid;
+  //print_r($entity_id); exit;
   $links['listing'] = array(
-      'data' => l(t('Add to list'), $_GET['q']),
+    'data' => flag_create_link('bookmarks', $entity_id),//l(t('Add to list'), $_GET['q']),
   );
 
   if ($link = _og_school_connect_link($field)){
