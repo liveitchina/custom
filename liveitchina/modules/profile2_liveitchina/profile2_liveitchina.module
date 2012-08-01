@@ -18,6 +18,13 @@ function profile2_liveitchina_preprocess_search_results(&$vars) {
         'label'=> t('Promote myself as '. $label),
       );
       break;
+    case 'news_and_happenings':
+      $profile_search = array(
+        'profile' => TRUE,
+        'url' => url("contact-us"),
+        'label'=> t('Send Us Your Article'),
+      );
+      break;
     case 'core_search':
       $profile_search = array(
         'profile' => TRUE,
