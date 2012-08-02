@@ -339,14 +339,18 @@ function _og_school_school_information($field){
   return render($display);
 }
 function _og_school_school_title($field){
+  $city = array();
+  $district = array(); 
   $entity = $field['entity'];
   $node = node_load($entity->nid);
-  $city = _liveitchina_field_get_field('node', $node, 'field_city', 'tid');
-  $district = _liveitchina_field_get_field('node', $node, 'field_district', 'tid');
-  $city_name = facetapi_map_taxonomy_terms(array($city));
-  $district_name = facetapi_map_taxonomy_terms(array($district));
+  $city['id'] = _liveitchina_field_get_field('node', $node, 'field_city', 'tid');
+  $district['id'] = _liveitchina_field_get_field('node', $node, 'field_district', 'tid');
+  $city['name'] = facetapi_map_taxonomy_terms(array($city['id']));
+  $city['display'] = ($city['name'][$city['id']]) ? $city['name'][$city['id']] : '';
+  $district['name'] = facetapi_map_taxonomy_terms(array($district['id']));
+  $district['display'] = $district['name'][$district['id']];
   return '<h2 class="block-title">'. $node->title .
-    '<span class="field-city"> ('. $city_name[$city] . ', ' . $district_name[$district] .')</span>'.
+    '<span class="field-city"> ('. $city['display'] . ', ' . $district['display'] .')</span>'.
     '</h2>';
 }
 
