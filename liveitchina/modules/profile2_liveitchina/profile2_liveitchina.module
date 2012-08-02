@@ -313,7 +313,7 @@ function _profile2_liveitchina_ds_field_user_edit_profile($field){
     )
   );
 
-  $data[] = '<span class="promote-my-profile">' . t('Do you want to feature this promotion') . '?' . l(t('Email Us'),'contact-us') . '</span>';
+  $data[] = '<span class="promote-my-profile">' . t('Do you want to feature this promotion') . '?' . l(t('Email Us'),'contact-us',array('query'=>array('promotion'=>'X'))) . '</span>';
   return implode('', $data);
 }
 
