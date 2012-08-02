@@ -281,6 +281,7 @@ function _og_school_get_connect($result){
 function _og_school_ds_school_actions($field){
   global $user;
   
+  $entity_id = $field['node']->nid;
   $links[] = array(
     'data' => flag_create_link('bookmarks', $entity_id),//l(t('Book'), $_GET['q']),
   );
