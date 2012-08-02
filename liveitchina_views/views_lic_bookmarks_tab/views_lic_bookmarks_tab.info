@@ -1,0 +1,9 @@
+name = Views User Bookmarks (Profiles)
+description = Default Views for User Bookmarks
+package = "LiveitChina Views"
+version = 7.x-1.0
+core = 7.x
+
+dependencies[] = views
+dependencies[] = liveitchina
+dependencies[] = flag
