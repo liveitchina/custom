@@ -274,14 +274,15 @@ function _og_school_get_connect($result){
     return flag_create_link('bookmarks', $user->uid) . ctools_modal_text_button(t('Connect'), $connect_url, t('Connect'), 'ctools-modal-modal-popup-medium');
   }
   else{
-    return l('Add to list','#') . l(t('Connect'),'signup');
+    //return flag_create_link('bookmarks', $user->uid) . l(t('Connect'),'signup');
+    return l(t('Connect'),'signup');
   }
 }
 
 function _og_school_ds_school_actions($field){
   global $user;
-  
-  $entity_id = $field['node']->nid;
+  //print_r($field); exit;
+  $entity_id = $field['entity']->nid;
   $links[] = array(
     'data' => flag_create_link('bookmarks', $entity_id),//l(t('Book'), $_GET['q']),
   );
