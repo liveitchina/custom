@@ -575,3 +575,9 @@ function profile2_liveitchina_profile2_view_alter(&$build) {
   }
   drupal_add_js(array('lic_profile'=>$my_settings), 'setting');
 }
+
+function profile2_liveitchina_profile2_update($profile){
+  if(profile2_apachesolr_indexable($profile)){
+    drupal_cron_run();
+  }
+}

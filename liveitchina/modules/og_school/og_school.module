@@ -30,6 +30,12 @@ function og_school_views_api() {
   );
 }
 
+function og_school_node_view($node, $view_mode, $langcode){
+
+  $logo = field_get_items('node', $node, 'field_logo');
+  print_r($logo); exit;
+}
+
 //*
 function og_school_form_school_node_form_alter(&$form, &$form_state, $form_id) {
   $options_city = _liveitchina_select_city_dropdown_options();
@@ -202,10 +208,11 @@ function og_school_preprocess_search_result(&$vars) {
 
   switch ($result['bundle']){
     case 'school':
+      if ($fields['entity_id'] == 83 ){print_r($vars); exit;}
       $vars['image_path']= '';
       $vars['image'] = '';
-      if (!empty($result['fields']['is_logo'])) {
-        $file_main = file_load($result['fields']['is_logo']);
+      if (!empty($fields['is_logo'])) {
+        $file_main = file_load($fields['is_logo']);
       }
       else {
         $avatar = field_info_field('field_logo');
@@ -221,7 +228,7 @@ function og_school_preprocess_search_result(&$vars) {
               'path' => $file_main->uri
             )
           ),
-          $result['fields']['path'],
+          $fields['path'],
           array('html' => TRUE)
         );
       }
