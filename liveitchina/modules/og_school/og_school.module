@@ -281,19 +281,12 @@ function _og_school_get_connect($result){
 function _og_school_ds_school_actions($field){
   global $user;
   
-  if ($user->uid){
-    $links['listing'] = array(
-    'data' => l(t('Book'), $_GET['q']),
-    );
-  }
-  else{
-    $links['listing'] = array(
-        'data' => l(t('Book'), 'user/register'),
-    );
-  }
+  $links[] = array(
+    'data' => flag_create_link('profile', $entity_id),//l(t('Book'), $_GET['q']),
+  );
   
   if ($link = _og_school_connect_link($field)){
-    $links['connect'] = array(
+    $links[] = array(
       'data' => render($link),
     );
   }
