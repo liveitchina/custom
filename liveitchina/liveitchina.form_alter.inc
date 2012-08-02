@@ -82,7 +82,7 @@ function liveitchina_form_search_block_form_alter(&$form, &$form_state, $form_id
   
   $form['actions']['city-add']['#markup'] = ' <span id ="city-add">' . 
                                             t('Add Your ') . 
-                                            l(t('City'),'contact-us') . '?</span>';
+                                            l(t('City'),'contact-us',array('query'=>array('city'=>'X'))) . '?</span>';
   $form['actions']['city-add']['#weight'] = '-500';
   
   $form['actions']['#attributes'] = array(
@@ -93,8 +93,7 @@ function liveitchina_form_search_block_form_alter(&$form, &$form_state, $form_id
       'edit-actions1'
     )
   );
-  //print_r($form);
-  $form['actions']['submit']['#markup'] = 'testing alng';
+  
   $form['actions']['submit']['#value'] = t('Go');
   $form['#submit'] = array('liveitchina_search_box_form_submit');
 }
