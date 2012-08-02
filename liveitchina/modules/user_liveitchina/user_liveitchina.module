@@ -70,27 +70,11 @@ function user_liveitchina_title($type){
  * Implements hook_menu_alter().
  */
 function user_liveitchina_menu_alter(&$items) {
-  //$items['user/%user']['title callback'] = 'user_liveitchina_user_page_title';
   $items['user/%user/edit']['title'] =  t('Edit');
   $items['user/%user/relationships/received']['type'] = MENU_NORMAL_ITEM;
   $items['user/%user/relationships/sent']['type'] = MENU_NORMAL_ITEM;
-
-  //$items['user/%/reviews/my-review']['type'] = MENU_NORMAL_ITEM;
-
-  /*/change the display of tutor and student connections
-  $items['user/%user/relationships/list']['type'] = MENU_NORMAL_ITEM;
-  $items['user/%user/relationships/5']['type'] = MENU_NORMAL_ITEM;
-  $items['user/%user/relationships/3']['type'] = MENU_NORMAL_ITEM;
-  $items['user/%user/relationships/6']['type'] = MENU_NORMAL_ITEM;
-  $items['user/%/relationships/tutor']['type'] = MENU_LOCAL_TASK;
-  $items['user/%/relationships/student']['type'] = MENU_LOCAL_TASK;
-  $items['user/%/relationships/all']['type'] = MENU_LOCAL_TASK;
-
-  //* /
-  $items['user/%user/relationships/3']['type']['page callback'] = 'user_liveitchina_page';
-  $items['user/%user/relationships/3']['type']['file'] = 'user_liveitchina.pages.inc';
-  //*/
 }
+
 function user_liveitchina_title_callback($account){
   $name = is_object($account) ? format_username($account) : '';
   return t("@name's Reviews", array('@name'=>$name));
@@ -115,8 +99,8 @@ function user_liveitchina_field_info_alter(&$info) {
 
 /*
  * Implements hook_form_ID_alter();
-* User Profile Form
-*/
+ * User Profile Form
+ */
 function user_liveitchina_form_user_profile_form_alter(&$form, &$form_state, $form_id) {
 
   if (isset($_GET['pass-reset-token'])){
@@ -161,29 +145,7 @@ function user_liveitchina_form_user_profile_form_alter_weight($elements) {
 function user_liveitchina_form_profile2_edit_user_form_alter(&$form, &$form_state, $form_id) {
   
   $options_city = _liveitchina_city_dropdown_options();
-/*
-  if (isset($form_state['values']['profile_user']['field_city']['und'][0]['tid'])) {
-    $selected = $form_state['values']['profile_user']['field_city']['und'][0]['tid'];
-  }
-  elseif(isset($form['profile_user']['field_city']['und']['#default_value'][0])) {
-    $selected = $form['profile_user']['field_city']['und']['#default_value'][0];
-  }
-  else {
-    $selected = key($options_city);
-  }
-
-  //add #ajax for the city
-  $form['profile_user']['field_city']['und']['#options'] = $options_city;
-  $form['profile_user']['field_city']['und']['#ajax'] = array(
-      'callback' => 'liveitchina_dependent_dropdown_city_callback',
-      'wrapper' => 'dropdown-district-replace',
-  );
-
-  $form['profile_user']['field_district']['und']['#prefix'] = '<div id="dropdown-district-replace">';
-  $form['profile_user']['field_district']['und']['#suffix'] = '</div>';
-  $form['profile_user']['field_district']['und']['#attributes']['class'][] = 'enabled-for-ajax';
-  $form['profile_user']['field_district']['und']['#options'] = _user_liveitchina_district_dropdown_options($selected);
-*/
+  
   if (isset($form_state['values']['profile_user']['field_city']['und'][0]['tid'])) {
     $city_selected = $form_state['values']['profile_user']['field_city']['und'][0]['tid'];
   }

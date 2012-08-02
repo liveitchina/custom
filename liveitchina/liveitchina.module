@@ -268,7 +268,7 @@ function liveitchina_account_block() {
     );
     
     $menu[] = array(
-      'data' => l(t('Bookmarks'), 'bookmarks'),
+      'data' => l(t('Bookmarks'), 'user/bookmarks'),
       'class' => array('leaf'),
     );
 

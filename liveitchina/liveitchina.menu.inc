@@ -37,10 +37,25 @@ function liveitchina_menu() {
     'page callback' => 'liveitchina_user_relationships_ui_remove_ajax',
     'page arguments' => array(1, 3),
   );
+  /*/ Registration and login pages.
+  $items['user/%user/bookmarks'] = array(
+    'title' => 'User account',
+    'title callback' => 'user_menu_title',
+    'page callback' => 'liveitchina_user_bookmark',
+    'page arguments' => array(1),
+    'access callback' => TRUE,
+    'file' => 'user.pages.inc',
+    'file path' => drupal_get_path('module', 'user'),
+    'weight' => -10,
+    'menu_name' => 'menu-liveitchina',
+  );//*/
 
   return $items;
 }
 
+function liveitchina_user_bookmark($user){
+	
+}
 /**
  * Implements hook_menu_alter().
  */
@@ -64,5 +79,9 @@ function liveitchina_menu_alter(&$items) {
   $items['relationships']['title'] = 'My Connections';
   $items['user/%user/relationships/list']['title'] = 'All Connections';
   $items['messages']['title'] = 'Inbox';
+
+  //$items['user/%user/bookmarks']['type'] = MENU_NORMAL_ITEM;
+  //$items['user/%user/bookmarks']['title'] = 'This is it';
+  //$items['user/%user/bookmarks']['menu_name'] = 'menu-liveitchina';
 
 }
