@@ -776,7 +776,7 @@ function liveitchina_field_widget_info_alter(&$info) {
 }
 
 function user_relationships_is_connected($requester, $requestee, $rtid){
-  if ($requester->uid == 0){
+  if (!is_object($requester) || $requester->uid == 0){
     return FALSE;
   }
   else {

@@ -392,7 +392,8 @@ function _profile2_liveitchina_ds_user_match($field){
 
 function _profile2_liveitchina_ds_user_actions($field){
   global $user;
-
+  $requester = $user;
+  
   $profile = $field['entity'];
   $var = variable_get('profile_role_relationship', array());
   $links = array();
@@ -402,7 +403,7 @@ function _profile2_liveitchina_ds_user_actions($field){
 
   $requestee = $profile->uid;
   $relationship = $var[$profile->type]['rtid'];
-  $rel = user_relationships_is_connected($user->uid, $requestee, $relationship);
+  $rel = user_relationships_is_connected($requester, $requestee, $relationship);
   if ($rel){
     $links[] = array(
       'data' => l(t('Disconnect'), 'connect/' . $requestee . '/request/'. $relationship.'/remove'),
