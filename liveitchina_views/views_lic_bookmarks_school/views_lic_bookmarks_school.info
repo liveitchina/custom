@@ -1,5 +1,5 @@
-name = Views User Bookmarks (Profiles)
-description = Default Views for User Bookmarks
+name = Views User Bookmarks (School)
+description = Default Views for School Bookmarks
 package = "LiveitChina Views"
 version = 7.x-1.0
 core = 7.x
