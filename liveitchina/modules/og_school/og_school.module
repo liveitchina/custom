@@ -30,12 +30,6 @@ function og_school_views_api() {
   );
 }
 
-function og_school_node_view($node, $view_mode, $langcode){
-
-  $logo = field_get_items('node', $node, 'field_logo');
-  print_r($logo); exit;
-}
-
 //*
 function og_school_form_school_node_form_alter(&$form, &$form_state, $form_id) {
   $options_city = _liveitchina_select_city_dropdown_options();
