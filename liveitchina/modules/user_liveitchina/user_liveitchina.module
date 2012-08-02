@@ -295,9 +295,9 @@ function _user_liveitchina_ds_actions($field){
   }
   $url_label = liveitchina_get_connect_label($relationship);
   $connect_url = 'connect/' . $requestee . '/request/'. $relationship;
-  
+  $entity_id = $profile->uid;
     $links[] = array(
-      'data' => l(t('See Availability'), $_GET["q"], array('fragment'=>'#')),
+      'data' => flag_create_link('bookmarks', $entity_id),//l(t('See Availability'), $_GET["q"], array('fragment'=>'#')),
     );
     $links[] = array(
       //'data' => l(t('See Availability'), $_GET["q"], array('fragment'=>'#')),
