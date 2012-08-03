@@ -7,7 +7,7 @@ function og_school_apachesolr_query_alter($query) {
   switch (arg(1)){
     case 'school':
       $query->addFilter('bundle', 'school');
-      $query->addParam('fl', 'ts_view_mode');
+      //$query->addParam('fl', 'ts_view_mode');
       $query->addParam('fl', 'im_field_lang_offered');
       $query->addParam('fl', 'is_logo');
       $query->addParam('fl', 'fs_rating');
@@ -73,14 +73,14 @@ function og_school_apachesolr_index_document_build_node(ApacheSolrDocument $docu
           $document->addField('filter_area', $area_term['tid']);
         }
       }
-
+      /*
       ob_start();
       $element = node_view($node, 'search_result');
       print drupal_render($element);
       $output = ob_get_contents();
       ob_end_clean();
       $document->addField('ts_view_mode', $output);
-
+      */
       break;
   }
 }

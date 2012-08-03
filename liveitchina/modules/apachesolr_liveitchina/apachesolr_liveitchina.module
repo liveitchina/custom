@@ -33,28 +33,33 @@ function apachesolr_liveitchina_preprocess_search_result(&$variables) {
 function _apachesolr_liveitchina_get_connect($result){
   global $user;
   $var = variable_get('profile_role_relationship', array());
+  
+  
   //print_r($result);exit;
+  
+  
   list(, $requestee) = explode('/', $result['fields']['path']);
   $requestee_obj = user_load($requestee);
   $relationship = $var[$result['bundle']]['rtid'];
   //$relationships = user_relationships_get_requestable_rtypes($user, $requestee_obj);
 
   $links = array();
-    $entity_id = $result['fields']['entity_id'];
-    $links[] = flag_create_link('profile', $entity_id);//l('Add to list','#');print_r($requestee, true);
-    $rel = user_relationships_is_connected($user, $requestee, $relationship);
-    $connect_label = liveitchina_get_connect_label($relationship);
+  $entity_id = $result['fields']['entity_id'];
+  //print print_r($entity_id, true). '<br />';
+  $links[] = flag_create_link('profile', $entity_id);
+  $rel = user_relationships_is_connected($user, $requestee, $relationship);
+  $connect_label = liveitchina_get_connect_label($relationship);
 
-    if ($rel){
-      $connect_url = url('connect/' . $requestee . '/request/'. $relationship, array('absolute'=> TRUE));
-      //$links[] = ctools_modal_text_button(t('Disconnect'), $connect_url, t('Disconnect'), 'ctools-modal-modal-popup-medium');
-      $links[] = l(t(LIC_CONNECTED_REQUEST_LABEL), $connect_url);
-    }
-    else {
-      $connect_url = url('connect/' . $requestee . '/request/'. $relationship, array('absolute'=> TRUE));
-      //$links[] = ctools_modal_text_button(t('Connect'), $connect_url, t('Connect'), 'ctools-modal-modal-popup-medium');
-      $links[] = l( t( $connect_label ), $connect_url);
-    }
+  if ($rel){
+    $connect_url = url('connect/' . $requestee . '/request/'. $relationship, array('absolute'=> TRUE));
+    //$links[] = ctools_modal_text_button(t('Disconnect'), $connect_url, t('Disconnect'), 'ctools-modal-modal-popup-medium');
+    $links[] = l(t(LIC_CONNECTED_REQUEST_LABEL), $connect_url);
+  }
+  else {
+    $connect_url = url('connect/' . $requestee . '/request/'. $relationship, array('absolute'=> TRUE));
+    //$links[] = ctools_modal_text_button(t('Connect'), $connect_url, t('Connect'), 'ctools-modal-modal-popup-medium');
+    $links[] = l( t( $connect_label ), $connect_url);
+  }
 
   $rendered_links = implode('', $links);
   return $rendered_links;
