@@ -38,14 +38,14 @@ function og_school_apachesolr_index_document_build_node(ApacheSolrDocument $docu
       
       $language = field_language('node', $node, 'field_logo');
       if ($logos = field_get_items('node', $node, 'field_logo', $language)){
-        drupal_set_message(print_r($logos, true));
+        //drupal_set_message(print_r($logos, true));
         $school_logo = array_pop($logos);
         $document->addField('is_logo', $school_logo['fid']);
       }
       else {
         $avatar = field_info_field('field_user_avatar');
         $school_logo = file_load($avatar['settings']['default_image']);
-        drupal_set_message('default:' . print_r($logos, true));
+//         /drupal_set_message('default:' . print_r($logos, true));
         $document->addField('is_logo', $school_logo->fid);
       }
 
