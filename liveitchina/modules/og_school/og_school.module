@@ -603,8 +603,8 @@ function _og_school_liveitchina_ds_reviews($field){
 }
 
 /*
- * Implements hook_node_update_index()
+ * Implements hook_update()
  */
-function og_school_node_update(){
+function og_school_update($node){
   drupal_cron_run();
 }
