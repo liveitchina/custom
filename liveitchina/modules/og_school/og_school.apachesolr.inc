@@ -31,8 +31,13 @@ function og_school_apachesolr_index_document_build_node(ApacheSolrDocument $docu
       $document->bs_status = $node->status;
       $teaches = og_school_teaches($node);
       $document->addField('ts_teaches', $teaches);
-
-      if ($logos = field_get_items('node', $node, 'field_logo')){
+      
+        //drupal_set_message(print_r($node, true));
+      //$field = $obj->field_logo->value();
+      
+      
+      $language = field_language('node', $node, 'field_logo');
+      if ($logos = field_get_items('node', $node, 'field_logo', $language)){
         $school_logo = array_pop($logos);
         $document->addField('is_logo', $school_logo['fid']);
       }
@@ -85,3 +90,9 @@ function og_school_apachesolr_index_document_build_node(ApacheSolrDocument $docu
       break;
   }
 }
+/*
+function profile2_liveitchina_node_update($node){
+  if(node_apachesolr_indexable($node)){
+    drupal_cron_run();
+  }
+}//*/
