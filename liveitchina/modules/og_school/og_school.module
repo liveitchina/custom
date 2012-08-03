@@ -126,12 +126,6 @@ function og_school_form_school_node_form_alter(&$form, &$form_state, $form_id) {
 
   $form['field_review_school']['#access'] = FALSE;
   $form['user_relationship_node_access']['#access'] = FALSE;
-
-  /*/
-  //print_r(array_keys($form));
-  print_r($form);
-  exit;
-  //*/
 }
 //*
 
@@ -202,7 +196,7 @@ function og_school_preprocess_search_result(&$vars) {
 
   switch ($result['bundle']){
     case 'school':
-      if ($fields['entity_id'] == 83 ){print_r($vars); exit;}
+      //if ($fields['entity_id'] == 83 ){print_r($vars); exit;}
       $vars['image_path']= '';
       $vars['image'] = '';
       if (!empty($fields['is_logo'])) {
@@ -282,7 +276,6 @@ function _og_school_get_connect($result){
 
 function _og_school_ds_school_actions($field){
   global $user;
-  //print_r($field); exit;
   $entity_id = $field['entity']->nid;
   $links[] = array(
     'data' => flag_create_link('bookmarks', $entity_id),//l(t('Book'), $_GET['q']),
@@ -304,7 +297,6 @@ function _og_school_ds_school_actions($field){
 
 function _og_school_ds_school_search($field){
   $entity_id = $field['entity']->nid;
-  //print_r($entity_id); exit;
   $links['listing'] = array(
     'data' => flag_create_link('bookmarks', $entity_id),//l(t('Add to list'), $_GET['q']),
   );
@@ -327,7 +319,6 @@ function _og_school_ds_reviewer_author($field){
   $entity = $field['entity'];
   $author = user_load($entity->uid);
   return '<strong class="title">'. l($author->realname, 'user/'.$entity->uid ) .'</strong> '. t('says');
-  //return print_r($author, true);//field_view_field('user', $author, );
 }
 
 function _og_school_school_information($field){
@@ -469,8 +460,6 @@ function _og_school_school_administrator($field){
     ),
   );
   $admin_img = theme('image_style', $styles);
-  //print_r($user_admin);
-  //return print_r($user_admin, true);
   return '<strong>'.t('See Administrator'). '</strong>'.
   '<div class="dis-admin">'.l($user_admin->realname, 'user/'.$user_admin->uid, array('html'=>true)) . '</div>';
 }
