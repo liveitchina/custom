@@ -605,6 +605,6 @@ function _og_school_liveitchina_ds_reviews($field){
 /*
  * Implements hook_node_update_index()
  */
-function og_school_node_update_index(){
+function og_school_node_update(){
   drupal_cron_run();
 }
