@@ -31,6 +31,7 @@ function og_school_apachesolr_index_document_build_node(ApacheSolrDocument $docu
       $document->bs_status = $node->status;
       $teaches = og_school_teaches($node);
       $document->addField('ts_teaches', $teaches);
+
       if ($logos = field_get_items('node', $node, 'field_logo')){
         $school_logo = array_pop($logos);
         $document->addField('is_logo', $school_logo['fid']);

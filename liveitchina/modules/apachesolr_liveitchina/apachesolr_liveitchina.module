@@ -34,10 +34,6 @@ function _apachesolr_liveitchina_get_connect($result){
   global $user;
   $var = variable_get('profile_role_relationship', array());
   
-  
-  //print_r($result);exit;
-  
-  
   list(, $requestee) = explode('/', $result['fields']['path']);
   $requestee_obj = user_load($requestee);
   $relationship = $var[$result['bundle']]['rtid'];
@@ -45,7 +41,6 @@ function _apachesolr_liveitchina_get_connect($result){
 
   $links = array();
   $entity_id = $result['fields']['entity_id'];
-  //print print_r($entity_id, true). '<br />';
   $links[] = flag_create_link('profile', $entity_id);
   $rel = user_relationships_is_connected($user, $requestee, $relationship);
   $connect_label = liveitchina_get_connect_label($relationship);
@@ -239,7 +234,6 @@ class LiveitChinaFacetapiSelect extends FacetapiWidget {
     $element = &$this->build[$this->facet['field alias']];
     $name = array_pop(explode(':', $this->build['#settings']->name));
     $element = drupal_get_form('facetapi_select_' .  $name, $element);
-    //print_r($element);
   }
 }
 
