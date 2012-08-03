@@ -276,9 +276,9 @@ function _og_school_get_connect($result){
 
 function _og_school_ds_school_actions($field){
   global $user;
-  
+  $entity_id = $field['entity']->nid;
   $links[] = array(
-    'data' => l(t('Book'), $_GET['q']),//flag_create_link('bookmarks', $entity_id),
+    'data' => l(t('Book'), 'school/' . $entity_id . '/book'),//flag_create_link('bookmarks', $entity_id),
   );
   
   if ($link = _og_school_connect_link($field)){

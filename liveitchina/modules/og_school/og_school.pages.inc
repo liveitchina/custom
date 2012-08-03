@@ -205,3 +205,11 @@ function og_school_confirm_unsubscribe_submit($form, &$form_state) {
   // page.
   $form_state['redirect'] = "node/$group->etid";
 }
+
+function og_school_book($etid) {
+  global $user;
+  $entity_type = 'node';
+  $node = node_load($etid);
+  $view = node_view($node,'school_booking'); 
+  return $view;
+}

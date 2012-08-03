@@ -20,6 +20,14 @@ function og_school_menu() {
     'access callback' => 'user_is_logged_in',
     'title' => 'Connect',
   );
+  $items['school/%/book'] = array(
+      'type' => MENU_CALLBACK,
+      'file' => 'og_school.pages.inc',
+      'page callback' => 'og_school_book',
+      'page arguments' => array(1),
+      'access callback' => 'user_is_logged_in',
+      'title' => 'Book',
+  );
   $items['school/%/unsubscribe'] = array(
     'type' => MENU_CALLBACK,
     'file' => 'og_school.pages.inc',
