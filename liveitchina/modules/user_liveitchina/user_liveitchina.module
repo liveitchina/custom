@@ -117,6 +117,15 @@ function user_liveitchina_form_user_profile_form_alter(&$form, &$form_state, $fo
       $form[$fid]['#collapsible'] = FALSE;
     }
   }
+
+  $hide_elements = array(
+    'translation',
+    'group_audience',
+  );
+  $form['account']['roles']['#access'] = FALSE;
+  foreach ($hide_elements as $element){
+    $form[$element]['#access'] = FALSE;
+  }
 }
 
 function user_liveitchina_form_user_profile_form_alter_weight($elements) {
@@ -410,5 +419,5 @@ function _user_liveitchina_rating_exchange_partner($field){
                   'settings' => array('text'=>'none',
                                       'expose' => 0,
                                       'widget' => array('fivestar_widget'=> drupal_get_path('module','liveitchina') . '/widget/star/star.css')));
-	return render(field_view_field('profile2', $profile_user, 'field_rating',$format));
+ return render(field_view_field('profile2', $profile_user, 'field_rating',$format));
 }
