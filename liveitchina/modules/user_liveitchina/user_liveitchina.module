@@ -109,10 +109,6 @@ function user_liveitchina_form_user_profile_form_alter(&$form, &$form_state, $fo
 
   $form['#pre_render'][] = 'user_liveitchina_form_user_profile_form_alter_weight';
   foreach ($form as $fid => $form_value){
-    if ($fid == 'metatags'){
-      $form[$fid]['#access'] = FALSE;
-    }
-
     if (is_array($form[$fid]) && isset($form[$fid]['#type']) && $form[$fid]['#type'] == 'fieldset') {
       $form[$fid]['#collapsible'] = FALSE;
     }
@@ -123,25 +119,32 @@ function user_liveitchina_form_user_profile_form_alter(&$form, &$form_state, $fo
     'group_audience',
     'l10n_client',
     'ckeditor',
+    'metatags',
   );
   $form['account']['roles']['#access'] = FALSE;
   foreach ($hide_elements as $element){
     $form[$element]['#access'] = FALSE;
   }
+  
+  $form['account']['#prefix'] = '<div class="container clearfix"><h2>' . t('Security Settings') . '</h2>';
+  $form['account']['#suffix'] = '</div>';
+  $form['timezone']['#prefix'] = '<div class="container clearfix"><h2>' . t('Language and Time Settings') . '</h2>';
+  $form['locale']['#suffix'] = '</div>';
+  $form['privatemsg']['#prefix'] = '<div class="container clearfix"><h2>' . t('Privacy Settings') . '</h2>';
+  $form['locale']['#user_relationship_node_access'] = '</div>';
 }
 
 function user_liveitchina_form_user_profile_form_alter_weight($elements) {
   $element_weights = array(
     'picture' => 1,
     'account' => 2,
-    'l10n_client' => 3,
-    'timezone' => 4,
-    'locale' => 5,
-    'privatemsg' => 6,
-    'metatags' => 7,
-    'ckeditor' => 8,
-    'signature_settings' => 9,
-    'user_relationship_node_access' => 10,
+    'timezone' => 3,
+    'locale' => 4,
+    'privatemsg' => 5,
+    'metatags' => 6,
+    'ckeditor' => 7,
+    'signature_settings' => 8,
+    'user_relationship_node_access' => 9,
   );
   foreach ($element_weights as $eid=>$value){
     $elements[$eid]['#weight'] = $value;
