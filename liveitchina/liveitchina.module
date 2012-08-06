@@ -173,7 +173,7 @@ function liveitchina_account_menu_block(){
     'children' => array(
       l('Account Settings', 'user/'. $user->uid.'/edit'),
       l('Privacy Settings', 'user/'. $user->uid.'/edit', array('fragment'=>'privacy-settings')),
-      l('Help', '#'),
+      l('Help', $_GET['q'], array('fragment'=>'main-content')),
       l('Log Out', 'user/logout')
     )
   );
