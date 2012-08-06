@@ -121,6 +121,8 @@ function user_liveitchina_form_user_profile_form_alter(&$form, &$form_state, $fo
   $hide_elements = array(
     'translation',
     'group_audience',
+    'l10n_client',
+    'ckeditor',
   );
   $form['account']['roles']['#access'] = FALSE;
   foreach ($hide_elements as $element){
@@ -133,11 +135,11 @@ function user_liveitchina_form_user_profile_form_alter_weight($elements) {
     'picture' => 1,
     'account' => 2,
     'l10n_client' => 3,
-    'timezone' => 3,
-    'privatemsg' => 4,
-    'metatags' => 5,
-    'locale' => 6,
-    'ckeditor' => 7,
+    'timezone' => 4,
+    'locale' => 5,
+    'privatemsg' => 6,
+    'metatags' => 7,
+    'ckeditor' => 8,
     'signature_settings' => 9,
     'user_relationship_node_access' => 10,
   );
