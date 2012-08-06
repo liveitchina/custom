@@ -120,6 +120,7 @@ function user_liveitchina_form_user_profile_form_alter(&$form, &$form_state, $fo
     'l10n_client',
     'ckeditor',
     'metatags',
+    'heartbeat',
   );
   $form['account']['roles']['#access'] = FALSE;
   foreach ($hide_elements as $element){
@@ -131,7 +132,7 @@ function user_liveitchina_form_user_profile_form_alter(&$form, &$form_state, $fo
   $form['timezone']['#prefix'] = '<div class="container clearfix"><h2>' . t('Language and Time Settings') . '</h2>';
   $form['locale']['#suffix'] = '</div>';
   $form['privatemsg']['#prefix'] = '<div class="container clearfix"><h2>' . t('Privacy Settings') . '</h2>';
-  $form['locale']['#user_relationship_node_access'] = '</div>';
+  $form['user_relationships_ui_settings']['#suffix'] = '</div>';
   
   $form['timezone']['#title'] = '';
   $form['locale']['#title'] = '';
@@ -144,8 +145,7 @@ function user_liveitchina_form_user_profile_form_alter_weight($elements) {
     'timezone' => 3,
     'locale' => 4,
     'privatemsg' => 5,
-    'metatags' => 6,
-    'ckeditor' => 7,
+    'user_relationships_ui_settings'=> 6,
     'signature_settings' => 8,
     'user_relationship_node_access' => 9,
   );
