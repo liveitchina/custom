@@ -407,15 +407,17 @@ function _profile2_liveitchina_ds_user_actions($field){
 
   $requestee = $profile->uid;
   $relationship = $var[$profile->type]['rtid'];
+  //print_r($var);exit;
   $rel = user_relationships_is_connected($requester, $requestee, $relationship);
   if ($rel){
     $links[] = array(
-      'data' => l(t('Disconnect'), 'connect/' . $requestee . '/request/'. $relationship.'/remove'),
+      'data' => l(t('My '. $var[$profile->type]['name']), 'connect/' . $requestee . '/request/'. $relationship.'/remove'),
     );
   }
   else {
+    $label = ($relationship == 2) ? LIC_EXPAT_REQUEST_LABEL : LIC_TUTOR_REQUEST_LABEL;
     $links[] = array(
-      'data' => l(t('Connect'), 'connect/' . $requestee . '/request/'. $relationship),
+      'data' => l(t($label), 'connect/' . $requestee . '/request/'. $relationship),
     );
   }
 
