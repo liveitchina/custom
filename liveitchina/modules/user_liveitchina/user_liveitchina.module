@@ -70,7 +70,7 @@ function user_liveitchina_title($type){
  * Implements hook_menu_alter().
  */
 function user_liveitchina_menu_alter(&$items) {
-  $items['user/%user/edit']['title'] =  t('Edit');
+  $items['user/%user/edit']['title'] =  t('Account Settings');
   $items['user/%user/relationships/received']['type'] = MENU_NORMAL_ITEM;
   $items['user/%user/relationships/sent']['type'] = MENU_NORMAL_ITEM;
 }
