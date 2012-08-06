@@ -120,7 +120,7 @@ function profile2_liveitchina_form_profile2_edit_tutor_form_alter(&$form, &$form
       'type'=>'file',
     ),
   );
-
+  $form['profile_tutor']['field_review_tutor']['#access'] = FALSE;
 }
 
 function profile2_liveitchina_form_profile2_edit_exchange_partner_form_alter(&$form, &$form_state, $form_id) {
@@ -148,11 +148,14 @@ function _profile2_liveitchina_form_footer(&$form, $profile_type, $form_state = 
   
   //buttons
   $form['actions']['previews'] = array(
-      '#markup' => l(t('Cancel'), '', array('fragment' => 'cancel', 'attributes' => array('onClick'=> 'history.go(-1); return false;', 'class'=> 'form-submit'))) . 
-                   l(t('Preview in English'), '', array('fragment' => 'english')) . 
-                   l(t('Preview in Chinese'), '', array('fragment' => 'chinese')),
+      '#markup' => l(t('Cancel'), '', 
+                     array('fragment' => 'cancel', 
+                     'attributes' => array('onClick'=> 'history.go(-1); return false;', 
+                       'class'=> 'form-submit'))),
+                   //l(t('Preview in English'), '', array('fragment' => 'english')) . 
+                   //l(t('Preview in Chinese'), '', array('fragment' => 'chinese')),
       '#weight' => 40,
-  );
+  );//*/
   $checkbox_label = t('I agree to the') . ' ' . l(t('Terms and Conditions'), '#');
   // Adding the checkbox to the fieldset.
   $form['terms_of_use'] = array(
