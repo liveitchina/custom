@@ -131,7 +131,7 @@ function user_liveitchina_form_user_profile_form_alter(&$form, &$form_state, $fo
   $form['account']['#suffix'] = '</div>';
   $form['timezone']['#prefix'] = '<div class="container clearfix"><h2>' . t('Language and Time Settings') . '</h2>';
   $form['locale']['#suffix'] = '</div>';
-  $form['privatemsg']['#prefix'] = '<div class="container clearfix"><h2>' . t('Privacy Settings') . '</h2>';
+  $form['privatemsg']['#prefix'] = '<div class="container clearfix"><h2><a id="privacy-settings">' . t('Privacy Settings') . '</a></h2>';
   $form['user_relationships_ui_settings']['#suffix'] = '</div>';
   
   $form['timezone']['#title'] = '';
