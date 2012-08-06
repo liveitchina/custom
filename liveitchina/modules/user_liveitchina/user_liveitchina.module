@@ -132,6 +132,9 @@ function user_liveitchina_form_user_profile_form_alter(&$form, &$form_state, $fo
   $form['locale']['#suffix'] = '</div>';
   $form['privatemsg']['#prefix'] = '<div class="container clearfix"><h2>' . t('Privacy Settings') . '</h2>';
   $form['locale']['#user_relationship_node_access'] = '</div>';
+  
+  $form['timezone']['#title'] = '';
+  $form['locale']['#title'] = '';
 }
 
 function user_liveitchina_form_user_profile_form_alter_weight($elements) {
