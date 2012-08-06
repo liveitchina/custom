@@ -131,6 +131,7 @@ function profile2_liveitchina_form_profile2_edit_exchange_partner_form_alter(&$f
       'type'=>'file',
     ),
   );
+  $form['profile_exchange_partner']['field_review_exchange_partner']['#access'] = FALSE;
 }
 
 function profile2_liveitchina_form_profile2_edit_user_form_alter(&$form, &$form_state, $form_id) {
