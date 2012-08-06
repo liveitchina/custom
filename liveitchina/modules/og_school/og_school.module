@@ -126,6 +126,21 @@ function og_school_form_school_node_form_alter(&$form, &$form_state, $form_id) {
 
   $form['field_review_school']['#access'] = FALSE;
   $form['user_relationship_node_access']['#access'] = FALSE;
+  $form['revision_information']['#access'] = FALSE;
+  $hide_elements = array(
+    'field_review_school',
+    'user_relationship_node_access',
+    'revision_information',
+    'author',
+    'options',
+    'comment_settings',
+    'path',
+    'metatags'
+  );
+  foreach ($hide_elements as $element){
+    $form[$element]['#access'] = FALSE;
+  }
+  //print_r($form); exit;
 }
 //*
 
@@ -605,6 +620,6 @@ function _og_school_liveitchina_ds_reviews($field){
 /*
  * Implements hook_update()
  */
-function og_school_update($node){
+function og_school_node_update_index($node){
   drupal_cron_run();
 }
