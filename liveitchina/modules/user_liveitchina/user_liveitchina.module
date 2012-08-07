@@ -429,3 +429,9 @@ function _user_liveitchina_rating_exchange_partner($field){
                                       'widget' => array('fivestar_widget'=> drupal_get_path('module','liveitchina') . '/widget/star/star.css')));
  return render(field_view_field('profile2', $profile_user, 'field_rating',$format));
 }
+
+function _user_liveitchina_ds_profile_learning($field){
+  $entity = $field['entity'];
+  $profile = profile2_load_by_user($entity->uid, $entity->type);
+  return _profile2_liveitchina_learning($profile);
+}

@@ -53,5 +53,10 @@ function user_liveitchina_ds_fields_info($entity_type) {
               'field_type' => DS_FIELD_TYPE_FUNCTION,
               'function' => '_user_liveitchina_rating_exchange_partner',
   );
+  $fields['user']['profile_learning'] = array(
+        'title' => t('Profile - Learning'),
+        'field_type' => DS_FIELD_TYPE_FUNCTION,
+        'function' => '_user_liveitchina_ds_profile_learning',
+  );
   return $fields;
 }
