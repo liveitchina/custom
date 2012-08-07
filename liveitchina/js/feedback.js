@@ -1,5 +1,5 @@
 (function ($) {
-  Drupal.behaviors.liveitchina = {
+  Drupal.behaviors.feedback = {
     attach: function(context) {
   var uvOptions = {};
   //(function() {
