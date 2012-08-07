@@ -377,7 +377,7 @@ function _profile2_liveitchina_ds_user_links($field){
     )
   );
   $links[] = array(
-    'data' => l(t('Add to List'), $inline_link, array('fragment'=>'#')),
+    'data' => flag_create_link('bookmarks', $profile->uid)//l(t('Add to List'), $inline_link, array('fragment'=>'#')),
   );
   $links[] = array(
     'data' => l(t('Send Message'), $inline_link, array('fragment'=>'#')),
