@@ -59,7 +59,7 @@
 
       $('.liveitchina-sharethis').click(function(e){
         e.preventDefault();
-        $('.liveitchina-sharethis-link .sharethis-wrapper').toggle();
+        $('.sharethis-wrapper', this).toggle();
       });
     }
   };
