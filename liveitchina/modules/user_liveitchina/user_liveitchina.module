@@ -432,6 +432,24 @@ function _user_liveitchina_rating_exchange_partner($field){
 
 function _user_liveitchina_ds_profile_learning($field){
   $entity = $field['entity'];
-  $profile = profile2_load_by_user($entity->uid, $entity->type);
-  return _profile2_liveitchina_learning($profile);
+  $profile = profile2_load_by_user($entity->uid, 'exchange_partner');
+  return _user_liveitchina_learning($profile);
+}
+
+function _user_liveitchina_learning($profile){
+	$lang_offered = $lang_others = array();
+	if ($field_values = field_get_items('profile2', $profile, 'field_language_wanted')){
+		foreach ($field_values as $value) {
+			$lang_offered[] = $value['tid'];
+		}
+	}
+	$field_others = 'field_wan_exch_other';
+	if ($field_values = field_get_items('profile2', $profile, $field_others)){
+		foreach ($field_values as $value) {
+			$lang_others[] = $value['tid'];
+		}
+	}
+	$lang_display = (count($lang_offered)) ? implode(', ', facetapi_map_taxonomy_terms($lang_offered)): '';
+	$lang_others = (count($lang_others))? ': '. implode(', ', facetapi_map_taxonomy_terms($lang_others)):'';
+	return $lang_display . $lang_others;
 }
