@@ -19,12 +19,12 @@ function liveitchina_init() {
   drupal_add_js($path . '/js/globals.js', array('weight' => 1));
   drupal_add_js($path . '/js/liveitchina.js', array('group' => 'JS_THEME'));
 }//*/
-
+/*
 function liveitchina_init(){
   $path = drupal_get_path('module', 'liveitchina');
   drupal_add_js($path . '/js/feedback.js');
 }
-
+//*/
 /**
  * Implements hook_field_formatter_info().
  */
