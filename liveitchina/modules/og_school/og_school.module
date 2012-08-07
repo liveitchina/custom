@@ -623,3 +623,18 @@ function _og_school_liveitchina_ds_reviews($field){
 function og_school_node_update_index($node){
   drupal_cron_run();
 }
+
+function _og_school_get_taxonomy_terms($term){
+  $options = array();
+  $v = taxonomy_vocabulary_machine_name_load('nationality');
+  $terms = taxonomy_get_tree($v->vid);
+  foreach ($terms as $term) {
+    $options[$term->tid] = $term->name;
+  }
+  
+  return $options;
+}
+
+function _og_school_send_email(){
+  
+}
