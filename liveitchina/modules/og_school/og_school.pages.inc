@@ -206,10 +206,12 @@ function og_school_confirm_unsubscribe_submit($form, &$form_state) {
   $form_state['redirect'] = "node/$group->etid";
 }
 
-function og_school_book($etid) {
+function og_school_book($form_state, $arg) {
   global $user;
+  //print_r($arg);
+  ///*
   $entity_type = 'node';
-  $node = node_load($etid);
+  $node = node_load($arg['build_info']['args'][0]);
   $view = node_view($node,'school_booking');
   $ctr = 0;
   //List create for select type of fields
@@ -264,9 +266,10 @@ function og_school_book($etid) {
                                                                      '#prefix' => '<div class = "grid-16 alpha omega"><div class = "grid-4 alpha omega">',
                                                                      '#suffix' => '</div>',
                                                                  ),///*
-                                           'field_bday' => array( '#type' => 'date_select',
+                                           'field_bday' => array( '#type' => 'date',
                                                                   '#title' => t('Birthday'),
                                                                   '#weight' => '700',
+                                                                  '#date_format' => 'm-d-Y',
                                                                   '#prefix' => '<div class = "grid-8 alpha omega">',
                                                                   '#suffix' => '</div>',
                                                                  ),//*/
@@ -327,8 +330,13 @@ function og_school_book($etid) {
                                                   '#value' => 'Submit',
                                                   '#prefix' => '<div class="grid-3 alpha omega">',
                                                   '#suffix' => '</div>',
-                                                  '#submit' => array ('_og_school_send_email'),
+                                                  //'#submit' => array ('_og_school_send_email'),
                          ),
-                       ); 
+                       ); //*/
   return $form;
+}
+
+
+function og_school_book_submit($form, &$form_state){
+	print_r($form);
 }
