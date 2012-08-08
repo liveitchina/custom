@@ -211,7 +211,7 @@ function og_school_book($form, $form_state, $node) {
   //print_r($arg);
   ///*
   $entity_type = 'node';
-  $form['#markup'] = print_r($node, true);
+  $form['book']['#markup'] = print_r($node, true);
   return $form;
   $view = node_view($node,'school_booking');
   $ctr = 0;
