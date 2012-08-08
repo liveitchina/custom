@@ -211,6 +211,7 @@ function og_school_book($form_state, $node) {
   //print_r($arg);
   ///*
   $entity_type = 'node';
+  return $form['#markup'] = print_r($node, true);
   $view = node_view($node,'school_booking');
   $ctr = 0;
   //List create for select type of fields
