@@ -206,7 +206,7 @@ function og_school_confirm_unsubscribe_submit($form, &$form_state) {
   $form_state['redirect'] = "node/$group->etid";
 }
 
-function og_school_book($form, $form_state, $node) {
+function og_school_book($form, &$form_state, $node) {
   global $user;
   //print_r($arg);
   ///*
