@@ -20,11 +20,11 @@ function og_school_menu() {
     'access callback' => 'user_is_logged_in',
     'title' => 'Connect',
   );
-  $items['school/%/book'] = array(
+  $items['school/%node/book'] = array(
       'type' => MENU_CALLBACK,
       'file' => 'og_school.pages.inc',
       'page callback'      => 'drupal_get_form',
-      'page arguments' => array('og_school_book',1),//'apachesolr_settings', 1),
+      'page arguments' => array('og_school_book', 1),//'apachesolr_settings', 1),
       'access callback' => 'user_is_logged_in',
       'title' => 'Book',
   );
