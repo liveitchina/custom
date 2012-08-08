@@ -403,7 +403,7 @@ function _user_liveitchina_name_title_exchange_partner($field){
 }
 
 function user_liveitchina_form_user_register_form_alter(&$form, &$form_state, $form_id){
-  $form['#prefix'] = '<div class="register-preface">LiveItChina.com is a social media platform for language learners. A free service that lets users share their unbiased learning experience. Find local teachers, ideal language exchange partners, compare, review and book courses at language schools. Learn a language and sign up for free!</div>';
+  $form['#prefix'] = '<div class="register-preface">'. t("LiveItChina.com is a social media platform for language learners. A free service that lets users share their unbiased learning experience. Find local teachers, ideal language exchange partners, compare, review and book courses at language schools. Learn a language and sign up for free!") . '</div>';
 }
 
 function _user_liveitchina_rating_tutor($field){
@@ -441,19 +441,19 @@ function _user_liveitchina_ds_ratings($field){
 }
 
 function _user_liveitchina_learning($profile){
-	$lang_offered = $lang_others = array();
-	if ($field_values = field_get_items('profile2', $profile, 'field_language_wanted')){
-		foreach ($field_values as $value) {
-			$lang_offered[] = $value['tid'];
-		}
-	}
-	$field_others = 'field_wan_exch_other';
-	if ($field_values = field_get_items('profile2', $profile, $field_others)){
-		foreach ($field_values as $value) {
-			$lang_others[] = $value['tid'];
-		}
-	}
-	$lang_display = (count($lang_offered)) ? implode(', ', facetapi_map_taxonomy_terms($lang_offered)): '';
-	$lang_others = (count($lang_others))? ': '. implode(', ', facetapi_map_taxonomy_terms($lang_others)):'';
-	return $lang_display . $lang_others;
+  $lang_offered = $lang_others = array();
+  if ($field_values = field_get_items('profile2', $profile, 'field_language_wanted')){
+    foreach ($field_values as $value) {
+      $lang_offered[] = $value['tid'];
+    }
+  }
+  $field_others = 'field_wan_exch_other';
+  if ($field_values = field_get_items('profile2', $profile, $field_others)){
+    foreach ($field_values as $value) {
+      $lang_others[] = $value['tid'];
+    }
+  }
+  $lang_display = (count($lang_offered)) ? implode(', ', facetapi_map_taxonomy_terms($lang_offered)): '';
+  $lang_others = (count($lang_others))? ': '. implode(', ', facetapi_map_taxonomy_terms($lang_others)):'';
+  return $lang_display . $lang_others;
 }
