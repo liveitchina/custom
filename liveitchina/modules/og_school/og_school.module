@@ -333,15 +333,15 @@ function _og_school_ds_school_search($field){
 function _og_school_ds_reviewer_author($field){
   $entity = $field['entity'];
   $author = user_load($entity->uid);
-  $picture = print_r($author, true);
-  /*$picture =  l(
+  //$picture = print_r($author, true);
+  $picture =  l(
       theme('image_style',
           array('style_name' => 'profile_main',
-              'path' => $file_main->uri)
+              'path' => $author->uri)
       ),
       'user/'.$entity->uid,
       array('html' => TRUE)
-  );*/
+  );
   return '<strong class="title">'. $picture . l($author->realname, 'user/'.$entity->uid ) .'</strong> '. t('says');
 }
 
