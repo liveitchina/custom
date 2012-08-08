@@ -27,7 +27,11 @@ function user_liveitchina_ds_fields_info($entity_type) {
         'field_type' => DS_FIELD_TYPE_FUNCTION,
         'function' => '_user_liveitchina_ds_profile_cost',
   );
-  
+  $fields['user']['profile_ratings'] = array(
+        'title' => t('Ratings'),
+        'field_type' => DS_FIELD_TYPE_FUNCTION,
+        'function' => '_user_liveitchina_ds_ratings',
+  );
   $fields['user']['profile_desc_tutor'] = array(
           'title' => t('Tutor - Description'),
           'field_type' => DS_FIELD_TYPE_FUNCTION,

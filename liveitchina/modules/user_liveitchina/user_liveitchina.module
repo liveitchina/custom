@@ -436,6 +436,10 @@ function _user_liveitchina_ds_profile_learning($field){
   return _user_liveitchina_learning($profile);
 }
 
+function _user_liveitchina_ds_ratings($field){
+  return 'User Rating';
+}
+
 function _user_liveitchina_learning($profile){
 	$lang_offered = $lang_others = array();
 	if ($field_values = field_get_items('profile2', $profile, 'field_language_wanted')){
