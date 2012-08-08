@@ -333,17 +333,7 @@ function _og_school_ds_school_search($field){
 function _og_school_ds_reviewer_author($field){
   $entity = $field['entity'];
   $author = user_load($entity->uid);
-  $picture = file_load($author->picture);
-  $image = l(theme('image_style',
-      array(
-        'style_name' => 'profile_main',
-        'path' => $picture->uri
-      )
-    ),
-    'user/'.$entity->uid,
-    array('html' => TRUE)
-    );
-  return '<strong class="title">' . $image . l($author->realname, 'user/'.$entity->uid ) .'</strong> '. t('says');
+  return '<strong class="title">'. l($author->realname, 'user/'.$entity->uid ) .'</strong> '. t('says');
 }
 
 function _og_school_school_information($field){
@@ -643,8 +633,4 @@ function _og_school_get_taxonomy_terms($term){
   }
   
   return $options;
-}
-
-function _og_school_send_email(){
-  
 }
