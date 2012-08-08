@@ -206,12 +206,13 @@ function og_school_confirm_unsubscribe_submit($form, &$form_state) {
   $form_state['redirect'] = "node/$group->etid";
 }
 
-function og_school_book($form_state, $node) {
+function og_school_book($form, $form_state, $node) {
   global $user;
   //print_r($arg);
   ///*
   $entity_type = 'node';
-  return $form['#markup'] = print_r($node, true);
+  $form['#markup'] = print_r($node, true);
+  return $form;
   $view = node_view($node,'school_booking');
   $ctr = 0;
   //List create for select type of fields
