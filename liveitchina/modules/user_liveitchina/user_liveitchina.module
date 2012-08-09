@@ -276,6 +276,22 @@ function user_liveitchina_field_attach_presave($entity_type, $entity){
   }
 }
 
+function _user_school_ds_reviewer_author($field){
+	$entity = $field['entity'];
+	$author = user_load($entity->uid);
+	/*/$picture = print_r($author, true);
+	 $userPicture = $author->picture;
+	$picture =  l(
+			theme('image_style',
+					array('style_name' => 'profile_main',
+							'path' => $userPicture->uri)
+			),
+			'user/'.$entity->uid,
+			array('html' => TRUE)
+	);//*/
+	return '<strong class="title">'. l($author->realname, 'user/'.$entity->uid ) .'</strong> '. t('says');
+}
+
 function _user_liveitchina_ds_display($field){
   $entity = $field['entity'];
   $user = user_load($entity->uid);
@@ -332,6 +348,11 @@ function _user_liveitchina_ds_actions($field){
     )
   );
   return $data;
+}
+
+function _user_liveitchina_ds_field_user_profile_name($field){
+  $data = user_load($field['entity']->uid);
+  return $data->realname;
 }
 
 function user_liveitchina_preprocess_user_profile(&$vars){
@@ -403,7 +424,7 @@ function _user_liveitchina_name_title_exchange_partner($field){
 }
 
 function user_liveitchina_form_user_register_form_alter(&$form, &$form_state, $form_id){
-  $form['#prefix'] = '<div class="register-preface">LiveItChina.com is a social media platform for language learners. A free service that lets users share their unbiased learning experience. Find local teachers, ideal language exchange partners, compare, review and book courses at language schools. Learn a language and sign up for free!</div>';
+  $form['#prefix'] = '<div class="register-preface">'. t("LiveItChina.com is a social media platform for language learners. A free service that lets users share their unbiased learning experience. Find local teachers, ideal language exchange partners, compare, review and book courses at language schools. Learn a language and sign up for free!") . '</div>';
 }
 
 function _user_liveitchina_rating_tutor($field){
@@ -441,19 +462,19 @@ function _user_liveitchina_ds_ratings($field){
 }
 
 function _user_liveitchina_learning($profile){
-	$lang_offered = $lang_others = array();
-	if ($field_values = field_get_items('profile2', $profile, 'field_language_wanted')){
-		foreach ($field_values as $value) {
-			$lang_offered[] = $value['tid'];
-		}
-	}
-	$field_others = 'field_wan_exch_other';
-	if ($field_values = field_get_items('profile2', $profile, $field_others)){
-		foreach ($field_values as $value) {
-			$lang_others[] = $value['tid'];
-		}
-	}
-	$lang_display = (count($lang_offered)) ? implode(', ', facetapi_map_taxonomy_terms($lang_offered)): '';
-	$lang_others = (count($lang_others))? ': '. implode(', ', facetapi_map_taxonomy_terms($lang_others)):'';
-	return $lang_display . $lang_others;
+  $lang_offered = $lang_others = array();
+  if ($field_values = field_get_items('profile2', $profile, 'field_language_wanted')){
+    foreach ($field_values as $value) {
+      $lang_offered[] = $value['tid'];
+    }
+  }
+  $field_others = 'field_wan_exch_other';
+  if ($field_values = field_get_items('profile2', $profile, $field_others)){
+    foreach ($field_values as $value) {
+      $lang_others[] = $value['tid'];
+    }
+  }
+  $lang_display = (count($lang_offered)) ? implode(', ', facetapi_map_taxonomy_terms($lang_offered)): '';
+  $lang_others = (count($lang_others))? ': '. implode(', ', facetapi_map_taxonomy_terms($lang_others)):'';
+  return $lang_display . $lang_others;
 }
