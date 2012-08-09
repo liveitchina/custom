@@ -649,8 +649,8 @@ function _og_school_send_email($form, &$form_state){
 		$subject = 'Booking Reservation';
 		$message['subject'] = $subject;
 		$message['body'] = array();
-		$line1 = 'sending';
-		$line2 = 'dummy message';
+		$line1 = $form['details']['#markup'];
+		$line2 = 'Personal Information';
 		$message['body'][] = $line1;
 		$message['body'][] = $line2;
 		
@@ -662,6 +662,8 @@ function _og_school_send_email($form, &$form_state){
 		
 		// Send e-mail.
 		$message['result'] = $system->mail($message);
+		
+		drupal_set_message($message['result']);
   //}
   //else{
 	
