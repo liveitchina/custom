@@ -565,18 +565,8 @@ function _profile2_liveitchina_ds_reviews($field){
   $field_info = field_info_instance($entity_type, "field_review_{$field['bundle']}", $field['bundle']);
   if ((user_access('administer replies') || 
       user_access('post '. $field['bundle'] .' reply'))) {
-    return render(drupal_get_form('reply_add_form', $entity->pid, $field_info['id'], 0 ));
+    return render(drupal_get_form('reply_add_form', $entity->pid, $field_info['id'], 0));
   }
-}
-
-function _profile2_liveitchina_ds_sharethis($field){
-	$content = '<div class="liveitchina-sharethis-link">'.l('Share This', $_GET['q'], array(
-			'attributes' => array('class'=>array('liveitchina-sharethis')),
-	));
-	$content .= sharethis_block_contents();
-	$content .= '</div>';
-
-	return $content;
 }
 
 function profile2_liveitchina_profile2_view_alter(&$build) {
@@ -596,20 +586,4 @@ function profile2_liveitchina_profile2_update($profile){
   if(profile2_apachesolr_indexable($profile)){
     drupal_cron_run();
   }
-}
-
-function profile2_liveitchina_form_reply_add_form_alter(&$form, &$form_state, $form_id) {
-  if (isset($form['field_user_reference'])){
-    $reference = (arg(1))? arg(1):0;
-    $form['field_user_reference']['und'][0]['value']['#value'] = $reference;
-    $form['field_user_reference']['#access'] = FALSE;
-  }
-}
-
-function profile2_liveitchina_reply_add_form($form, &$form_state, $entity_id, $instance_id, $parent = 0, $reference=0) {
-  $form = drupal_get_form('reply_add_form', $entity_id, $instance_id, $parent);
-  $form['field_user_reference']['und'][0]['value']['#value'] = $reference;
-  $form['field_user_reference']['#access'] = FALSE;
-  //print_r($form);exit;
-  return $form;
 }

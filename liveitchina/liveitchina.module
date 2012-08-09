@@ -296,22 +296,6 @@ function _liveitchina_location(){
   return $options;
 }
 
-function _liveitchina_ds_reviewer_author($field){
-	$entity = $field['entity'];
-	$author = user_load($entity->uid);
-	/*/$picture = print_r($author, true);
-	 $userPicture = $author->picture;
-	$picture =  l(
-			theme('image_style',
-					array('style_name' => 'profile_main',
-							'path' => $userPicture->uri)
-			),
-			'user/'.$entity->uid,
-			array('html' => TRUE)
-	);//*/
-	return '<strong class="title">'. l($author->realname, 'user/'.$entity->uid ) .'</strong> '. t('says');
-}
-
 function liveitchina_ds_field_theme_functions_info() {
   return array('theme_liveit_list_field' => t('List comma separated'));
 }
@@ -357,6 +341,36 @@ function liveitchina_node_view($node, $view_mode, $langcode) {
     $node->content['my_additional_field']['#prefix'] = '<div class="sharethis-button">';
     $node->content['my_additional_field']['#suffix'] = '</div>';
   }
+}
+
+function _liveitchina_ds_field_user_profile_name($field){
+  $data = user_load($field['entity']->uid);
+  return $data->realname;
+}
+
+function _liveitchina_ds_sharethis($field){
+  $content = '<div class="liveitchina-sharethis-link">'.l('Share This', $_GET['q'], array(
+    'attributes' => array('class'=>array('liveitchina-sharethis')),
+  ));
+  $content .= sharethis_block_contents();
+  $content .= '</div>';
+
+  return $content;
+}
+/**
+ * Implements hook_user_insert().
+ */
+function liveitchina_user_insert(&$edit, &$account, $category = NULL) {
+  $profile_partner = profile2_create(array('user' => $account, 'type' => 'exchange_partner'));
+  profile2_save($profile_partner);
+
+  $profile_tutor = profile2_create(array('user' => $account, 'type' => 'tutor'));
+  profile2_save($profile_tutor);
+  
+  $profile = profile2_create(array('user' => $account, 'type' => 'user'));
+  $profile->field_user_first_name['und'][0]['value'] = $account->first_name;
+  $profile->field_user_last_name['und'][0]['value'] = $account->last_name;
+  profile2_save($profile);
 }
 
 /**

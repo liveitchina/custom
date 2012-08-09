@@ -330,6 +330,12 @@ function _og_school_ds_school_search($field){
   return $data;
 }
 
+function _og_school_ds_reviewer_author($field){
+  $entity = $field['entity'];
+  $author = user_load($entity->uid);
+  return '<strong class="title">'. l($author->realname, 'user/'.$entity->uid ) .'</strong> '. t('says');
+}
+
 function _og_school_school_information($field){
   $entity = $field['entity'];
   $display = array();
@@ -591,11 +597,11 @@ function _og_school_get_city() {
 }
 
 function _og_school_school_title_feat($field){
-  $entity = $field['entity'];
-  $node = node_load($entity->nid);
-  $city = _liveitchina_field_get_field('node', $node, 'field_city', 'tid');
-  $city_name = facetapi_map_taxonomy_terms(array($city));
-  return '<h2 class="block-title">'. l($node->title,'school/' . $node->title) .
+	$entity = $field['entity'];
+	$node = node_load($entity->nid);
+	$city = _liveitchina_field_get_field('node', $node, 'field_city', 'tid');
+	$city_name = facetapi_map_taxonomy_terms(array($city));
+	return '<h2 class="block-title">'. l($node->title,'school/' . $node->title) .
     '<span class="field-city"> ('.$city_name[$city].')</span>'.
     '</h2>';
 }
@@ -628,3 +634,45 @@ function _og_school_get_taxonomy_terms($term){
   
   return $options;
 }
+
+function _og_school_send_email($form, &$form_state){
+  //if($form['field_terms']['#checked']){
+		$module = 'og_school';
+		$key = 'key';
+		$language = language_default();
+		$params = array();
+		$from = 'geoffrey@iwoork.com';
+		$send = FALSE;
+		$email = 'geoffrey@liveitchina.com';
+		$message = drupal_mail($module, $key, $email, $language, $params, $from, $send);
+		
+		$subject = 'Booking Reservation';
+		$message['subject'] = $subject;
+		$message['body'] = array();
+		$line1 = 'sending';
+		$line2 = 'dummy message';
+		$message['body'][] = $line1;
+		$message['body'][] = $line2;
+		
+		// Retrieve the responsible implementation for this message.
+		$system = drupal_mail_system($module, $key);
+		
+		// Format the message body.
+		$message = $system->format($message);
+		
+		// Send e-mail.
+		$message['result'] = $system->mail($message);
+  //}
+  //else{
+	
+    //drupal_set_message(print_r('Please accept terms and agreement', true));
+  //}
+}
+/*
+function og_school_form_og_school_book_form_alter(&$form, &$form_state, $form_id){
+  
+  if($form_id == 'og_school_book_form'){
+    $form["#submit"][] = "_og_school_send_email";
+  }
+  //print_r($form);
+}*/

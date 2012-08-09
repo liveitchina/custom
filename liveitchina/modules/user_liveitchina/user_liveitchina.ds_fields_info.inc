@@ -4,11 +4,7 @@
  */
 function user_liveitchina_ds_fields_info($entity_type) {
   $fields = array();
-  $fields['user']['user_profile_name'] = array(
-    'title' => t('User Full Name'),
-    'field_type' => DS_FIELD_TYPE_FUNCTION,
-    'function' => '_user_liveitchina_ds_field_user_profile_name',
-  );
+
   $fields['user']['user_display'] = array(
     'title' => t('User - Display'),
     'field_type' => DS_FIELD_TYPE_FUNCTION,
@@ -19,11 +15,13 @@ function user_liveitchina_ds_fields_info($entity_type) {
     'field_type' => DS_FIELD_TYPE_FUNCTION,
     'function' => '_user_liveitchina_ds_actions',
   );
+  ///*
   $fields['user']['profile_teaches_tutor'] = array(
         'title' => t('Profile - Teaches (tutor)'),
         'field_type' => DS_FIELD_TYPE_FUNCTION,
         'function' => '_user_liveitchina_ds_profile_teaches',
   );
+  //*/
   $fields['user']['profile_cost_tutor'] = array(
         'title' => t('Tutor - Cost'),
         'field_type' => DS_FIELD_TYPE_FUNCTION,

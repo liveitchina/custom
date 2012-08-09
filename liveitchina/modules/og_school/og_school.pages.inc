@@ -206,14 +206,16 @@ function og_school_confirm_unsubscribe_submit($form, &$form_state) {
   $form_state['redirect'] = "node/$group->etid";
 }
 
-function og_school_book($form, &$form_state, $node) {
+function og_school_book_form($form, &$form_state, $node) {
   global $user;
   //print_r($arg);
   ///*
   $entity_type = 'node';
   $form['book']['#markup'] = print_r($node, true);
-  return $form;
-  $view = node_view($node,'school_booking');
+  //return $form;
+  $promotion = node_load($node->vid);
+  $view = node_view($promotion,'school_booking');
+  //print_r($view);
   $ctr = 0;
   //List create for select type of fields
   $option_title_list = array('mr' => 'Mr.', 'ms' => 'Ms.', 'mrs' => 'Mrs.');
@@ -224,11 +226,13 @@ function og_school_book($form, &$form_state, $node) {
   for($ctr=1;$ctr<31;$ctr++){
     $option_hour[$ctr] = $ctr;
   }//*/
-  $form['book'] = array( 'details' => array( '#markup' => render($view),
+  ///*
+  $form = array( 'details' => array( '#markup' => render($view),
                                               ),
                          'form_title' => array( '#markup' => '<h2 class = "block-title grid-16 alpha omega">' . t('Please Confirm Your Personal Information') . '</h2>',
                                                  ),
-                         'forms' => array( 'field_title' => array( '#type' => 'select',
+                         //'forms' => array( 
+                         'field_title' => array( '#type' => 'select',
                                                                    '#options' => $option_title_list,
                                                                    '#title' => t('Title'),
                                                                    '#key_type' => 'associative',
@@ -273,7 +277,7 @@ function og_school_book($form, &$form_state, $node) {
                                                                   '#date_format' => 'm-d-Y',
                                                                   '#prefix' => '<div class = "grid-8 alpha omega">',
                                                                   '#suffix' => '</div>',
-                                                                 ),//*/
+                                                                 ),
                                            'field_nationality' => array( '#type' => 'select',
                                                                        '#options' => $option_nationality_list,
                                                                        '#title' => t('Nationality'),
@@ -313,6 +317,8 @@ function og_school_book($form, &$form_state, $node) {
                                                                        '#weight' => '1400',
                                                                        '#prefix' => '<div class = "grid-16 alpha omega">',
                                                                        '#suffix' => '</div>',
+                                                                       '#input' => FALSE,
+                                                                       '#value' => 'rate here',
                                                                 ),
                                            'field_discount' => array( '#type' => 'textfield',
                                                                        '#title' => t('Discount Code'),
@@ -324,20 +330,20 @@ function og_school_book($form, &$form_state, $node) {
                                                                      '#title' => t('Terms and Agreement'),
                                                                      '#weight' => '1600',
                                                                      '#prefix' => '<div class = "grid-16 alpha omega">',
-                                                                     '#suffix' => '</div>'
+                                                                     '#suffix' => '</div>',
+                                                                     '#required' => TRUE,
                                                                  ),
-                                         ),
-                         'user-actions' => array( '#type' => 'submit' ,
-                                                  '#value' => 'Submit',
-                                                  '#prefix' => '<div class="grid-3 alpha omega">',
-                                                  '#suffix' => '</div>',
-                                                  //'#submit' => array ('_og_school_send_email'),
-                         ),
-                       ); //*/
+                                         );
+                       //); //*/
+  $form['submit'] = array( '#type' => 'submit' ,
+                           '#value' => 'Submit',
+                           //'#submit' => array ('_og_school_send_email'),
+                           '#prefix' => '<div class="grid-3 alpha omega">',
+                           '#suffix' => '</div>',
+                                        '#weight' => '1700',
+                         );
+  $form['#submit'][] = '_og_school_send_email';
   return $form;
 }
 
 
-function og_school_book_submit($form, &$form_state){
-	print_r($form);
-}
