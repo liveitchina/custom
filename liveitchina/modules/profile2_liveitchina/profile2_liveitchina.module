@@ -569,6 +569,16 @@ function _profile2_liveitchina_ds_reviews($field){
   }
 }
 
+function _profile2_liveitchina_ds_sharethis($field){
+	$content = '<div class="liveitchina-sharethis-link">'.l('Share This', $_GET['q'], array(
+			'attributes' => array('class'=>array('liveitchina-sharethis')),
+	));
+	$content .= sharethis_block_contents();
+	$content .= '</div>';
+
+	return $content;
+}
+
 function profile2_liveitchina_profile2_view_alter(&$build) {
   $profile = array('tutor', 'exchange_partner');
   $my_settings = array(

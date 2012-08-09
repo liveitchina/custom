@@ -10,13 +10,6 @@
  */
 function liveitchina_ds_fields_info($entity_type) {
   $fields = array();
-
-  $fields['user']['user_profile_name'] = array(
-    'title' => t('User Full Name'),
-    'field_type' => DS_FIELD_TYPE_FUNCTION,
-    'function' => '_liveitchina_ds_field_user_profile_name',
-  );
-
   $fields['node']['submitted_by'] = array(
     'title' => 'Submitted by',
     'field_type' => DS_FIELD_TYPE_FUNCTION,
@@ -32,10 +25,15 @@ function liveitchina_ds_fields_info($entity_type) {
     'field_type' => DS_FIELD_TYPE_FUNCTION,
     'function' => '_liveitchina_ds_sharethis',
   );
-  $fields['profile2']['liveitchina_sharethis'] = array(
-    'title' => 'LiveitChina ShareThis',
+  $fields['reply']['reviewer_author'] = array(
+    'title' => 'Reviewer Name',
     'field_type' => DS_FIELD_TYPE_FUNCTION,
-    'function' => '_liveitchina_ds_sharethis',
+    'function' => '_liveitchina_ds_reviewer_author',
+  );
+  $fields['reply']['reviewer_details'] = array(
+    'title' => 'Reviewer Name',
+    'field_type' => DS_FIELD_TYPE_FUNCTION,
+    'function' => '_og_school_ds_reviewer_details',
   );
   return $fields;
 }

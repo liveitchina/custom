@@ -334,6 +334,11 @@ function _user_liveitchina_ds_actions($field){
   return $data;
 }
 
+function _user_liveitchina_ds_field_user_profile_name($field){
+  $data = user_load($field['entity']->uid);
+  return $data->realname;
+}
+
 function user_liveitchina_preprocess_user_profile(&$vars){
 }
 
