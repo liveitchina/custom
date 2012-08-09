@@ -380,7 +380,7 @@ function _profile2_liveitchina_ds_user_links($field){
     'data' => flag_create_link('bookmarks', $profile->uid)//l(t('Add to List'), $inline_link, array('fragment'=>'#')),
   );
   $links[] = array(
-    'data' => l(t('Send Message'), $inline_link, array('fragment'=>'#')),
+    'data' => l(t('Send Message'), 'messages/new', array('query'=>array('user'=>$profile->uid))),// $inline_link, array('fragment'=>'#')),
   );
   $data = theme('item_list',
     array('items' => $links,
