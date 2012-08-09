@@ -651,9 +651,40 @@ function _og_school_send_email($form, &$form_state){
 		$message['body'] = array();
 		$line1 = $form['details']['#markup'];
 		$line2 = 'Personal Information';
+		$title = $form['field_title']['#options'][$form['field_title']['#value']];
+		
+		$line3 = 'Full Name : ' .$title . ' ' . 
+		         $form['field_fname']['#value'] . ' ' . 
+		         $form['field_mname']['#value'] . ' ' .
+		         $form['field_lname']['#value'] . '     Chinese Name : ' . 
+		         $form['field_cname']['#value'];
+		$line4 = 'Gender : ' . $form['field_gender']['#value'];
+		$line5 = 'Birthdate : ' . $form['field_bday']['#value']['month'] . ' ' . 
+		         $form['field_bday']['#value']['day'] . ', ' .
+		         $form['field_bday']['#value']['year'];
+		$line6 = 'Nationality : ' . $form['field_nationality']['#options'][$form['field_nationality']['#value']];
+		$line7 = 'Contact Information';
+		if ($form['field_email']['#value']){
+			$line8 = 'Email : ' . $form['field_email']['#value'];
+		}
+		if($form['field_telno']['#value']){
+		  $line9 = 'Contact No. : ' . $form['field_telno']['#value'];
+		}
+		$line10 = 'Class Information';
+		$line11 = 'Hours : ' . $form['field_hours']['#options'][$form['field_hours']['#value']];
+		$line12 = 'Rate : ' . $form['field_rate']['#value'] . '     Discount : ' . $form['field_discount']['#value'];
 		$message['body'][] = $line1;
 		$message['body'][] = $line2;
-		
+		$message['body'][] = $line3;
+		$message['body'][] = $line4;
+		$message['body'][] = $line5;
+		$message['body'][] = $line6;
+		$message['body'][] = $line7;
+		$message['body'][] = $line8;
+		$message['body'][] = $line9;
+		$message['body'][] = $line10;
+		$message['body'][] = $line11;
+		$message['body'][] = $line12;
 		// Retrieve the responsible implementation for this message.
 		$system = drupal_mail_system($module, $key);
 		
@@ -663,12 +694,9 @@ function _og_school_send_email($form, &$form_state){
 		// Send e-mail.
 		$message['result'] = $system->mail($message);
 		
-		drupal_set_message($message['result']);
-  //}
-  //else{
-	
-    //drupal_set_message(print_r('Please accept terms and agreement', true));
-  //}
+		if ($message['result']){
+		  drupal_set_message('Booking Request Sent');
+    }
 }
 /*
 function og_school_form_og_school_book_form_alter(&$form, &$form_state, $form_id){
