@@ -643,7 +643,7 @@ function _og_school_send_email($form, &$form_state){
 		$params = array();
 		$from = 'geoffrey@iwoork.com';
 		$send = FALSE;
-		$email = 'geoffrey@liveitchina.com';
+		$email = 'info@liveitchina.com';
 		$message = drupal_mail($module, $key, $email, $language, $params, $from, $send);
 		
 		$subject = 'Booking Reservation';
