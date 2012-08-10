@@ -39,21 +39,21 @@ function views_reply_reviews_views_default_views() {
   $handler->display->display_options['fields']['id']['id'] = 'id';
   $handler->display->display_options['fields']['id']['table'] = 'reply';
   $handler->display->display_options['fields']['id']['field'] = 'id';
-  /* Contextual filter: Reply: User Reference (field_user_reference) */
-  $handler->display->display_options['arguments']['field_user_reference_value']['id'] = 'field_user_reference_value';
-  $handler->display->display_options['arguments']['field_user_reference_value']['table'] = 'field_data_field_user_reference';
-  $handler->display->display_options['arguments']['field_user_reference_value']['field'] = 'field_user_reference_value';
-  $handler->display->display_options['arguments']['field_user_reference_value']['default_action'] = 'default';
-  $handler->display->display_options['arguments']['field_user_reference_value']['title_enable'] = 1;
-  $handler->display->display_options['arguments']['field_user_reference_value']['title'] = '%1';
-  $handler->display->display_options['arguments']['field_user_reference_value']['default_argument_type'] = 'raw';
-  $handler->display->display_options['arguments']['field_user_reference_value']['default_argument_options']['index'] = '1';
-  $handler->display->display_options['arguments']['field_user_reference_value']['default_argument_skip_url'] = 0;
-  $handler->display->display_options['arguments']['field_user_reference_value']['summary']['number_of_records'] = '0';
-  $handler->display->display_options['arguments']['field_user_reference_value']['summary']['format'] = 'default_summary';
-  $handler->display->display_options['arguments']['field_user_reference_value']['summary_options']['items_per_page'] = '25';
-  $handler->display->display_options['arguments']['field_user_reference_value']['break_phrase'] = 0;
-  $handler->display->display_options['arguments']['field_user_reference_value']['not'] = 0;
+  /* Contextual filter: Reply: Uid */
+  $handler->display->display_options['arguments']['uid']['id'] = 'uid';
+  $handler->display->display_options['arguments']['uid']['table'] = 'reply';
+  $handler->display->display_options['arguments']['uid']['field'] = 'uid';
+  $handler->display->display_options['arguments']['uid']['default_action'] = 'default';
+  $handler->display->display_options['arguments']['uid']['title_enable'] = 1;
+  $handler->display->display_options['arguments']['uid']['title'] = '%1';
+  $handler->display->display_options['arguments']['uid']['default_argument_type'] = 'raw';
+  $handler->display->display_options['arguments']['uid']['default_argument_options']['index'] = '1';
+  $handler->display->display_options['arguments']['uid']['default_argument_skip_url'] = 0;
+  $handler->display->display_options['arguments']['uid']['summary']['number_of_records'] = '0';
+  $handler->display->display_options['arguments']['uid']['summary']['format'] = 'default_summary';
+  $handler->display->display_options['arguments']['uid']['summary_options']['items_per_page'] = '25';
+  $handler->display->display_options['arguments']['uid']['break_phrase'] = 0;
+  $handler->display->display_options['arguments']['uid']['not'] = 0;
   /* Filter criterion: Reply: Bundle */
   $handler->display->display_options['filters']['bundle']['id'] = 'bundle';
   $handler->display->display_options['filters']['bundle']['table'] = 'reply';
@@ -89,6 +89,7 @@ function views_reply_reviews_views_default_views() {
     t('Block'),
     t('Page (with Page Title)'),
   );
+  
 
   $views['user_review'] = $view;
 
