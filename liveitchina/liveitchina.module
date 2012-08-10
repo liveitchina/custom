@@ -328,26 +328,28 @@ function _liveitchina_ds_reviewer_author($field){
 
 function _liveitchina_ds_entity_details($field){
   $entity = $field['entity'];
+  $profile_role_relationship = variable_get('profile_role_relationship', array());
   $userDetails = array(
     'image'=>'',
     'name' => '',
     'path' =>'',
+    'profile' => '',
   );
   $picture = '';
-  //$user_info = entity_build_content($entity->entity_type, $entity);
- /*/$picture = print_r($author, true);
- //*/
+
   if ($value = $entity->field_user_reference['und'][0]['value']) {
     $user_info = user_load($value);
     $userPicture = $user_info->picture;
     $userDetails['name'] = $user_info->realname;
     $userDetails['path'] = 'user/'. $user_info->uid; 
     $userDetails['image'] =  theme('image_style',
-        array('style_name' => 'thumbnail',
-          'path' => $userPicture->uri)
+      array('style_name' => 'thumbnail',
+        'path' => $userPicture->uri)
       );
+    $userDetails['profile'] =  $profile_role_relationship[$entity->bundle];
   }
-  //return print_r($user_info, true);
+
+  $userDetails['entity'] = $entity;
   return theme('liveitchina_review_info', $userDetails);
 }
 

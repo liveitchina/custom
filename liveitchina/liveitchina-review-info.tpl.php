@@ -4,5 +4,6 @@
   </div>
   <div class="user-info-detail">
     <h2><?php print $name; ?></h2>
+    <span>(<?php print $profile['name'] ?>)</span>
   </div>
 </div>
