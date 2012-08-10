@@ -412,7 +412,7 @@ function _profile2_liveitchina_ds_user_actions($field){
   if ($rel){
     $links[] = array(
       'data' => l(t('My '. $var[$profile->type]['name']), 
-                  'connect/' . $requestee . '/request/'. $relationship.'/remove', 
+                  'user/' . $requestee . '/connectivity/'. $relationship, 
                   array('attributes'=> array('class'=> array('green')))),
     );
   }

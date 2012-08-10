@@ -1,5 +1,13 @@
 <?php
 /**
+ * Page callback for the two user
+ */
+function liveitchina_user_connectivity_form($form, &$form_state, $requestee, $relationship){
+  $form['user']['#markup'] = 'Hi there';
+  return $form;
+}
+
+/**
  * Request a new relationship with another user
  */
 function liveitchina_user_relationships_ui_request($form, &$form_state, $requestee) {

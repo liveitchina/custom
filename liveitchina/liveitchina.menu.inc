@@ -37,6 +37,16 @@ function liveitchina_menu() {
     'page callback' => 'liveitchina_user_relationships_ui_remove_ajax',
     'page arguments' => array(1, 3),
   );
+  $items['user/connectivity/%user/%user_relationships'] = array(
+    'title' => 'My Relationship',
+    //'title callback' => 'liveitchina_relationship_name',
+    //'title arguments' => array('user_relationships'),
+    'type' => MENU_CALLBACK,
+    'access callback' => TRUE,
+    //'access arguments' => array('delete', 1),
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('liveitchina_user_connectivity_form', 2, 3),
+  );
   /*/ Registration and login pages.
   $items['user/%user/bookmarks'] = array(
     'title' => 'User account',

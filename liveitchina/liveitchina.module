@@ -111,7 +111,6 @@ function liveitchina_theme($existing, $type, $theme, $path) {
   );
 }
 
-
 /**
  * Implements hook_block_view().
  * 
@@ -590,6 +589,14 @@ function _liveitchina_add_picture_to_user($form, &$form_state){
   user_save($user, $edit);
 }
 
+/**
+ * Page callback
+ */
+function liveitchina_user_connectivity_page($form, &$form_state, $connection, $relationship) {
+  $form = array();
+  $form['header']['#markup'] = 'This';
+  return $form;
+}
 /**
  * Ajax handler function that is utilized to display the form
  * in a popup rather than having the full page reload for the users
