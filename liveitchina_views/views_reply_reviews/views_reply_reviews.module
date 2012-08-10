@@ -26,3 +26,17 @@ function views_reply_reviews_ds_fields_info($entity_type) {
 
   return $fields;
 }
+
+/*
+ * Implements hook_views_pre_render().
+*/
+function views_reply_reviews_views_pre_render(&$view){
+  if ($view->name == 'user_review' && $view->current_display == 'page_with_page_title_1'){
+    $title = '';
+    if ($arg = arg(1)){
+      $reviewer = user_load($arg);
+      $title = $reviewer->realname;
+    }
+    $view->build_info['substitutions']['%1'] = t('Reviews by !name', array('!name'=>$title));
+  }
+}

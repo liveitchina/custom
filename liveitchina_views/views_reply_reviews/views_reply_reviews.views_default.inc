@@ -17,7 +17,6 @@ function views_reply_reviews_views_default_views() {
   
   /* Display: Master */
   $handler = $view->new_display('default', 'Master', 'default');
-  $handler->display->display_options['title'] = 'User Review';
   $handler->display->display_options['access']['type'] = 'none';
   $handler->display->display_options['cache']['type'] = 'none';
   $handler->display->display_options['query']['type'] = 'views_query';
@@ -45,6 +44,8 @@ function views_reply_reviews_views_default_views() {
   $handler->display->display_options['arguments']['field_user_reference_value']['table'] = 'field_data_field_user_reference';
   $handler->display->display_options['arguments']['field_user_reference_value']['field'] = 'field_user_reference_value';
   $handler->display->display_options['arguments']['field_user_reference_value']['default_action'] = 'default';
+  $handler->display->display_options['arguments']['field_user_reference_value']['title_enable'] = 1;
+  $handler->display->display_options['arguments']['field_user_reference_value']['title'] = '%1';
   $handler->display->display_options['arguments']['field_user_reference_value']['default_argument_type'] = 'raw';
   $handler->display->display_options['arguments']['field_user_reference_value']['default_argument_options']['index'] = '1';
   $handler->display->display_options['arguments']['field_user_reference_value']['default_argument_skip_url'] = 0;
@@ -73,7 +74,6 @@ function views_reply_reviews_views_default_views() {
   $handler->display->display_options['path'] = 'user/%user/reviews';
   $translatables['user_review'] = array(
     t('Master'),
-    t('User Review'),
     t('more'),
     t('Apply'),
     t('Reset'),
@@ -85,6 +85,7 @@ function views_reply_reviews_views_default_views() {
     t('.'),
     t(','),
     t('All'),
+    t('%1'),
     t('Block'),
     t('Page (with Page Title)'),
   );

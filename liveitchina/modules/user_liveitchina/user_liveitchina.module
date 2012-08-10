@@ -85,12 +85,6 @@ function user_liveitchina_user_page_title($account){
 }
 
 /*
- * Implements hook_user_view_alter().
- */
-function user_liveitchina_user_view_alter(&$build) {
-}
-
-/*
  * Implements hook_field_info_alter
  */
 function user_liveitchina_field_info_alter(&$info) {
