@@ -337,8 +337,10 @@ function _liveitchina_ds_entity_details($field){
     'profile' => '',
     'entity'=>'',
   );
+
   $picture = '';
-  
+  $image = '';
+
   if ($field['bundle'] == 'school'){
     $school = node_load($entity->entity_id);
     //$userid = $school->uid; 
@@ -347,25 +349,27 @@ function _liveitchina_ds_entity_details($field){
     $image = $school->field_logo['und'][0]['uri'];
     $userDetails['name'] = $school->title;
     $userDetails['path'] = 'node/'. $school->nid;
-    $userDetails['image'] =  theme('image_style',
-      array('style_name' => 'thumbnail',
-        'path' => $image)
-    );
+    $userDetails['image'] =  
     $userDetails['profile'] =  t('School');
   }
   else {
     if ($value = $entity->field_user_reference['und'][0]['value']) {
       $user_info = user_load($value);
-      $image = $user_info->picture;
+      $picture = $user_info->picture;
       $userDetails['name'] = $user_info->realname;
-      $userDetails['path'] = 'user/'. $user_info->uid; 
-      $userDetails['image'] =  theme('image_style',
-        array('style_name' => 'thumbnail',
-          'path' => $image->uri)
-      );
+      $userDetails['path'] = 'profile-'. $entity->bundle .'/'. $user_info->uid; 
+      $image = $picture->uri;
+
       $userDetails['profile'] =  $profile_role_relationship[$entity->bundle]['name'];
       //$userDetails['entity'] = $entity;
     }
+  }
+  
+  if ($image != '') {
+    $userDetails['image'] =  theme('image_style',
+      array('style_name' => 'thumbnail',
+        'path' => $image)
+    );
   }
 
   return theme('liveitchina_review_info', $userDetails);
