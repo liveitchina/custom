@@ -328,6 +328,7 @@ function _liveitchina_ds_reviewer_author($field){
 
 function _liveitchina_ds_entity_details($field){
   $entity = $field['entity'];
+  //print_r($entity);exit;
   $profile_role_relationship = variable_get('profile_role_relationship', array());
   $userDetails = array(
     'image'=>'',
