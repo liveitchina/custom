@@ -1,0 +1,9 @@
+name = My Review view
+description = Default Views for my review
+package = "LiveitChina Views"
+version = 7.x-1.0
+core = 7.x
+
+dependencies[] = views
+dependencies[] = ds
+dependencies[] = reply
