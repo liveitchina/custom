@@ -299,5 +299,5 @@ function profile2_liveitchina_apachesolr_index_document_build_profile2(ApacheSol
    }
   }
   
-  print_r($document);exit;
+  //print_r($document);exit;
 }
