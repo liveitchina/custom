@@ -23,7 +23,7 @@ function liveitchina_form_search_block_form_alter(&$form, &$form_state, $form_id
   $apachesolr_has_searched = apachesolr_has_searched($search_page->env_id);
   $searcher = NULL;
   $default_search = DEFAULT_SEARCH_TERM;
-  $default['location'] = 'all';
+  $default['location'] = (isset($_GET['loc'])) ? $_GET['loc'] : t('Hong Kong');
   $fq = NULL;
   if ($apachesolr_has_searched) {
     $query = apachesolr_current_query($search_page->env_id);
@@ -31,14 +31,16 @@ function liveitchina_form_search_block_form_alter(&$form, &$form_state, $form_id
     // We use the presence of filter query params as a flag for the retain filters checkbox.
     $q = $query->getParam('q');
     $default_search = $q;
+    /*
+    print_r($query);exit;
     $default_location = $query->getParam('fq');
     foreach($default_location as $loc){
       list($lic_filter, $lic_value) = explode(':', $loc);
       if ($lic_filter == 'im_field_city'){
         $opt_query = array ('f' => array('city:' . $lic_value));
-        $default['location'] = serialize($opt_query);
+        $default['location'] = $opt_query;
       }
-    }
+    }//*/
   }
   
   $form['search_block_form']['#prefix'] = '<div class="grid-8 omega">';
@@ -62,7 +64,7 @@ function liveitchina_form_search_block_form_alter(&$form, &$form_state, $form_id
     '#title_display' => 'before',
     '#type' => 'textfield',
     //'#size' => 40,
-    //'#default_value' => $default_search,
+    '#default_value' => $default['location'],
   );
   $form['actions']['#attributes']['class'] = array('grid-2 omega');
   $form['actions']['#attributes']['id'] = array('edit-actions1');

@@ -468,14 +468,16 @@ function _og_school_school_administrator($field){
   $entity = $field['entity'];
   $user_admin = user_load($entity->uid);
   //$display = $user_admin['picture']->uri;
-  $styles = array(
-    'style_name' => 'comment_avatar',
-    'path' => $user_admin->picture->uri,
-    'attributes' => array(
-      'class' => 'avatar',
-    ),
-  );
-  $admin_img = theme('image_style', $styles);
+  if (isset($user_admin->picture->uri)){
+    $styles = array(
+      'style_name' => 'comment_avatar',
+      'path' => $user_admin->picture->uri,
+      'attributes' => array(
+        'class' => 'avatar',
+      ),
+    );
+    $admin_img = theme('image_style', $styles);
+  }
   return '<strong>'.t('See Administrator'). '</strong>'.
   '<div class="dis-admin">'.l($user_admin->realname, 'user/'.$user_admin->uid, array('html'=>true)) . '</div>';
 }

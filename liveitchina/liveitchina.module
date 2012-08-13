@@ -568,7 +568,11 @@ function liveitchina_search_box_form_submit($form, &$form_state) {
 
   if ($info) {
     if ($form_state['values']['location'] != 'all'){
-      $filter = array('query' => unserialize($form_state['values']['location']));
+      //$filter = array('query' => unserialize($form_state['values']['location']));
+      $location = $form_state['values']['location'];
+      //print_r($test);exit;
+      $filter = array('query' => array('loc'=>$location));
+      //print_r($filter);exit;
     }
     $form_state['redirect'] = array('search/' . $info['path'] . '/' . trim($form_state['values'][$form_id]), $filter);
   }

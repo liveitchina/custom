@@ -7,6 +7,17 @@ function profile2_liveitchina_apachesolr_query_alter($query) {
 
   //Show only if status is true
   $query->addFilter('bs_status', TRUE);
+  
+  if (isset($_GET['loc'])){
+    $location = rawurldecode($_GET['loc']);
+    $distance = 10;//the distance to search
+
+    if ($coordinates = _liveitchina_get_map($location)){
+      //print_r($coordinates);exit;
+      $coordinate = $coordinates['lat'].','.$coordinates['lon'];
+      $query->addParam('fq', "{!geofilt sfield=coordinates pt=$coordinate d=$distance}");
+    }
+  }
 
   switch (arg(1)){
     case 'tutor':
@@ -52,7 +63,7 @@ function profile2_liveitchina_apachesolr_index_document_build_profile2(ApacheSol
   if (count($user) == 0){
     return;
   }
-  
+
   //add custom display
   if ($profile2->type == 'exchange_partner'){
     $teaches = _profile2_liveitchina_teaches($profile2);
@@ -157,28 +168,35 @@ function profile2_liveitchina_apachesolr_index_document_build_profile2(ApacheSol
     ),
     'field_user_website' => array(
       'source'=>'value',
-      'field'=>'user_website'
+      'field'=>'user_website',
+    ),
+    'field_location' => array(
+      'source'=>'lat',
+      'field'=>'coordinates',
     ),
   );
 
   foreach ($fields as $field=>$field_info){
-   if ($field_values = field_get_items('profile2', $user, $field)){
-    foreach ($field_values as $value) {
-     switch ($field_info['source']){
-      case 'tid':
-       $document->addField('im_'.$field, $value['tid']);
-       break;
-      case 'country':
-       $document->addField('user_address', $value['country']);
-       break;
-      case 'value':
-       $document->addField($field_info['field'], apachesolr_clean_text($value['value']));
-       break;
-     }
+    if ($field_values = field_get_items('profile2', $user, $field)){
+      foreach ($field_values as $value) {
+        switch ($field_info['source']){
+          case 'tid':
+            $document->addField('im_'.$field, $value['tid']);
+            break;
+          case 'country':
+            $document->addField('user_address', $value['country']);
+            break;
+          case 'value':
+            $document->addField($field_info['field'], apachesolr_clean_text($value['value']));
+            break;
+          case 'lat':
+            $document->addField($field_info['field'], $value['lat'] . ','. $value['lng']);
+            break;
+        }
+      }
     }
-   }
   }
-  
+
   //index user_role or additional fields base on profile type
   $profile_fields = array(
     'tutor'=> array(
@@ -274,10 +292,12 @@ function profile2_liveitchina_apachesolr_index_document_build_profile2(ApacheSol
         $document->addField($pfield['field'], $term->name);
       }
       else {
-       $document->addField($pfield['field'], $value[$pfield['index']]);
+        $document->addField($pfield['field'], $value[$pfield['index']]);
       }
      }
     }
    }
   }
+  
+  print_r($document);exit;
 }
