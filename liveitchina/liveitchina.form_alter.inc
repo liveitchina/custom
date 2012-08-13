@@ -15,9 +15,10 @@ function liveitchina_form_reply_add_form_alter(&$form, &$form_state, $form_id) {
     '#weight'=> -1,
   );
 }
-
+//*
 function liveitchina_form_search_block_form_alter(&$form, &$form_state, $form_id) {
-  unset($form['search_block_form']);
+  //print_r($form); exit;
+  //unset($form['search_block_form']);
   $search_page = apachesolr_search_page_load('core_search');
   $apachesolr_has_searched = apachesolr_has_searched($search_page->env_id);
   $searcher = NULL;
@@ -40,6 +41,34 @@ function liveitchina_form_search_block_form_alter(&$form, &$form_state, $form_id
     }
   }
   
+  $form['search_block_form']['#prefix'] = '<div class="grid-8 omega">';
+  $form['search_block_form']['#suffix'] = '</div>';
+  $form['search_block_form']['#default_value'] = $default_search;
+  $form['search_block_form']['#title'] = t('Search').' <span>('.t('e.g. Mandarin School, Tutor, learn Cantonese').')</span>';
+  $form['search_block_form']['#title_display'] = 'before';
+  $form['search_block_form']['#type'] = 'textfield';
+  $form['search_block_form']['#attributes']['onblur'] = "if (this.value == '') {this.value = '" . t(DEFAULT_SEARCH_TERM) . "';jQuery(this).css('color','#b9b9b9');}";
+  $form['search_block_form']['#attributes']['onfocus'] = "if (this.value == '" . t(DEFAULT_SEARCH_TERM) . "') {this.value = '';}jQuery(this).css('color','#7b7a7a !important');";
+  $form['search_form_location'] = array(
+    '#type' => 'container',
+    '#attributes' => array(
+      'class' => array(
+        'grid-4 omega'
+      ),
+    )
+  );
+  $form['search_form_location']['location'] = array(
+    '#title' => t('Choose your Location'),
+    '#title_display' => 'before',
+    '#type' => 'textfield',
+    //'#size' => 40,
+    //'#default_value' => $default_search,
+  );
+  $form['actions']['#attributes']['class'] = array('grid-2 omega');
+  $form['actions']['#attributes']['id'] = array('edit-actions1');
+  $form['actions']['submit']['#value'] = t('Go');
+  $form['#submit'] = array('liveitchina_search_box_form_submit');
+/*
   $form['search_form_key'] = array(
     '#type' => 'container',
     '#attributes' => array(
@@ -96,8 +125,9 @@ function liveitchina_form_search_block_form_alter(&$form, &$form_state, $form_id
   
   $form['actions']['submit']['#value'] = t('Go');
   $form['#submit'] = array('liveitchina_search_box_form_submit');
+  //*/
 }
-
+//*/
 /*
  * Implements hook_form_ID_alter();
 * User Register Form
