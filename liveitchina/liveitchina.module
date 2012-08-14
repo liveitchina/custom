@@ -892,3 +892,81 @@ function liveitchina_get_connect_label($rel_id){
   }
  
 }
+
+/**
+ * Reverse Geocode an address
+ * Input can be a string or an array
+ * Output is an array if successful, string if failed
+ *
+ * "OK" indicates that no errors occurred; the address was successfully parsed and at least one geocode was returned.
+ * "ZERO_RESULTS" indicates that the geocode was successful but returned no results. This may occur if the geocode was passed a non-existent address or a latlng in a remote location.
+ * "OVER_QUERY_LIMIT" indicates that you are over your quota.
+ * "REQUEST_DENIED" indicates that your request was denied, generally because of lack of a sensor parameter.
+ * "INVALID_REQUEST" generally indicates that the query (address or latlng) is missing.
+ */
+function liveitchina_reverse_geocode($latlng, $single = TRUE) {
+  if (empty($latlng)) {
+    return;
+  }
+  
+  if (is_array($latlng)) {
+    if (count($latlng)) {
+      $latlng = implode(',', $latlng);
+    }
+    else {
+      return;
+    }
+  }
+
+  $query = array(
+    'latlng' => $latlng,
+    'sensor' => 'false'
+  );
+
+  $msg = '';
+  $url = url("http://maps.googleapis.com/maps/api/geocode/json", array('query' => $query));
+  $result = drupal_http_request($url);
+  $data = json_decode($result->data);
+  $status = $data->status;
+  if ($status == 'OK'){
+    //$address_components = $data->results[0]->address_components;
+    //print_r($data->results); exit;
+    $rows = array();
+    $results = $data->results;
+    foreach ($results as $result) {
+      $out = array();
+      $addressComponent = $result->address_components;
+      foreach ($addressComponent as $component) {
+      //print_r($component);exit;
+        $type = $component->types[0];
+        switch ($type) {
+          case 'route':
+            $out['route'] = $component->short_name;
+            $out['address1'] = $component->long_name;
+            break;
+          case 'country':
+            $out['country'] = $component->long_name;
+            $out['country_short'] = $component->short_name;
+            break;
+          default:
+            $out[$type] = $component->long_name;
+        }
+      }
+      $out['formatted_address'] = $result->formatted_address;
+      $out['location_type'] = $result->geometry->location_type;
+      if ($single){
+        return $out;
+      }
+      $rows[] = $out;
+    }
+    return $rows;
+  }
+
+  $msg = array(
+    'ZERO_RESULTS' => 'No result',
+    'OVER_QUERY_LIMIT' => 'Over query limit',
+    'REQUEST_DENIED' => 'Request denied',
+    'INVALID_REQUEST' => 'Request invalid',
+  );
+   return $msg[$status];
+}

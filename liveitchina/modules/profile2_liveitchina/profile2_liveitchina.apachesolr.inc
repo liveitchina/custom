@@ -15,7 +15,9 @@ function profile2_liveitchina_apachesolr_query_alter($query) {
     if ($coordinates = _liveitchina_get_map($location)){
       //print_r($coordinates);exit;
       $coordinate = $coordinates['lat'].','.$coordinates['lon'];
-      $query->addParam('fq', "{!geofilt sfield=coordinates pt=$coordinate d=$distance}");
+      //$query->addParam('fq', "{!geofilt sfield=coordinates pt=$coordinate d=$distance}");
+      $query->addParam('fq', "ts_mapapi_country:$location");
+      
     }
   }
 
@@ -190,7 +192,15 @@ function profile2_liveitchina_apachesolr_index_document_build_profile2(ApacheSol
             $document->addField($field_info['field'], apachesolr_clean_text($value['value']));
             break;
           case 'lat':
-            $document->addField($field_info['field'], $value['lat'] . ','. $value['lng']);
+            $latlon = $value['lat'] . ','. $value['lng'];
+            $reverseGeocode = liveitchina_reverse_geocode( $latlon );
+            if (is_array($reverseGeocode)){
+              foreach ($reverseGeocode as $geoInd=>$geoValue) {
+                $document->addField("ts_mapapi_{$geoInd}", $geoValue );
+              }
+            }
+            $document->addField($field_info['field'], $latlon );
+            //print_r($reverseGeocode);
             break;
         }
       }
@@ -281,23 +291,22 @@ function profile2_liveitchina_apachesolr_index_document_build_profile2(ApacheSol
   
    //index extra fields not being indexed by apachesolr look for @$profile_fields
    $pfields = $profile_fields[$profile2->type];
-   foreach ( $pfields as $pfield ){
-    if ($field_values = field_get_items('profile2', $profile2, $pfield['source'])){
-     foreach ($field_values as $value) {
-      if ($pfield['index']=='value'){
-       $document->addField($pfield['field'], apachesolr_clean_text($value[$pfield['index']]));
+    foreach ( $pfields as $pfield ){
+      if ($field_values = field_get_items('profile2', $profile2, $pfield['source'])){
+        foreach ($field_values as $value) {
+          if ($pfield['index']=='value'){
+            $document->addField($pfield['field'], apachesolr_clean_text($value[$pfield['index']]));
+          }
+          elseif ($pfield['index']=='name'){
+            $term = taxonomy_term_load($value['tid']);
+            $document->addField($pfield['field'], $term->name);
+          }
+          else {
+            $document->addField($pfield['field'], $value[$pfield['index']]);
+          }
+        }
       }
-      elseif ($pfield['index']=='name'){
-        $term = taxonomy_term_load($value['tid']);
-        $document->addField($pfield['field'], $term->name);
-      }
-      else {
-        $document->addField($pfield['field'], $value[$pfield['index']]);
-      }
-     }
     }
-   }
   }
-  
   //print_r($document);exit;
 }
