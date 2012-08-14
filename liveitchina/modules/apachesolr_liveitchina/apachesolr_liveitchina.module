@@ -148,25 +148,26 @@ function apachesolr_liveitchina_facetapi_map_bundle(array $values) {
 }
 
 function facetapi_map_liveitchina_distance(&$build, $adapter, $facet){
-  //print_r($build);exit;
-  $build = array(
-    '20' => array(
-      '#markup'=> t("Bird's-eye View"),
-    		'#count'=> 0,
-    ),
-    '5' => array(
-      '#markup'=> t('Metro (5 km)'),
-    		'#count'=> 0,
-    ),
-    '2' => array(
-      '#markup'=> t('Biking (2 km)'),
-    		'#count'=> 0,
-    ),
-    '1' => array(
-      '#markup'=> t('Walking (1 km)'),
-    		'#count'=> 0,
-    ),
+	/*
+	 $location = (isset($_GET['loc'])) ? $_GET['loc']:'';
+  if ($coordinates = _liveitchina_get_map($location)){
+    $coordinate = $coordinates['lat'].','.$coordinates['lon'];
+  }
+*/
+  $options = array(
+    '20' => t("Bird's-eye View"),
+    '5' => t('Metro (5 km)'),
+    '2' => t('Biking (2 km)'),
+    '1' => t('Walking (1 km)'),
   );
+  
+  foreach ($options as $ind=>$opt){
+  	 //$value = '{!geofilt sfield=coordinates pt='.$coordinate.' d='.$ind.'}';
+    $build[$ind] = array(
+  			'#markup'=> $opt,
+  			'#count'=> 0,
+  	 );
+  }
 }
 /**
  * Map callback for bundle.

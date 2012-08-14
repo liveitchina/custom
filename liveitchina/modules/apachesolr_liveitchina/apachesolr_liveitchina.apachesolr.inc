@@ -8,7 +8,7 @@ function apachesolr_liveitchina_apachesolr_query_alter($query) {
   //$query->addFilter('ss_language', $language->language);
   
   //Show only if status is true
-  $query->addFilter('bs_status', TRUE);
+  //$query->addFilter('bs_status', TRUE);
   
   //Parameters
   $query->addParam('fl', 'bundle');
