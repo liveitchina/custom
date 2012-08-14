@@ -152,15 +152,19 @@ function facetapi_map_liveitchina_distance(&$build, $adapter, $facet){
   $build = array(
     '20' => array(
       '#markup'=> t("Bird's-eye View"),
+    		'#count'=> 0,
     ),
     '5' => array(
       '#markup'=> t('Metro (5 km)'),
+    		'#count'=> 0,
     ),
     '2' => array(
       '#markup'=> t('Biking (2 km)'),
+    		'#count'=> 0,
     ),
     '1' => array(
       '#markup'=> t('Walking (1 km)'),
+    		'#count'=> 0,
     ),
   );
 }
