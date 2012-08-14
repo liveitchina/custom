@@ -147,11 +147,6 @@ function apachesolr_liveitchina_facetapi_map_bundle(array $values) {
   return $map;
 }
 
-function facetapi_map_liveitchina_distance_values(array $facet){
-  print_r($face);exit;
-  $distance = array(1, 2, 5, 20);
-  return $distance;
-}
 function facetapi_map_liveitchina_distance(&$build, $adapter, $facet){
   //print_r($build);exit;
   $build = array(
