@@ -238,6 +238,7 @@ function apachesolr_liveitchina_facetapi_widgets() {
         'query types' => array('term', 'date'),
       ),
     ),
+  		/*
     'apachesolr_liveitchina_facetapi_distance' => array(
       'handler' => array(
         'label' => t('Distance'),
@@ -245,6 +246,7 @@ function apachesolr_liveitchina_facetapi_widgets() {
         'query types' => array('apatial'),
       ),
     ),
+    //*/
   );
 }
 
