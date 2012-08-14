@@ -62,6 +62,9 @@ function _apachesolr_liveitchina_get_connect($result){
   return $rendered_links;
 }
 
+/*
+ * Implements hook_facetapi_facet_info()
+ */
 function apachesolr_liveitchina_facetapi_facet_info(array $searcher_info) {
   $facets = array();
   $facets['filter_language'] = array(
@@ -109,6 +112,26 @@ function apachesolr_liveitchina_facetapi_facet_info(array $searcher_info) {
     'map callback' => 'apachesolr_liveitchina_facetapi_map_bundle',
     'default widget' => 'facetapi_checkbox_links',
   );
+  $facets['distance'] = array(
+    'label' => t('Distance'),
+    'description' => t('Filter by Distance.'),
+    'field alias' => 'distance',
+    'field api name' => FALSE,
+    //'query types' => array('apatial'),
+    //'values callback' => 'facetapi_map_liveitchina_distance_values',
+    //'map callback' => 'facetapi_map_liveitchina_distance',
+    'alter callbacks' => array('facetapi_map_liveitchina_distance'),
+    'default widget' => 'facetapi_checkbox_links',
+  );
+  $facets['neighborhood'] = array(
+    'label' => t('Neighborhoods'),
+    'description' => t('Filter by Neighborhood.'),
+    'field' => 'ss_mapapi_locality',
+    'field alias' => 'neighbor',
+    'field api name' => 'neighborhood',
+    'default widget' => 'facetapi_checkbox_links',
+    //'alter callbacks' => array('facetapi_map_liveitchina_distance'),
+  );
   return $facets;
 }
 
@@ -124,6 +147,28 @@ function apachesolr_liveitchina_facetapi_map_bundle(array $values) {
   return $map;
 }
 
+function facetapi_map_liveitchina_distance_values(array $facet){
+  print_r($face);exit;
+  $distance = array(1, 2, 5, 20);
+  return $distance;
+}
+function facetapi_map_liveitchina_distance(&$build, $adapter, $facet){
+  //print_r($build);exit;
+  $build = array(
+    '20' => array(
+      '#markup'=> t("Bird's-eye View"),
+    ),
+    '5' => array(
+      '#markup'=> t('Metro (5 km)'),
+    ),
+    '2' => array(
+      '#markup'=> t('Biking (2 km)'),
+    ),
+    '1' => array(
+      '#markup'=> t('Walking (1 km)'),
+    ),
+  );
+}
 /**
  * Map callback for bundle.
  */
@@ -191,13 +236,20 @@ function apachesolr_liveitchina_facet_items_alter(&$build, &$settings) {
  */
 function apachesolr_liveitchina_facetapi_widgets() {
   return array(
-      'apachesolr_liveitchina_facetapi_select' => array(
-          'handler' => array(
-              'label' => t('Select'),
-              'class' => 'LiveitChinaFacetapiSelect',
-              'query types' => array('term', 'date'),
-          ),
+    'apachesolr_liveitchina_facetapi_select' => array(
+      'handler' => array(
+        'label' => t('Select'),
+        'class' => 'LiveitChinaFacetapiSelect',
+        'query types' => array('term', 'date'),
       ),
+    ),
+    'apachesolr_liveitchina_facetapi_distance' => array(
+      'handler' => array(
+        'label' => t('Distance'),
+        'class' => 'LiveitChinaFacetapiDistance',
+        'query types' => array('apatial'),
+      ),
+    ),
   );
 }
 

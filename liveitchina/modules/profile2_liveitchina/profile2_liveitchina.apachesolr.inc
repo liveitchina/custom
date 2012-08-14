@@ -17,7 +17,6 @@ function profile2_liveitchina_apachesolr_query_alter($query) {
       $coordinate = $coordinates['lat'].','.$coordinates['lon'];
       //$query->addParam('fq', "{!geofilt sfield=coordinates pt=$coordinate d=$distance}");
       $query->addParam('fq', "ts_mapapi_country:$location");
-      
     }
   }
 
@@ -197,6 +196,7 @@ function profile2_liveitchina_apachesolr_index_document_build_profile2(ApacheSol
             if (is_array($reverseGeocode)){
               foreach ($reverseGeocode as $geoInd=>$geoValue) {
                 $document->addField("ts_mapapi_{$geoInd}", $geoValue );
+                $document->addField("ss_mapapi_{$geoInd}", $geoValue );
               }
             }
             $document->addField($field_info['field'], $latlon );
