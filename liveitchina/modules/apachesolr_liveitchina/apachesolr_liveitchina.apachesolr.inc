@@ -4,13 +4,26 @@
  */
 function apachesolr_liveitchina_apachesolr_query_alter($query) {
   global $language;
-  //Filter by language
-  //$query->addFilter('ss_language', $language->language);
-  
   //Show only if status is true
-  //$query->addFilter('bs_status', TRUE);
-  
-  //Parameters
+  $query->addFilter('bs_status', TRUE);
+
+  if (isset($_GET['loc']) && !empty($_GET['loc'])){
+    $location = rawurldecode($_GET['loc']);
+
+    $query->addParam('fq', "ts_mapapi_country:$location");
+
+    if ($dist = $query->getFilters('distance')){
+      $query->removeFilter('distance');
+      if ($coordinates = _liveitchina_get_map($location)){
+        //print_r($coordinates);exit;
+        $coordinate = $coordinates['lat'].','.$coordinates['lon'];
+        $distance = str_replace(array('(',')'),'', $dist[0]['#value']);
+        $query->addParam('fq', "{!geofilt sfield=coordinates pt=$coordinate d=$distance}");
+        //print_r($query);exit;
+      }
+    }
+  }
+
   $query->addParam('fl', 'bundle');
   $query->addParam('fl', 'user_role');
   switch (arg(1)){

@@ -5,26 +5,6 @@
 function profile2_liveitchina_apachesolr_query_alter($query) {
   global $language;
 
-  //Show only if status is true
-  $query->addFilter('bs_status', TRUE);
-
-  if (isset($_GET['loc']) && !empty($_GET['loc'])){
-    $location = rawurldecode($_GET['loc']);
-
-    $query->addParam('fq', "ts_mapapi_country:$location");
-
-    if ($dist = $query->getFilters('distance')){
-      $query->removeFilter('distance');
-      if ($coordinates = _liveitchina_get_map($location)){
-        //print_r($coordinates);exit;
-        $coordinate = $coordinates['lat'].','.$coordinates['lon'];
-        $distance = str_replace(array('(',')'),'', $dist[0]['#value']);
-        $query->addParam('fq', "{!geofilt sfield=coordinates pt=$coordinate d=$distance}");
-        //print_r($query);exit;
-      }
-    }
-  }
-
   switch (arg(1)){
     case 'tutor':
       $query->addParam('fl', 'user_avatar');
