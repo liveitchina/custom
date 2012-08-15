@@ -443,7 +443,7 @@ function _og_school_ds_school_links($field){
     'data' => flag_create_link('bookmarks', $entity_id),//l(t('Add to List'), $_GET["q"], array('fragment'=>'#')),
   );
   $links[] = array(
-    'data' => l(t('Send Message'), $_GET["q"], array('fragment'=>'#')),
+    'data' => l(t('Send Message'), 'messages/new', array('query'=>array('user'=>$field['entity']->uid))),//$_GET["q"], array('fragment'=>'#')),
   );
   $data = theme('item_list',
     array('items' => $links,
