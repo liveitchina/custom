@@ -31,66 +31,81 @@ function og_school_apachesolr_index_document_build_node(ApacheSolrDocument $docu
       $document->bs_status = $node->status;
       $teaches = og_school_teaches($node);
       $document->addField('ts_teaches', $teaches);
-      
-        //drupal_set_message(print_r($node, true));
-      //$field = $obj->field_logo->value();
-      
-      
-      $language = field_language('node', $node, 'field_logo');
-      if ($logos = field_get_items('node', $node, 'field_logo', $language)){
-        //drupal_set_message(print_r($logos, true));
+
+      if ($logos = field_get_items('node', $node, 'field_logo', LANGUAGE_NONE)){
         $school_logo = array_pop($logos);
-        $document->addField('is_logo', $school_logo['fid']);
+        $logo = $school_logo['fid'];
       }
       else {
         $avatar = field_info_field('field_user_avatar');
         $school_logo = file_load($avatar['settings']['default_image']);
-//         /drupal_set_message('default:' . print_r($logos, true));
-        $document->addField('is_logo', $school_logo->fid);
+        $logo = $school_logo->fid;
       }
-
-      if ($school_names = field_get_items('node', $node, 'field_school_name')){
-        $school_name = array_pop($school_names);
-        $document->label = $school_name['value'];
-      }
-
-      if ($summary = field_get_items('node', $node, 'field_summary')){
-        $summary = array_pop($summary);
-        $document->addField('ts_summary', $summary['value']);
-      }
-
+      $document->addField('is_logo', $logo);
+      
       if ($school_rating= field_get_items('node', $node, 'field_rating')){
         $rating = array_pop($school_rating);
         $document->addField('fs_rating', $rating['average']);
       }
 
-      if ($school_language = field_get_items('node', $node, 'field_lang_offered')){
-        foreach ($school_language as $language){
-          $document->addField('filter_language', $language['tid']);
+      $idxfields = array(
+        'field_summary' => array(
+           'source' => 'value',
+           'field' => 'ts_summary',
+        ),
+        'field_school_name' => array(
+           'source' => 'label',
+           'field' => 'label',
+        ),
+        'field_map'=> array(
+           'source' => 'lat',
+           'field' => 'coordinates',
+        ),
+        'field_lang_offered'=> array(
+           'source' => 'tid',
+           'field' => 'filter_language',
+        ),
+        'field_lang_others'=> array(
+          'source' => 'tid',
+          'field' => 'im_field_lang_others',
+        ),
+        'field_area'=> array(
+          'source' => 'tid',
+          'field' => 'filter_area',
+        ),
+      );
+      foreach ($idxfields as $field=>$fieldInfo){
+        if ($items = field_get_items('node', $node, $field)){
+          foreach ($items as $item){
+            switch ($fieldInfo['source']){
+              case 'lat':
+                $latlon = $item['lat'] . ',' . $item['lon'];
+                $reverseGeocode = liveitchina_reverse_geocode( $latlon );
+                if (is_array($reverseGeocode)){
+                  foreach ($reverseGeocode as $geoInd=>$geoValue) {
+                    $document->addField("ts_mapapi_{$geoInd}", $geoValue );
+                    $document->addField("ss_mapapi_{$geoInd}", $geoValue );
+                  }
+                }
+                $document->addField($fieldInfo['field'], $latlon);
+              break;
+              case 'tid':
+                $document->addField($fieldInfo['field'], $item['tid']);
+              break;
+              case 'value':
+                $document->addField($fieldInfo['field'], $item['value']);
+              break;
+              case 'label':
+                $document->label = $item['value'];
+              break;
+            }
+          }
         }
       }
-      if ($school_language = field_get_items('node', $node, 'field_lang_others')){
-        foreach ($school_language as $language){
-        //$document->addField('filter_language', $language['tid']);
-          $document->addField('im_field_lang_others', $language['tid']);
-        }
-      }
-
-      if ($area_terms = field_get_items('node', $node, 'field_area')){
-        foreach ($area_terms as $area_term) {
-          $document->addField('filter_area', $area_term['tid']);
-        }
-      }
-      /*
-      ob_start();
-      $element = node_view($node, 'search_result');
-      print drupal_render($element);
-      $output = ob_get_contents();
-      ob_end_clean();
-      $document->addField('ts_view_mode', $output);
-      */
-      break;
+    break;
   }
+  //print_r($node); exit;
+  //print_r($document); exit;
 }
 /*
 function profile2_liveitchina_node_update($node){

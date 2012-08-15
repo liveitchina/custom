@@ -1060,7 +1060,7 @@ function _liveitchina_fields(){
     'translatable' => '0',
     'type' => 'list_boolean',
   );
-
+/*
   $fields['field_address'] = array(
     'active' => '1',
     'cardinality' => '1',
@@ -1073,7 +1073,7 @@ function _liveitchina_fields(){
     'translatable' => '0',
     'type' => 'addressfield',
   );
-
+//*/
   $fields['field_category'] = array(
     'active' => '1',
     'cardinality' => '1',
