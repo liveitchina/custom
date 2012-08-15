@@ -148,8 +148,8 @@ function apachesolr_liveitchina_facetapi_map_bundle(array $values) {
 }
 
 function facetapi_map_liveitchina_distance(&$build, $adapter, $facet){
-	/*
-	 $location = (isset($_GET['loc'])) ? $_GET['loc']:'';
+ /*
+  $location = (isset($_GET['loc'])) ? $_GET['loc']:'';
   if ($coordinates = _liveitchina_get_map($location)){
     $coordinate = $coordinates['lat'].','.$coordinates['lon'];
   }
@@ -162,11 +162,11 @@ function facetapi_map_liveitchina_distance(&$build, $adapter, $facet){
   );
   
   foreach ($options as $ind=>$opt){
-  	 //$value = '{!geofilt sfield=coordinates pt='.$coordinate.' d='.$ind.'}';
+    //$value = '{!geofilt sfield=coordinates pt='.$coordinate.' d='.$ind.'}';
     $build[$ind] = array(
-  			'#markup'=> $opt,
-  			'#count'=> 0,
-  	 );
+     '#markup'=> $opt,
+     '#count'=> NULL,
+    );
   }
 }
 /**
@@ -243,7 +243,7 @@ function apachesolr_liveitchina_facetapi_widgets() {
         'query types' => array('term', 'date'),
       ),
     ),
-  		/*
+    /*
     'apachesolr_liveitchina_facetapi_distance' => array(
       'handler' => array(
         'label' => t('Distance'),

@@ -129,9 +129,11 @@ function profile2_liveitchina_apachesolr_index_document_build_profile2(ApacheSol
     'field_language_wanted'=> array(
       'source'=>'tid'
     ),
+    /*
     'field_user_address'=> array(
       'source'=>'country'
     ),
+    */
     'field_user_first_name' => array(
       'source'=>'value',
       'field'=>'user_first_name'

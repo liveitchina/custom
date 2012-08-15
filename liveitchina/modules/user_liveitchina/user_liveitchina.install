@@ -924,6 +924,7 @@ function _user_liveitchina_installed_instances(){
         'weight' => '17',
       ),
     );
+  /*
   $instances['user-field_user_address'] = array(
       'bundle' => 'user',
       'default_value' => NULL,
@@ -967,6 +968,7 @@ function _user_liveitchina_installed_instances(){
         'weight' => '32',
       ),
     );
+  //*/
   $instances['user-field_city'] = array(
       'bundle' => 'user',
       'default_value' => NULL,

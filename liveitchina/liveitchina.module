@@ -710,7 +710,12 @@ function liveitchina_block_view_facetapi_wOER33SIuigH29qN7r2xP6n0omobQ4Nf_alter(
     unset($data['content']);
   }
 }
-
+function liveitchina_block_view_facetapi_ei3dzp0dyuo0stcqfhqdg0cf9wbos12j_alter(&$data, $block) {
+  $data['subject'] = t('Neighborhood'). ':';
+}
+function liveitchina_block_view_facetapi_uo4i5qq1rkinwo0vs1ao9ymwvpskhr6q_alter(&$data, $block) {
+  $data['subject'] = t('Distance'). ':';
+}
 function liveitchina_block_view_facetapi_3IHTw7DdTZX1DkaTSxdUQpWnwQJGuBIx_alter(&$data, $block) {
   $data['subject'] = t('Language'). ':';
 }

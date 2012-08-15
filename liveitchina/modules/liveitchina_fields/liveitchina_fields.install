@@ -179,7 +179,7 @@ function _liveitchina_fields(){
       ),
       'type' => 'list_text',
   );
-
+/*
   $fields['field_user_address'] = array(
       'cardinality' => '1',
       'entity_types' => array(),
@@ -202,7 +202,7 @@ function _liveitchina_fields(){
       'translatable' => '0',
       'type' => 'text_long',
   );
-
+*/
   $fields['field_user_avatar'] = array(
       'cardinality' => '1',
       'entity_types' => array(),
