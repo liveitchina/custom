@@ -16,7 +16,6 @@ function og_school_apachesolr_query_alter($query) {
       $query->addParam('fl', 'im_field_city');
       $query->addParam('fl', 'im_field_district');
       $query->addParam('fl', 'ts_teaches');
-      $query->addParam('fl', 'zs_mapresult');
     break;
   }
 }
