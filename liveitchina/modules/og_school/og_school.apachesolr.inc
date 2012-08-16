@@ -57,12 +57,10 @@ function og_school_apachesolr_index_document_build_node(ApacheSolrDocument $docu
            'source' => 'label',
            'field' => 'label',
         ),
-      		/*
-        'field_map'=> array(
+        'field_location'=> array(
            'source' => 'lat',
            'field' => 'coordinates',
         ),
-        //*/
         'field_lang_offered'=> array(
            'source' => 'tid',
            'field' => 'filter_language',
@@ -81,7 +79,7 @@ function og_school_apachesolr_index_document_build_node(ApacheSolrDocument $docu
           foreach ($items as $item){
             switch ($fieldInfo['source']){
               case 'lat':
-                $latlon = $item['lat'] . ',' . $item['lon'];
+                $latlon = $value['lat'] . ','. $value['lng'];
                 $reverseGeocode = liveitchina_reverse_geocode( $latlon );
                 if (is_array($reverseGeocode)){
                   foreach ($reverseGeocode as $geoInd=>$geoValue) {
@@ -89,8 +87,8 @@ function og_school_apachesolr_index_document_build_node(ApacheSolrDocument $docu
                     $document->addField("ss_mapapi_{$geoInd}", $geoValue );
                   }
                 }
-                $document->addField($fieldInfo['field'], $latlon);
-              break;
+                $document->addField($field_info['field'], $latlon );
+                break;
               case 'tid':
                 $document->addField($fieldInfo['field'], $item['tid']);
               break;
