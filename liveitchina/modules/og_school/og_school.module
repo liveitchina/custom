@@ -219,7 +219,7 @@ function og_school_preprocess_search_result(&$vars) {
         $file_main = $fields['zs_image'];//file_load($fields['is_logo']);
       }
       else {
-        $avatar = field_info_field('field_logo');
+        $avatar = field_info_field('field_user_avatar');
         $f = file_load($avatar['settings']['default_image']);
         $file_main = $f->uri;
       }//*/
