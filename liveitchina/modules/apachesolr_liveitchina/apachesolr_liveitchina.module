@@ -126,7 +126,7 @@ function apachesolr_liveitchina_facetapi_facet_info(array $searcher_info) {
   $facets['neighborhood'] = array(
     'label' => t('Neighborhoods'),
     'description' => t('Filter by Neighborhood.'),
-    'field' => 'ss_mapapi_locality',
+    'field' => 'tm_filter_neighborhood',
     'field alias' => 'neighbor',
     'field api name' => 'neighborhood',
     'default widget' => 'facetapi_checkbox_links',

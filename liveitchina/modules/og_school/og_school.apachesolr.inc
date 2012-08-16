@@ -89,6 +89,10 @@ function og_school_apachesolr_index_document_build_node(ApacheSolrDocument $docu
                   foreach ($reverseGeocode as $geoInd=>$geoValue) {
                     $document->addField("ts_mapapi_{$geoInd}", $geoValue );
                     $document->addField("ss_mapapi_{$geoInd}", $geoValue );
+                    $neighbors = array('locality', 'sublocality');
+                    if (in_array($geoInd, $neighbors)){
+                      $document->addField('tm_filter_neighborhood', $geoValue );
+                    }
                   }
                 }
                 $document->addField($fieldInfo['field'], $latlon );
