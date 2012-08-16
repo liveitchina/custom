@@ -10,7 +10,7 @@ function apachesolr_liveitchina_apachesolr_query_alter($query) {
   if (isset($_GET['loc']) && !empty($_GET['loc'])){
     $location = rawurldecode($_GET['loc']);
 
-    $query->addFilter('ts_mapapi_country', $location);
+    $query->addFilter('ts_mapapi_formatted_address', $location);
 
     if ($dist = $query->getFilters('distance')){
       $query->removeFilter('distance');

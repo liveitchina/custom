@@ -61,7 +61,6 @@ function profile2_liveitchina_apachesolr_index_document_build_profile2(ApacheSol
     $teaches = _profile2_liveitchina_teaches($profile2);
     $document->addField('ts_teaches', $teaches);
   }
-  
 
   //replace label with realname
   $document->label = $user_data->realname;
@@ -184,6 +183,7 @@ function profile2_liveitchina_apachesolr_index_document_build_profile2(ApacheSol
               foreach ($reverseGeocode as $geoInd=>$geoValue) {
                 $document->addField("ts_mapapi_{$geoInd}", $geoValue );
                 $document->addField("ss_mapapi_{$geoInd}", $geoValue );
+                $document->addField("zs_mapresult", serialize($reverseGeocode) );
               }
             }
             $document->addField($field_info['field'], $latlon );

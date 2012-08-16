@@ -945,7 +945,8 @@ function liveitchina_reverse_geocode($latlng, $single = TRUE) {
     //print_r($data->results); exit;
     $rows = array();
     $results = $data->results;
-    foreach ($results as $result) {
+    $addressComponents = array();
+    foreach ($results as $ind=>$result) {
       $out = array();
       $addressComponent = $result->address_components;
       foreach ($addressComponent as $component) {
@@ -969,9 +970,13 @@ function liveitchina_reverse_geocode($latlng, $single = TRUE) {
       if ($single){
         return $out;
       }
-      $rows[] = $out;
+      foreach ($out as $field=>$value){
+        if (!isset($addressComponents[$field])){
+          $addressComponents[$field] = $value;
+        }
+      }
     }
-    return $rows;
+    return $addressComponents;
   }
 
   $msg = array(
