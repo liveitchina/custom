@@ -16,7 +16,7 @@ function og_school_apachesolr_query_alter($query) {
       $query->addParam('fl', 'im_field_city');
       $query->addParam('fl', 'im_field_district');
       $query->addParam('fl', 'ts_teaches');
-
+      $query->addParam('fl', 'zs_mapresult');
     break;
   }
 }
@@ -73,22 +73,26 @@ function og_school_apachesolr_index_document_build_node(ApacheSolrDocument $docu
           'source' => 'tid',
           'field' => 'filter_area',
         ),
+      		'field_map_api'=> array(
+      				'source'=>'value',
+      				'field'=>'zs_mapresult',
+      		)
       );
       foreach ($idxfields as $field=>$fieldInfo){
         if ($items = field_get_items('node', $node, $field)){
           foreach ($items as $item){
             switch ($fieldInfo['source']){
               case 'lat':
-                $latlon = $value['lat'] . ','. $value['lng'];
+              	 //print_r($item);exit;
+                $latlon = $item['lat'] . ','. $item['lng'];
                 $reverseGeocode = liveitchina_reverse_geocode( $latlon );
                 if (is_array($reverseGeocode)){
                   foreach ($reverseGeocode as $geoInd=>$geoValue) {
                     $document->addField("ts_mapapi_{$geoInd}", $geoValue );
                     $document->addField("ss_mapapi_{$geoInd}", $geoValue );
-                    $document->addField("zs_mapresult", serialize($reverseGeocode) );
                   }
                 }
-                $document->addField($field_info['field'], $latlon );
+                $document->addField($fieldInfo['field'], $latlon );
                 break;
               case 'tid':
                 $document->addField($fieldInfo['field'], $item['tid']);
