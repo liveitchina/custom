@@ -405,7 +405,7 @@ function _og_school_school_address($field){
   $entity = $field['entity'];
   $display = array();
   //$display[] = field_view_field($field['entity_type'], $entity, 'field_map', 'teaser');
-  $display[] = field_view_field($field['entity_type'], $entity, 'field_location', 'teaser');
+  $display[] = field_view_field($field['entity_type'], $entity, 'field_location', 'display');
   return render($display);
 }
 
