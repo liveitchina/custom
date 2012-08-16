@@ -15,7 +15,7 @@ function profile2_liveitchina_apachesolr_query_alter($query) {
       $query->addParam('fl', 'sm_lang_offered');
       $query->addParam('fl', 'tutor_price');
       $query->addFilter('user_role', 6);
-      $query->addParam('fl', 'ts_teaches');
+      $query->addParam('fl', 'zs_teaches');
       break;
     case 'exchange-partner':
       $query->addParam('fl', 'user_avatar');
@@ -27,7 +27,7 @@ function profile2_liveitchina_apachesolr_query_alter($query) {
       $query->addParam('fl', 'sm_lang_wanted');
       $query->addFilter('bundle', 'exchange_partner');
       $query->addParam('fl', 'ts_learning');
-      $query->addParam('fl', 'ts_teaches');
+      $query->addParam('fl', 'zs_teaches');
       $query->addFilter('user_role', 4);
       break;
   }
@@ -53,13 +53,13 @@ function profile2_liveitchina_apachesolr_index_document_build_profile2(ApacheSol
   //add custom display
   if ($profile2->type == 'exchange_partner'){
     $teaches = _profile2_liveitchina_teaches($profile2);
-    $document->addField('ts_teaches', $teaches);
+    $document->addField('zs_teaches', $teaches);
     $learning = _profile2_liveitchina_learning( $profile2);
     $document->addField('ts_learning', $learning);
   }
   else {
     $teaches = _profile2_liveitchina_teaches($profile2);
-    $document->addField('ts_teaches', $teaches);
+    $document->addField('zs_teaches', $teaches);
   }
 
   //replace label with realname

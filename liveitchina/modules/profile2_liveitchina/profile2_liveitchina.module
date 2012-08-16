@@ -55,7 +55,7 @@ function profile2_liveitchina_preprocess_search_result(&$variables) {
       $variables['user_actions'] = _apachesolr_liveitchina_get_connect($result);
       $variables['summary'] = (isset($fields['ts_summary']))? $fields['ts_summary']:'';
       $variables['profile_type'] = $fields['bundle_name'];
-      $variables['teaches'] = $fields['ts_teaches'];
+      $variables['teaches'] = $fields['zs_teaches'];
       $variables['language_offered'] = implode(', ', (array)$fields['sm_lang_offered']);
       if (is_numeric($fields['tutor_price'])){
         $variables['cost'] = _liveitchina_price_table($fields['im_field_city'][0], $fields['tutor_price']);//$cost[$fields['tutor_price']];
@@ -63,7 +63,7 @@ function profile2_liveitchina_preprocess_search_result(&$variables) {
       break;
     case 'exchange_partner':
       _profile2_liveitchina_result_vars($variables, $result);
-      $variables['teaches'] = $fields['ts_teaches'];
+      $variables['teaches'] = $fields['zs_teaches'];
       $variables['learning'] = $fields['ts_learning'];
       $variables['user_actions'] = _apachesolr_liveitchina_get_connect($result);
       $variables['summary'] = (isset($fields['ts_summary']))? $fields['ts_summary']:'';

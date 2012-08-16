@@ -35,7 +35,7 @@ function apachesolr_liveitchina_apachesolr_query_alter($query) {
         'sm_lang_wanted',
         'user_avatar',
         'fs_rating',
-        'ts_teaches',
+        'zs_teaches',
         'ts_learning',
         'im_field_district',
         'sm_vid_language',
