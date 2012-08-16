@@ -48,18 +48,14 @@ function og_school_apachesolr_index_document_build_node(ApacheSolrDocument $docu
       }
 
       $idxfields = array(
-        'field_summary' => array(
-           'source' => 'value',
-           'field' => 'ts_summary',
-        ),
         'field_school_name' => array(
            'source' => 'label',
            'field' => 'label',
-        ),
-        'field_location'=> array(
-           'source' => 'lat',
-           'field' => 'coordinates',
-        ),
+        ),/*
+      		'field_summary' => array(
+      				'source' => 'value',
+      				'field' => 'ts_summary',
+      		),
         'field_lang_offered'=> array(
            'source' => 'tid',
            'field' => 'filter_language',
@@ -71,7 +67,11 @@ function og_school_apachesolr_index_document_build_node(ApacheSolrDocument $docu
         'field_area'=> array(
           'source' => 'tid',
           'field' => 'filter_area',
-        ),
+        ),//*/
+      		'field_location'=> array(
+      				'source' => 'lat',
+      				'field' => 'coordinates',
+      		),
       		'field_map_api'=> array(
       				'source'=>'value',
       				'field'=>'zs_mapresult',

@@ -183,9 +183,9 @@ function profile2_liveitchina_apachesolr_index_document_build_profile2(ApacheSol
               foreach ($reverseGeocode as $geoInd=>$geoValue) {
                 $document->addField("ts_mapapi_{$geoInd}", $geoValue );
                 $document->addField("ss_mapapi_{$geoInd}", $geoValue );
-                //$document->addField("zs_mapresult", serialize($reverseGeocode) );
               }
             }
+            //$document->addField("zs_mapresult", serialize($reverseGeocode) );
             $document->addField($field_info['field'], $latlon );
             //print_r($reverseGeocode);
             break;
