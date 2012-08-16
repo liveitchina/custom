@@ -30,7 +30,7 @@ function og_school_apachesolr_index_document_build_node(ApacheSolrDocument $docu
       $document->bs_status = $node->status;
       $teaches = og_school_teaches($node);
       $document->addField('ts_teaches', $teaches);
-
+      /*
       if ($logos = field_get_items('node', $node, 'field_logo', LANGUAGE_NONE)){
         $school_logo = array_pop($logos);
         $logo = $school_logo['fid'];
@@ -41,7 +41,7 @@ function og_school_apachesolr_index_document_build_node(ApacheSolrDocument $docu
         $logo = $school_logo->fid;
       }
       $document->addField('is_logo', $logo);
-      
+      //*/
       if ($school_rating= field_get_items('node', $node, 'field_rating')){
         $rating = array_pop($school_rating);
         $document->addField('fs_rating', $rating['average']);

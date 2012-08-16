@@ -183,7 +183,7 @@ function profile2_liveitchina_apachesolr_index_document_build_profile2(ApacheSol
               foreach ($reverseGeocode as $geoInd=>$geoValue) {
                 $document->addField("ts_mapapi_{$geoInd}", $geoValue );
                 $document->addField("ss_mapapi_{$geoInd}", $geoValue );
-                $document->addField("zs_mapresult", serialize($reverseGeocode) );
+                //$document->addField("zs_mapresult", serialize($reverseGeocode) );
               }
             }
             $document->addField($field_info['field'], $latlon );
@@ -260,13 +260,6 @@ function profile2_liveitchina_apachesolr_index_document_build_profile2(ApacheSol
         'field'=>'sm_lang_wanted',
         'index'=>'name',
       ),
-      /*'im_field_user_partner_lang_offer',
-       'is_field_user_partner_offered_ye',
-  'im_field_user_partner_lang_wante',
-  'is_field_user_partner_wanted_yea',
-  'sm_field_user_partner_availabili',
-  'sm_field_user_partner_meeting_lo',
-  */
     ),
   );
   $var_profileuser = variable_get('liveitchina_profile_role', array());
@@ -295,5 +288,9 @@ function profile2_liveitchina_apachesolr_index_document_build_profile2(ApacheSol
       }
     }
   }
-  //print_r($document);exit;
+  /*
+  if ($profile2->uid == 119) {
+    print_r($profile2);exit;
+  }
+  //*/
 }
