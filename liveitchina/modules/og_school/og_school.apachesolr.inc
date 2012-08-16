@@ -107,6 +107,7 @@ function og_school_apachesolr_index_document_build_node(ApacheSolrDocument $docu
     if ($logos = field_get_items('node', $node, 'field_logo')){
       $school_logo = $logos[0];
       $document->addField('zs_image', $school_logo['uri']);
+      $document->addField('is_logo', $logo);
     }
     else {
       $avatar = field_info_field('field_user_avatar');
