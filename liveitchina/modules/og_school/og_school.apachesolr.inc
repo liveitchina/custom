@@ -15,7 +15,7 @@ function og_school_apachesolr_query_alter($query) {
       $query->addParam('fl', 'sm_field_price');
       $query->addParam('fl', 'im_field_city');
       $query->addParam('fl', 'im_field_district');
-      $query->addParam('fl', 'ss_teaches');
+      $query->addParam('fl', 'zs_teaches');
     break;
   }
 }
@@ -29,7 +29,7 @@ function og_school_apachesolr_index_document_build_node(ApacheSolrDocument $docu
     case 'school':
       $document->bs_status = $node->status;
       $teaches = og_school_teaches($node);
-      $document->addField('ss_teaches', $teaches);
+      $document->addField('zs_teaches', $teaches);
       /*
       if ($logos = field_get_items('node', $node, 'field_logo', LANGUAGE_NONE)){
         $school_logo = array_pop($logos);
