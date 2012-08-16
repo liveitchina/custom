@@ -108,6 +108,10 @@ function liveitchina_theme($existing, $type, $theme, $path) {
       'template' => 'liveitchina-review-info',
       'variables' => array('data' => NULL),
     ),
+    'liveitchina_display_teaser'=> array(
+       'template' => 'liveitchina-display-teaser',
+       'variables'=> array('data'=> NULL),
+    ),
   );
 }
 
