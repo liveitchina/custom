@@ -214,14 +214,15 @@ function og_school_preprocess_search_result(&$vars) {
       //if ($fields['entity_id'] == 83 ){print_r($vars); exit;}
       $vars['image_path']= '';
       $vars['image'] = '';
+      /*
       if (!empty($fields['zs_image'])) {
         $file_main = $fields['zs_image'];//file_load($fields['is_logo']);
       }
       else {
         $avatar = field_info_field('field_logo');
-        $file_main = file_load($avatar['settings']['default_image']);
-        $file_main = $file_main->uri;
-      }
+        $f = file_load($avatar['settings']['default_image']);
+        $file_main = $f->uri;
+      }//*/
 
       if (is_object($file_main)){
         $vars['image_path'] = $file_main;

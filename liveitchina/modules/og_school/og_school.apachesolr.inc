@@ -34,20 +34,6 @@ function og_school_apachesolr_index_document_build_node(ApacheSolrDocument $docu
     $idxfields = array();
     $neighbors = array('locality', 'sublocality');
     //*
-    if ($logos = field_get_items('node', $node, 'field_logo')){
-      $school_logo = array_pop($logos);
-      $logo = $school_logo['fid'];
-      $document->addField('zs_image', $school_logo['uri']);
-    }
-    else {
-      $avatar = field_info_field('field_user_avatar');
-      $school_logo = file_load($avatar['settings']['default_image']);
-      $logo = $school_logo->fid;
-      $document->addField('is_logo', $logo);
-    }
-    
-    
-    
 
     $idxfields = array(
       'field_school_name' => array(
@@ -87,7 +73,6 @@ function og_school_apachesolr_index_document_build_node(ApacheSolrDocument $docu
         'field'=>'ss_discount',
       ),
     );//*/
-
     foreach ($idxfields as $field=>$fieldInfo){
       if ($items = field_get_items('node', $node, $field)){
         foreach ($items as $item){
@@ -117,6 +102,18 @@ function og_school_apachesolr_index_document_build_node(ApacheSolrDocument $docu
           }
         }
       }
+    }
+
+    if ($logos = field_get_items('node', $node, 'field_logo')){
+      $school_logo = $logos[0];
+      $document->addField('zs_image', $school_logo['uri']);
+    }
+    else {
+      $avatar = field_info_field('field_user_avatar');
+      $school_logo = file_load($avatar['settings']['default_image']);
+      $logo = $school_logo->fid;
+      $document->addField('zs_image', $school_logo->uri);
+      $document->addField('is_logo', $logo);
     }
   }
 }
