@@ -207,31 +207,6 @@ function og_school_preprocess_search_results(&$vars) {
 function og_school_preprocess_search_result(&$vars) {
   $result = $vars['result'];
   $fields = $vars['result']['fields'];
-  $mapFields = array(
-    'street_address'=>'',
-    'route'=>'',
-    'intersection'=>'',
-    'political'=>'',
-    'country'=>'',
-    'administrative_area_level_1'=>'',
-    'administrative_area_level_2'=>'',
-    'administrative_area_level_3'=>'',
-    'colloquial_area'=>'',
-    'locality'=>'',
-    'sublocality'=>'',
-    'neighborhood'=>'',
-    'premise'=>'',
-    'subpremise'=>'',
-    'postal_code'=>'',
-    'natural_feature'=>'',
-    'airport'=>'',
-    'park'=>'',
-    'point_of_interest'=>'',
-    'post_box'=>'',
-    'street_number'=>'',
-    'floor'=>'',
-    'room'=>'',
-  );
 
   switch ($result['bundle']){
     case 'school':
@@ -298,17 +273,48 @@ function og_school_preprocess_search_result(&$vars) {
        'entity' => $entities[$fields['entity_id']],
       );
       $mapdetail = (isset($fields['zs_mapresult'])) ? unserialize($fields['zs_mapresult']) : '';
-      if ($mapdetail){
-        if (isset($mapdetail['sublocality'])){
-          $vars['city_name'] = $mapdetail['locality'] . ', ' . $mapdetail['sublocality'];
-        }
-        else {
-          $vars['city_name'] = $mapdetail['country'] . ', ' . $mapdetail['locality'];
-        }
-      }
+      $vars['city_name'] = _liveitchina_check_map_address( $mapdetail );
       $vars['actions'] = print_r($mapdetail, true) . _og_school_ds_school_search($field);
     break;
   }
+}
+
+function _liveitchina_check_map_address($mapdetail){
+  $mapFields = array(
+    'street_address'=>'',
+    'route'=>'',
+    'intersection'=>'',
+    'political'=>'',
+    'country'=>'',
+    'administrative_area_level_1'=>'',
+    'administrative_area_level_2'=>'',
+    'administrative_area_level_3'=>'',
+    'colloquial_area'=>'',
+    'locality'=>'',
+    'sublocality'=>'',
+    'neighborhood'=>'',
+    'premise'=>'',
+    'subpremise'=>'',
+    'postal_code'=>'',
+    'natural_feature'=>'',
+    'airport'=>'',
+    'park'=>'',
+    'point_of_interest'=>'',
+    'post_box'=>'',
+    'street_number'=>'',
+    'floor'=>'',
+    'room'=>'',
+  );
+  $ret = '';
+  if ($mapdetail){
+    if (isset($mapdetail['sublocality'])){
+      $ret = $mapdetail['locality'] . ', ' . $mapdetail['sublocality'];
+    }
+   else {
+      $ret = $mapdetail['country'] . ', ' . $mapdetail['locality'];
+    }
+  }
+  return $ret;
 }
 
 function _og_school_get_connect($result){
