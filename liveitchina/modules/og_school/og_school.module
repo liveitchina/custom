@@ -275,7 +275,8 @@ function og_school_preprocess_search_result(&$vars) {
       
       $mapdetail = (isset($fields['zs_mapresult'])) ? unserialize($fields['zs_mapresult']) : '';
       if ($mapdetail){
-        $vars['city_name'] = $mapdetail['locality'];
+        $mapadd = array();
+        $vars['city_name'] = $mapdetail['country'] . ', ' . $mapdetail['locality'];
       }
       $vars['actions'] = print_r($mapdetail, true) . _og_school_ds_school_search($field);
     break;
