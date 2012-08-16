@@ -252,6 +252,7 @@ function _liveitchina_dependent_dropdown_area_callback($form, &$form_state) {
  * Add automatic value for field_map;
  */
 function user_liveitchina_field_attach_presave($entity_type, $entity){
+	 /*
   //check if it's a profile2 and have field_map
   $lang = 'und';
   if ($entity_type == 'profile2' && isset($entity->field_map)){
@@ -268,6 +269,7 @@ function user_liveitchina_field_attach_presave($entity_type, $entity){
       $entity->field_map[$lang_field][0] = $map;
     }
   }
+  //*/
 }
 
 function _user_school_ds_reviewer_author($field){

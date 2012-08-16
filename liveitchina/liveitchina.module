@@ -446,10 +446,17 @@ function liveitchina_entity_info_alter(&$entity_info) {
     'label' => t('Promotions'),
     'custom settings' => TRUE,
   ); 
-  
+  $entity_info['profile2']['view modes']['display'] = array(
+    'label' => t('Custom Display'),
+    'custom settings' => TRUE,
+  );
   $entity_info['node']['view modes']['custom_teaser'] = array(
       'label' => t('Custom Teaser'),
       'custom settings' => TRUE,
+  );
+  $entity_info['node']['view modes']['display'] = array(
+    'label' => t('Custom Display'),
+    'custom settings' => TRUE,
   );
 }
 

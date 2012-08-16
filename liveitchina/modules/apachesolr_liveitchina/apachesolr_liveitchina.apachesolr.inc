@@ -10,7 +10,7 @@ function apachesolr_liveitchina_apachesolr_query_alter($query) {
   if (isset($_GET['loc']) && !empty($_GET['loc'])){
     $location = rawurldecode($_GET['loc']);
 
-    $query->addParam('fq', "ts_mapapi_country:$location");
+    $query->addFilter('ts_mapapi_country', $location);
 
     if ($dist = $query->getFilters('distance')){
       $query->removeFilter('distance');
@@ -49,9 +49,6 @@ function apachesolr_liveitchina_apachesolr_query_alter($query) {
       foreach ($paramFields as $paramField){
         $query->addParam('fl', $paramField);
       }
-      //$query->addParam('qf','bundle_name^4000');
-      //$query->addParam('qf','ts_teaches^10');
-      //$query->addParam('qf','ts_learning^10');
 
       break;
     case 'news-and-happenings':

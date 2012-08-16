@@ -103,11 +103,9 @@ function og_school_form_school_node_form_alter(&$form, &$form_state, $form_id) {
   $form['#attributes']['class'][] = 'lic-form';
   $form['field_logo']['#prefix'] = '<div class="lic-form-sides lic-form-top clearfix lic-form-bottom">';
   $form['field_price']['#suffix'] = '</div>';
-  $form_lang = $form['field_address']['#language'];
-  $form['field_address']['#prefix'] = '<div class="lic-form-sides lic-form-top clearfix lic-form-bottom">';
-  $form['field_address']['#suffix'] = '</div>';
-  $form['field_address'][$form_lang][0]['street_block']['thoroughfare']['#title'] = t('Floor/Building');
-  $form['field_address'][$form_lang][0]['street_block']['premise']['#title'] = t('Street');
+  $form['field_map_api']['#access'] = FALSE;
+  $form['field_location']['#prefix'] = '<div class="lic-form-sides lic-form-top clearfix lic-form-bottom">';
+  $form['field_location']['#suffix'] = '</div>';
   $form['field_additional_info']['#prefix'] = '<div class="lic-form-sides lic-form-top clearfix lic-form-bottom">'.
     '<h2 class="block-title">'. t('Additional Information') . '</h2>';
   $form['field_add_info_text']['#suffix'] = '</div>';
@@ -116,7 +114,7 @@ function og_school_form_school_node_form_alter(&$form, &$form_state, $form_id) {
   //*
   $field_classes = array(
     //'field_logo' => array('grid-15', 'omega'),
-    //'field_address'=> array('lic-form-sides', 'lic-form-bottom'),
+    //'field_location'=> array('lic-form-sides', 'lic-form-bottom'),
   );
   foreach ($field_classes as $field=>$classes){
     foreach ($classes as $class){
@@ -199,6 +197,7 @@ function og_school_preprocess_search_results(&$vars) {
     );
   }
   drupal_add_js(array('lic'=>$school_search), 'setting');
+  drupal_add_css(drupal_get_path('module', 'fivestar') . '/css/fivestar.css');
 }
 
 /**
@@ -237,7 +236,6 @@ function og_school_preprocess_search_result(&$vars) {
       }
 
       // Process rating
-      drupal_add_css(drupal_get_path('module', 'fivestar') . '/css/fivestar.css');
       $fivestar = array(
         'rating' => ($fields['fs_rating'])?$fields['fs_rating']:0,
         'stars' => 5,
@@ -406,8 +404,8 @@ function og_school_teaches($school_profile){
 function _og_school_school_address($field){
   $entity = $field['entity'];
   $display = array();
-  $display[] = field_view_field($field['entity_type'], $entity, 'field_map', 'teaser');
-  $display[] = field_view_field($field['entity_type'], $entity, 'field_address', 'teaser');
+  //$display[] = field_view_field($field['entity_type'], $entity, 'field_map', 'teaser');
+  $display[] = field_view_field($field['entity_type'], $entity, 'field_location', 'teaser');
   return render($display);
 }
 
@@ -574,9 +572,10 @@ function og_school_node_insert($node) {
  * Update the map base on the location
  */
 function og_school_node_presave($node) {
+	 /*
   $lang = $node->language;
   $map_field = 'field_map';
-  $address_field = 'field_address';
+  $address_field = 'field_location';
   $lang_field = (isset($node->{$map_field}[$lang])) ? $lang: 'und';
   if ($address = field_get_items('node', $node, $address_field)){
     if ($address[0]['premise']){
@@ -584,6 +583,7 @@ function og_school_node_presave($node) {
       $node->{$map_field}[$lang_field][0] = $map;
     }
   }
+  //*/
 }
 
 function _og_school_get_city() {

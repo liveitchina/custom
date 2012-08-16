@@ -57,10 +57,12 @@ function og_school_apachesolr_index_document_build_node(ApacheSolrDocument $docu
            'source' => 'label',
            'field' => 'label',
         ),
+      		/*
         'field_map'=> array(
            'source' => 'lat',
            'field' => 'coordinates',
         ),
+        //*/
         'field_lang_offered'=> array(
            'source' => 'tid',
            'field' => 'filter_language',
