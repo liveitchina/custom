@@ -207,6 +207,7 @@ function og_school_preprocess_search_results(&$vars) {
 function og_school_preprocess_search_result(&$vars) {
   $result = $vars['result'];
   $fields = $vars['result']['fields'];
+  $mapdetail = '';
 
   switch ($result['bundle']){
     case 'school':
