@@ -214,7 +214,7 @@ function og_school_preprocess_search_result(&$vars) {
       //if ($fields['entity_id'] == 83 ){print_r($vars); exit;}
       $vars['image_path']= '';
       $vars['image'] = '';
-      /*
+      //*
       if (!empty($fields['zs_image'])) {
         $file_main = $fields['zs_image'];//file_load($fields['is_logo']);
       }
@@ -224,7 +224,7 @@ function og_school_preprocess_search_result(&$vars) {
         $file_main = $f->uri;
       }//*/
 
-      if (is_object($file_main)){
+      if ($file_main){
         $vars['image_path'] = $file_main;
         $vars['image'] = l(
           theme('image_style',
