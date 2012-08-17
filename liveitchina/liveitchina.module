@@ -69,7 +69,7 @@ function liveitchina_field_formatter_view ($entity_type, $entity, $field, $insta
     break;
     case 'geolocation_address':
       foreach ($items as $delta => $item) {
-        $latlon = $item['lat'] . ',' . $item['lon'];
+        $latlon = $item['lat'] . ',' . $item['lng'];
         $geoLocation = liveitchina_reverse_geocode($latlon);
         $element[$delta]['#markup'] = '<p>' . print_r($geoLocation, true) . '</p>';
       }
