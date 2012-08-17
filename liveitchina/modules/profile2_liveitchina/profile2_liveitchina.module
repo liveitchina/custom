@@ -335,6 +335,13 @@ function _profile2_liveitchina_ds_field_user_profile_name($field){
     '</h2>';
 }
 
+function _profile2_liveitchina_ds_field_user_profile_map($field){
+  $entity = $field['entity'];
+  $profile_user = profile2_load_by_user($entity->uid, 'user');
+  $mapValue = field_get_items('profile2', $profile_user, 'field_location');
+  return print_r($mapValue, true) . field_view_field('profile2', $profile_user, 'field_location', 'display');
+}
+
 function _profile2_liveitchina_ds_profile_teaches($field){
   $entity = $field['entity'];
   $profile = profile2_load_by_user($entity->uid, $entity->type);

@@ -75,5 +75,11 @@ function profile2_liveitchina_ds_fields_info($entity_type) {
     'field_type' => DS_FIELD_TYPE_FUNCTION,
     'function' => '_liveitchina_ds_sharethis',
   );
+  $fields['profile2']['profile_user_map'] = array(
+  		'title' => 'Location',
+  		'field_type' => DS_FIELD_TYPE_FUNCTION,
+  		'function' => '_profile2_liveitchina_ds_field_user_profile_map',
+  );
+  
   return $fields;
 }
