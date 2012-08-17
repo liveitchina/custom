@@ -8,6 +8,7 @@ function og_school_apachesolr_query_alter($query) {
     case 'school':
       $query->addFilter('bundle', 'school');
     case 'site':
+      $query->addParam('fl', 'zs_mapresult');
       $query->addParam('fl', 'im_field_lang_offered');
       $query->addParam('fl', 'im_field_lang_others');
       $query->addParam('fl', 'is_logo');

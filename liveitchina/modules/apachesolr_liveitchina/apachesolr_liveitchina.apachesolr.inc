@@ -29,22 +29,12 @@ function apachesolr_liveitchina_apachesolr_query_alter($query) {
   switch (arg(1)){
     case 'site':
       $paramFields = array(
-        'sm_lang_offered',
         'tutor_price',
         'sm_lang_wanted',
         'user_avatar',
-        'fs_rating',
-        'zs_teaches',
         'ts_learning',
-        'im_field_district',
         'sm_vid_language',
         'ts_view_mode',
-        'im_field_lang_offered',
-        'is_logo',
-        'ts_summary',
-        'sm_field_price',
-        'im_field_city',
-        'zs_mapresult',
       );
       foreach ($paramFields as $paramField){
         $query->addParam('fl', $paramField);
