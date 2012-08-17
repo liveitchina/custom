@@ -338,9 +338,9 @@ function _profile2_liveitchina_ds_field_user_profile_name($field){
 function _profile2_liveitchina_ds_field_user_profile_map($field){
   $entity = $field['entity'];
   $profile_user = profile2_load_by_user($entity->uid, 'user');
-  if ($mapValue = field_get_items('profile2', $profile_user, 'field_map_api')){
+  /*if ($mapValue = field_get_items('profile2', $profile_user, 'field_map_api')){
     $mapValue = unserialize($mapValue);
-  }
+  }//*/
   $display = array();
   $display[] = field_view_field('profile2', $profile_user, 'field_location', array(
     'label'=> 'hidden',
