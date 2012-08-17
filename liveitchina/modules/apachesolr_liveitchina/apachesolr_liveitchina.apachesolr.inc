@@ -135,24 +135,3 @@ function apachesolr_liveitchina_apachesolr_query_prepare($query) {
 
   $query->setSolrsort($sort[0],$sort[1]);
 }
-
-/**
- * Implements hook_apachesolr_index_document_build_node().
- */
-function apachesolr_liveitchina_apachesolr_index_document_build_node(ApacheSolrDocument $document, $node, $env_id) {
-  //index language offered
-  switch ($node->type){
-   case 'article':
-   case 'video':
-   case 'person_of_the_week':
-   case 'photo':
-     ob_start();
-     $element = node_view($node, 'custom_teaser');
-     print drupal_render($element);
-     $output = ob_get_contents();
-     ob_end_clean();
-     $document->addField('ts_view_mode', $output);
-     $document->addField('ss_bundle', 'news');
-     break;
-  }
-}
