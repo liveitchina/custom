@@ -348,7 +348,7 @@ function _profile2_liveitchina_ds_field_user_profile_map($field){
     )
   );
   $display[] = field_view_field('profile2', $profile_user, 'field_location', 'display');
-  return print_r($mapValue, true) . render($display);
+  return render($display);
 }
 
 function _profile2_liveitchina_ds_profile_teaches($field){
