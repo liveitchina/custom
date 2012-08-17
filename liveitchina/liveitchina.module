@@ -38,15 +38,118 @@ function liveitchina_field_formatter_info() {
       'label' => t('Geolocation Address'),
       'field types' => array('geolocation_latlng'),
     ),
+    'geolocation_googlemaps_dynamic_text' => array(
+      'label' => t('Dynamic Google Map'),
+      'field types' => array('geolocation_latlng'),
+      'settings' => array(
+        'map_dimensions' => '300x300',
+        'map_zoomlevel' => '7',
+        'map_imageformat' => 'png8',
+        'map_maptype' => 'roadmap',
+        'marker_icon' => '',
+        'map_scrollwheel' => FALSE,
+      ),
+    ),
   );
 }
-/*
-function liveitchina_field_formatter_prepare_view($entity_type, $entities, $field, $instances, $langcode, &$items, $displays) {
-  switch ($displays['type']){
-    case 'taxonomy_term_comma_separated':
-      return taxonomy_field_formatter_prepare_view($entity_type, $entities, $field, $instances, $langcode, $items, $displays);
+
+/**
+ * Implements hook_field_formatter_settings_form().
+ */
+function liveitchina_field_formatter_settings_form($field, $instance, $view_mode, $form, &$form_state) {
+  $display = $instance['display'][$view_mode];
+  $type = $display['type'];
+  $settings = $display['settings'];
+  
+  $element = array();
+  
+  // Implement some configuration options.
+  // http://code.google.com/intl/en/apis/maps/documentation/staticmaps/
+  $element['map_dimensions'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Map dimensions'),
+    '#description' => t('Enter custom map dimensions, default is 300x300.'),
+    '#default_value' => $settings['map_dimensions'],
+  );
+  $element['marker_icon'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Marker icon'),
+    '#description' => t('Set the path to the icon marker you wish to use. Path can be absolute (wicth http://) or relative to the Drupal instalation. If left blank, the default will be used'),
+    '#default_value' => $settings['marker_icon'],
+  );
+  switch ($type) {
+   case 'geolocation_googlemaps_dynamic_text':
+    $element['map_scrollwheel'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Scroll Zoom'),
+    '#description' => t('By default zooming is done with double click and/or using the map controls to avoid interrupting the normal window scroll. It can optionally be enabled here.'),
+    '#default_value' => $settings['map_scrollwheel'],
+    );
     break;
   }
+  
+  $element['map_zoomlevel'] = array(
+    '#type' => 'select',
+    '#title' => t('Zoom level'),
+    '#options' => array(
+      '1' => '1',
+      '2' => '2',
+      '3' => '3',
+      '4' => '4',
+      '5' => '5',
+      '6' => '6',
+      '7' => '7 (default)',
+      '8' => '8',
+      '9' => '9',
+      '10' => '10',
+      '11' => '11',
+      '12' => '12',
+      '13' => '13',
+      '14' => '14',
+      '15' => '15',
+      '16' => '16',
+      '17' => '17',
+      '18' => '18',
+      '19' => '19',
+    ),
+    '#description' => t('Choose a custom zoom level - the higher the number the closer. <em>High zoom warning:</em> Google might not return images for any combination of Map Type and Zoom Level.'),
+    '#default_value' => $settings['map_zoomlevel'],
+  );
+  
+  return $element;
+}
+
+/**
+ * Implements hook_field_formatter_settings_summary().
+ */
+function liveitchina_field_formatter_settings_summary($field, $instance, $view_mode) {
+  $display = $instance['display'][$view_mode];
+  $type = $display['type'];
+  $settings = $display['settings'];
+  
+  $summary = '<strong>Map:</strong> ' . $settings['map_dimensions'];
+  switch ($type) {
+   case 'geolocation_googlemaps_dynamic_text':
+    $summary .= '<br />';
+    $scrl = $settings['map_scrollwheel'] ? t('Yes') : t('No');
+    $summary .= '<strong>Scrollable:</strong> ' . $scrl . '<br />';
+    break;
+  }
+  $summary .= '<strong>Type:</strong> ' . $settings['map_maptype'] . '<br />';
+  $summary .= '<strong>Zoom:</strong> ' . $settings['map_zoomlevel'];
+  if (!empty($settings['marker_icon'])) {
+   $vars = array(
+     'path' => $settings['marker_icon'],
+   );
+   $summary .= '<br /><strong>Icon:</strong> ' . theme('image', $vars);
+  }
+  return $summary;
+
+}
+
+//*
+function liveitchina_field_formatter_prepare_view($entity_type, $entities, $field, $instances, $langcode, &$items, $displays) {
+  return taxonomy_field_formatter_prepare_view($entity_type, $entities, $field, $instances, $langcode, $items, $displays);
 }
 //*/
 /**
@@ -74,15 +177,66 @@ function liveitchina_field_formatter_view ($entity_type, $entity, $field, $insta
         $element[$delta]['#markup'] = '<p>' . $geoLocation['formatted_address'] . '</p>';
       }
     break;
-    case 'geolocation_googlemaps_dynamic':
+    case 'geolocation_googlemaps_dynamic_text':
+      $info = entity_get_info($entity_type);
+      $key = isset($info['entity keys']['name']) ? $info['entity keys']['name'] : $info['entity keys']['id'];
+      $eid = $entity->$key;
+     
       foreach ($items as $delta => $item) {
-        $latlon = $item['lat'] . ',' . $item['lng'];
-        $geoLocation = liveitchina_reverse_geocode($latlon);
-        $address['#markup'] = '<p>' . $geoLocation['formatted_address'] . '</p>';
-        $address['#weight'] = -1;
-        $element[$delta]['address'] = $address;
+     
+       $width = strtok($settings['map_dimensions'], 'x') . "px";
+       $height = strtok('') . "px";
+     
+       $id = 'geolocation-googlemaps-dynamic-' . 'e_' . $eid . 'i_' . $instance['id'] . '-d_' . $delta;
+       $map_element['googlemap'] = array(
+         '#prefix' => '<div id="' . $id . '" class="geolocation-map geolocation-googlemaps-dynamic" ' . ' style="width:' . htmlentities($width) . ';height:' . htmlentities($height) . ';">',
+         '#suffix' => '</div>',
+       );
+     
+       // Attach CSS and JS files via FAPI '#attached'.
+       $map_element['googlemap']['#attached']['css'][] = drupal_get_path('module', 'geolocation_googlemaps') . '/geolocation_googlemaps.css';
+       $map_element['googlemap']['#attached']['js'][] = array(
+         'data' => 'http://maps.google.com/maps/api/js?sensor=false',
+         'type' => 'external',
+       );
+       $map_element['googlemap']['#attached']['js'][] = array(
+         'data' => 'http://www.google.com/jsapi',
+         'type' => 'external',
+       );
+       $map_element['googlemap']['#attached']['js'][] = array(
+         'data' => drupal_get_path('module', 'geolocation_googlemaps') . '/geolocation_googlemaps_dynamic_formatter.js',
+         'type' => 'file',
+         'scope' => 'footer',
+       );
+     
+       // Add each delta to the settings array.
+       $data = array(
+         'formatters' => array(
+           'e_' . $eid . 'i_' . $instance['id'] => array(
+             "settings" => $settings,
+             "deltas" => array(
+               'd_' . $delta => array(
+                 'lat' => $item['lat'],
+                 'lng' => $item['lng'],
+               ),
+             ),
+           ),
+         ),
+       );
+     
+       $map_element['googlemap']['#attached']['js'][] = array(
+         'data' => array('geolocationGooglemaps' => $data),
+         'type' => 'setting',
+       );
+       
+       $latlon = $item['lat'] . ',' . $item['lng'];
+       $geoLocation = liveitchina_reverse_geocode($latlon);
+       $map_element['address']['#markup'] = '<p>' . $geoLocation['formatted_address'] . '</p>';
+       $map_element['address']['#weight'] = -1;
+
+       $element[$delta] = $map_element;
       }
-    break;
+      break;
   }
   return $element;
 }
