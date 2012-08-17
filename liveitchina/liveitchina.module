@@ -147,9 +147,14 @@ function liveitchina_field_formatter_settings_summary($field, $instance, $view_m
 
 }
 
-//*
+/**
+ * Implements hook_field_formatter_prepare_view().
+ *
+ */
 function liveitchina_field_formatter_prepare_view($entity_type, $entities, $field, $instances, $langcode, &$items, $displays) {
-  return taxonomy_field_formatter_prepare_view($entity_type, $entities, $field, $instances, $langcode, $items, $displays);
+  if ($field['type']== 'taxonomy_term_reference'){
+    return taxonomy_field_formatter_prepare_view($entity_type, $entities, $field, $instances, $langcode, $items, $displays);
+  }
 }
 //*/
 /**
