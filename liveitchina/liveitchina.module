@@ -39,7 +39,7 @@ function liveitchina_field_formatter_info() {
       'field types' => array('geolocation_latlng'),
     ),
     'geolocation_googlemaps_dynamic_text' => array(
-      'label' => t('Dynamic Google Map'),
+      'label' => t('Dynamic GMap with Text'),
       'field types' => array('geolocation_latlng'),
       'settings' => array(
         'map_dimensions' => '300x300',
