@@ -7,6 +7,7 @@ function profile2_liveitchina_apachesolr_query_alter($query) {
 
   switch (arg(1)){
     case 'tutor':
+      $query->addFilter('user_role', 6);
       $query->addParam('fl', 'user_avatar');
       $query->addParam('fl', 'fs_rating');
       $query->addParam('fl', 'im_field_city');
@@ -14,10 +15,10 @@ function profile2_liveitchina_apachesolr_query_alter($query) {
       $query->addParam('fl', 'ts_summary');
       $query->addParam('fl', 'sm_lang_offered');
       $query->addParam('fl', 'tutor_price');
-      $query->addFilter('user_role', 6);
       $query->addParam('fl', 'zs_teaches');
       break;
     case 'exchange-partner':
+      $query->addFilter('user_role', 4);
       $query->addParam('fl', 'user_avatar');
       $query->addParam('fl', 'fs_rating');
       $query->addParam('fl', 'im_field_city');
@@ -28,7 +29,6 @@ function profile2_liveitchina_apachesolr_query_alter($query) {
       $query->addFilter('bundle', 'exchange_partner');
       $query->addParam('fl', 'ts_learning');
       $query->addParam('fl', 'zs_teaches');
-      $query->addFilter('user_role', 4);
       break;
   }
 }
