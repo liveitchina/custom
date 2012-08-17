@@ -163,6 +163,8 @@ function liveitchina_field_formatter_prepare_view($entity_type, $entities, $fiel
 function liveitchina_field_formatter_view ($entity_type, $entity, $field, $instance, $langcode, $items, $display) {
   $element = array();
   $language = i18n_language_interface();
+  $settings = $display['settings'];
+  $element = array();
 
   switch ($display['type']) {
     case 'taxonomy_term_comma_separated':
