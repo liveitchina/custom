@@ -31,7 +31,6 @@ function apachesolr_liveitchina_apachesolr_query_alter($query) {
       $paramFields = array(
         'sm_lang_offered',
         'tutor_price',
-        'sm_lang_offered',
         'sm_lang_wanted',
         'user_avatar',
         'fs_rating',

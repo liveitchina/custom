@@ -206,12 +206,17 @@ function og_school_preprocess_search_results(&$vars) {
  */
 function og_school_preprocess_search_result(&$vars) {
   $result = $vars['result'];
-  $fields = $vars['result']['fields'];
   $mapdetail = '';
 
   switch ($result['bundle']){
     case 'school':
-      //if ($fields['entity_id'] == 83 ){print_r($vars); exit;}
+      $fieldDefaults = array(
+        'im_field_lang_offered'=> array(),
+        'sm_field_price'=> array(0),
+        'im_field_lang_others' => array(),
+        'ss_discount'=>'',
+      );
+      $fields = $fieldDefaults + $vars['result']['fields'];
       $vars['image_path']= '';
       $vars['image'] = '';
       //*
@@ -249,22 +254,18 @@ function og_school_preprocess_search_result(&$vars) {
       );
       $vars['city_name'] = $vars['city'] = $vars['district_name'] = $vars['district'] = '';
       $vars['rating'] = theme('fivestar_static', $fivestar);
-      if (!isset($fields['im_field_lang_offered'])){
-        $fields['im_field_lang_offered'] = (array)0;
-      }
       $vars['teaches'] = facetapi_map_taxonomy_terms($fields['im_field_lang_offered']);
       $vars['teaches_list'] = implode(', ', $vars['teaches']);
-      if (!isset($fields['sm_field_price'])){
-        $fields['sm_field_price'] = (array)0;
-      }
+      $vars['teaches_others'] = facetapi_map_taxonomy_terms($fields['im_field_lang_others']);
+      $vars['teaches_others_list'] = implode(', ', $vars['teaches_others']);
       $vars['cost'] = apachesolr_liveitchina_facetapi_cost_bundle($fields['sm_field_price']);
       $vars['cost_value'] = $vars['cost'][$fields['sm_field_price'][0]];
-      //*
+
       if (isset($fields['im_field_city'])){
         $vars['city'] = facetapi_map_taxonomy_terms($fields['im_field_city']);
         $vars['city_name'] = '<strong>old</strong> '. implode(', ', $vars['city']);
       }
-      //*/
+
       if (isset($fields['im_field_district'])){
         $vars['district'] = facetapi_map_taxonomy_terms($fields['im_field_district']);
         $vars['district_name'] = implode(', ', $vars['district']);
@@ -275,12 +276,14 @@ function og_school_preprocess_search_result(&$vars) {
        'entity_type' => $fields['entity_type'],
        'entity' => $entities[$fields['entity_id']],
       );
+
       if (isset($fields['zs_mapresult'])) {
         $mapdetail = unserialize($fields['zs_mapresult']);
         $vars['city_name'] = _liveitchina_check_map_address( $mapdetail );
       }
 
-      $vars['actions'] = print_r($mapdetail, true) . _og_school_ds_school_search($field);
+      $vars['actions'] = _og_school_ds_school_search($field);
+      //print_r($fields);
     break;
   }
 }

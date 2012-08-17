@@ -72,6 +72,10 @@ function og_school_apachesolr_index_document_build_node(ApacheSolrDocument $docu
         'source'=>'value',
         'field'=>'ss_discount',
       ),
+      'field_lang_offered' => array(
+        'field'=>'sm_lang_offered',
+        'source'=>'name',
+      ),
     );//*/
     foreach ($idxfields as $field=>$fieldInfo){
       if ($items = field_get_items('node', $node, $field)){
@@ -96,6 +100,11 @@ function og_school_apachesolr_index_document_build_node(ApacheSolrDocument $docu
               break;
             case 'label':
               $document->label = $item['value'];
+              break;
+            case 'name':
+              $term = taxonomy_term_load($item['tid']);
+              $document->addField($fieldInfo['field'], $term->name);
+              //print_r($item);exit;
               break;
             default:
               $document->addField($fieldInfo['field'], $item[$fieldInfo['source']]);
