@@ -34,6 +34,10 @@ function liveitchina_field_formatter_info() {
       'label' => t('Comma Separated Field'),
       'field types' => array('taxonomy_term_reference'),
     ),
+    'geolocation_address' => array(
+      'label' => t('Geolocation Address'),
+      'field types' => array('geolocation_latlng'),
+    ),
   );
 }
 
@@ -58,6 +62,11 @@ function liveitchina_field_formatter_view ($entity_type, $entity, $field, $insta
       $element[] = array(
         '#markup' => implode(', ', $terms),
       );
+    break;
+    case 'geolocation_address':
+      foreach ($items as $delta => $item) {
+        $element[$delta]['#markup'] = '<p>' . print_r($item, true) . '</p>';
+      }
     break;
   }
   return $element;

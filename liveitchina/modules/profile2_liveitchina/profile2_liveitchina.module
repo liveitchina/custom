@@ -344,7 +344,7 @@ function _profile2_liveitchina_ds_field_user_profile_map($field){
   $display = array();
   $display[] = field_view_field('profile2', $profile_user, 'field_location', array(
     'label'=> 'hidden',
-    'type'=>'geolocation_text',
+    'type'=>'geolocation_address',
     )
   );
   $display[] = field_view_field('profile2', $profile_user, 'field_location', 'display');
