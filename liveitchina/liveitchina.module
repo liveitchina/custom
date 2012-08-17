@@ -42,7 +42,11 @@ function liveitchina_field_formatter_info() {
 }
 
 function liveitchina_field_formatter_prepare_view($entity_type, $entities, $field, $instances, $langcode, &$items, $displays) {
-  return taxonomy_field_formatter_prepare_view($entity_type, $entities, $field, $instances, $langcode, $items, $displays);
+  switch ($displays['type']){
+    case 'taxonomy_term_comma_separated':
+      return taxonomy_field_formatter_prepare_view($entity_type, $entities, $field, $instances, $langcode, $items, $displays);
+    break;
+  }
 }
 
 /**
