@@ -18,8 +18,9 @@ function og_school_apachesolr_query_alter($query) {
       $query->addParam('fl', 'im_field_district');
       $query->addParam('fl', 'zs_teaches');
       $query->addParam('fl', 'zs_image');
+      $query->addParam('fl', 'sm_lang_offered');
+      $query->addParam('fl', 'sm_lang_others');
       $query->addParam('fl', 'ss_discount');
-      
     break;
   }
 }
@@ -76,6 +77,10 @@ function og_school_apachesolr_index_document_build_node(ApacheSolrDocument $docu
         'field'=>'sm_lang_offered',
         'source'=>'name',
       ),
+      'field_lang_others' => array(
+        'field'=>'sm_lang_others',
+        'source'=>'name',
+    		),
     );//*/
     foreach ($idxfields as $field=>$fieldInfo){
       if ($items = field_get_items('node', $node, $field)){
