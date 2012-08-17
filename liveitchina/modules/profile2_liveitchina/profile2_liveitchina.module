@@ -341,7 +341,13 @@ function _profile2_liveitchina_ds_field_user_profile_map($field){
   if ($mapValue = field_get_items('profile2', $profile_user, 'field_map_api')){
     $mapValue = unserialize($mapValue);
   }
-  $display = field_view_field('profile2', $profile_user, 'field_location', 'display');
+  $display = array();
+  $display[] = field_view_field('profile2', $profile_user, 'field_location', array(
+    'label'=> 'hidden',
+    'type'=>'geolocation_text',
+    )
+  );
+  $display[] = field_view_field('profile2', $profile_user, 'field_location', 'display');
   return print_r($mapValue, true) . render($display);
 }
 
