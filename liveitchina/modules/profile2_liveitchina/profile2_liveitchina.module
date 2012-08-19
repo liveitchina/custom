@@ -399,9 +399,9 @@ function _profile2_liveitchina_ds_user_links($field){
   );
   $links[] = array(
     'data' => l(t('Send Message'), 'messages/new', array('query'=>array('user'=>$profile->uid),
-    //'attributes' => array('class' => array('profile-color'))
+    'attributes' => array('class' => array('profile-color'))
     )),// $inline_link, array('fragment'=>'#')),
-    'class' => 'profile-color'
+    //'class' => 'profile-color'
   );
   $data = theme('item_list',
     array('items' => $links,
