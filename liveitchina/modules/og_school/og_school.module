@@ -501,9 +501,13 @@ function _og_school_ds_school_links($field){
   $entity_id = $field['entity']->nid;
   $links[] = array(
     'data' => flag_create_link('bookmarks', $entity_id),//l(t('Add to List'), $_GET["q"], array('fragment'=>'#')),
+    'class' => 'profile-color'
   );
   $links[] = array(
-    'data' => l(t('Send Message'), 'messages/new', array('query'=>array('user'=>$field['entity']->uid))),//$_GET["q"], array('fragment'=>'#')),
+    'data' => l(t('Send Message'), 'messages/new', array('query'=>array('user'=>$field['entity']->uid),
+    //'attributes' => array('class' => array('profile-color'))
+    )),//$_GET["q"], array('fragment'=>'#')),
+    'class' => 'profile-color'
   );
   $data = theme('item_list',
     array('items' => $links,
