@@ -505,7 +505,7 @@ function _og_school_ds_school_links($field){
   );
   $links[] = array(
     'data' => l(t('Send Message'), 'messages/new', array('query'=>array('user'=>$field['entity']->uid),
-    'attributes' => array('class' => array('profile-color'))
+    'attributes' => array('id' => array('profile-color-a'))
     )),//$_GET["q"], array('fragment'=>'#')),
     //'class' => 'profile-color'
   );
