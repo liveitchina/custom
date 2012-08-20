@@ -46,7 +46,7 @@ function _apachesolr_liveitchina_get_connect($result){
   $connect_label = liveitchina_get_connect_label($relationship);
 
   if ($rel){
-    $connect_url = url('user/' . $requestee . '/connectivity/'. $relationship, array('absolute'=> TRUE));
+    $connect_url = url('user/' . 'connectivity/' . $requestee . '/' . $relationship, array('absolute'=> TRUE));
     //$links[] = ctools_modal_text_button(t('Disconnect'), $connect_url, t('Disconnect'), 'ctools-modal-modal-popup-medium');
     $links[] = l(t('My '. $var[$result['bundle']]['name']),
                    $connect_url,

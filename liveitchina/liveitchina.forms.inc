@@ -3,7 +3,42 @@
  * Page callback for the two user
  */
 function liveitchina_user_connectivity_form($form, &$form_state, $requestee, $relationship){
-  $form['user']['#markup'] = 'Hi there';
+  //$form['user']['#markup'] = 'Here you will find the greatest tools for mutual learning with your Tutor / Exchange Partner. Keep Tuned!';
+  //print_r($form_state);
+  $recipients = array($requestee);
+  $subject = 'testing subject';
+  //print_r($recipients);
+  $private_msg = drupal_get_form('privatemsg_new',$recipients,$subject,null);
+  /*
+  $form = array('form_title' => array('#markup' => '<div class = "block-title-highlight"><div> <h7>Here you will find the greatest tools for mutual learning with your Tutor / Exchange Partner.</h7></div><div><h7> Stay Tuned!</h7></div></div>'),
+                        'field_subject' => array('#type' => 'textfield',
+                                                 '#title' => t('Subject'),
+                                                 '#weightl' => '100',
+                                                 '#required' => FALSE,
+                                                ),
+                        'field_conversation' => array('#type' => 'text_format',
+                                                 '#format'      => 'plain_text',
+                                                 '#rows'        => '6',
+                                                 '#resizable'   => '0',
+                                                 '#weight' => '200',
+                                                 '#required' => FALSE,
+                                                ),
+                        );
+  $form['submit'] = array( '#type' => 'submit' ,
+                           '#value' => 'Submit',
+                           '#prefix' => '<div class="grid-3 alpha omega">',
+                           '#suffix' => '</div>',
+                           '#weight' => '1100',
+  );
+  
+  $form['availability'] = array( '#type' => 'submit' ,
+                             '#value' => t('See Availability'),
+                             '#prefix' => '<div class="grid-3 alpha omega">',
+                             '#suffix' => '</div>',
+                             '#weight' => '1000',
+  );
+  //*/
+  //print_r($form);
   return $form;
 }
 

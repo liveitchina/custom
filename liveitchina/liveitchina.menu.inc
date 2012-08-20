@@ -37,16 +37,39 @@ function liveitchina_menu() {
     'page callback' => 'liveitchina_user_relationships_ui_remove_ajax',
     'page arguments' => array(1, 3),
   );
-  $items['user/connectivity/%user/%user_relationships'] = array(
-    'title' => 'My Relationship',
+  $items['user/connectivity/%user/%'] = array(
+    'title' => 'My Tutor / Exchange Partner',//'My Relationship',
     //'title callback' => 'liveitchina_relationship_name',
     //'title arguments' => array('user_relationships'),
-    'type' => MENU_CALLBACK,
-    'access callback' => TRUE,
     //'access arguments' => array('delete', 1),
+    'type' => MENU_CALLBACK,
+    'access callback' => user_is_logged_in,//TRUE,
     'page callback' => 'drupal_get_form',
     'page arguments' => array('liveitchina_user_connectivity_form', 2, 3),
   );
+  //*
+  $items['connect/%user/request/%/%ctools_js'] = array(
+      'title' => 'Connect',
+      'page callback' => 'liveitchina_user_relationships_ui_request_ajax',
+      'page arguments' => array(1, 3),
+      'access callback' => TRUE,//'user_relationships_ui_check_access',
+  //'access arguments' => array('request'),
+      'type' => MENU_CALLBACK,
+  );
+  /*
+  //My Tutor or Exchange Partner
+  $items['user/%user/connectivity/%user_relationships'] = array(
+      'title' => 'My Tutor / Exchange Partner',
+  //'title callback' => 'liveitchina_relationship_name',
+  //'title arguments' => array('user_relationships'),
+      'type' => MENU_CALLBACK,
+      'access callback' => TRUE,
+  //'access arguments' => array('delete', 1),
+      //'file' => 'liveitchina.pages.inc',
+      'page callback' => 'liveitchina_already_connected_form',
+      'page arguments' => array(1, 3),
+  );
+  //*/
   /*/ Registration and login pages.
   $items['user/%user/bookmarks'] = array(
     'title' => 'User account',

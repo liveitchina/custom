@@ -12,7 +12,6 @@ function profile2_liveitchina_menu() {
     'type' => MENU_NORMAL_ITEM,
     'page arguments' => array(1),
   );
-
   $promotions = array('exchange_partner', 'tutor');
   foreach ($promotions as $promo){
     $items['promote/'.$promo] = array(
@@ -26,7 +25,6 @@ function profile2_liveitchina_menu() {
       'page arguments' => array(1),
     );
   }
-
   return $items;
 }
 
