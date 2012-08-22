@@ -436,7 +436,8 @@ function _user_liveitchina_rating_tutor($field){
                   'settings' => array('text'=>'none',
                                       'expose' => 0,
                                       'widget' => array('fivestar_widget'=> drupal_get_path('module','liveitchina') . '/widget/star/star.css')));
-  return render(field_view_field('profile2', $profile_user, 'field_rating',$format));
+  $fieldDisplay = field_view_field('profile2', $profile_user, 'field_rating', $format); 
+  return render($fieldDisplay);
 }
 
 function _user_liveitchina_rating_exchange_partner($field){
