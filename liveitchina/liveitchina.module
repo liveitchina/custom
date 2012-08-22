@@ -235,10 +235,11 @@ function liveitchina_field_formatter_view ($entity_type, $entity, $field, $insta
          'data' => array('geolocationGooglemaps' => $data),
          'type' => 'setting',
        );
-       
+
        $latlon = $item['lat'] . ',' . $item['lng'];
        $geoLocation = liveitchina_reverse_geocode($latlon);
-       $map_element['address']['#markup'] = '<p>' . $geoLocation['formatted_address'] . '</p>';
+       $formattedAddress = (isset($geoLocation['formatted_address']))? $geoLocation['formatted_address'] : '';
+       $map_element['address']['#markup'] = '<p>' . $formattedAddress . '</p>';
        $map_element['address']['#weight'] = -1;
 
        $element[$delta] = $map_element;
