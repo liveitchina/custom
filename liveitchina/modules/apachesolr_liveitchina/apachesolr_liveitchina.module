@@ -288,7 +288,8 @@ class LiveitChinaFacetapiSelect extends FacetapiWidget {
    */
   public function execute() {
     $element = &$this->build[$this->facet['field alias']];
-    $name = array_pop(explode(':', $this->build['#settings']->name));
+    $arrSettings = explode(':', $this->build['#settings']->name);
+    $name = array_pop($arrSettings);
     $element = drupal_get_form('facetapi_select_' .  $name, $element);
   }
 }
