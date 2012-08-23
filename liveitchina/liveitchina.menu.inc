@@ -43,7 +43,7 @@ function liveitchina_menu() {
     //'title arguments' => array('user_relationships'),
     //'access arguments' => array('delete', 1),
     'type' => MENU_CALLBACK,
-    'access callback' => user_is_logged_in,//TRUE,
+    'access callback' => 'user_is_logged_in',//TRUE,
     'page callback' => 'drupal_get_form',
     'page arguments' => array('liveitchina_user_connectivity_form', 2, 3),
   );
