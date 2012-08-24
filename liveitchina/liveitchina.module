@@ -281,6 +281,10 @@ function liveitchina_block_info() {
     'info' => t('Current search information'),
     'cache' => DRUPAL_NO_CACHE,
   );
+  $block['filter_location'] = array(
+    'info' => t('Filter Location'),
+    'cache' => DRUPAL_CACHE_PER_PAGE,
+  );
 
   return $blocks;
 }
@@ -359,6 +363,28 @@ function liveitchina_block_view($delta = '') {
           $block['content'] .= ' ' . t('in') . ' <strong>'. $_GET['loc'] . '</strong>';
         }
       }
+      break;
+    case 'filter_location':
+      $options = array(
+        'Hong Kong',
+        'Shenzhen',
+        'Macau',
+        'Zhuhai',
+        'Guangzhou',
+      );
+
+      $links = array();
+      foreach ($options as $opt){
+        $build[$opt] = t($opt);
+        $links[] = l($opt, $_GET['q'], array('query'=> array('loc'=>$opt)));
+      }
+
+      $data = theme('item_list',
+        array('items' => $links,
+          'attributes' => array('class' => array('filter-location'))
+        )
+      );
+      $block['content'] = $data;
       break;
   }
 
