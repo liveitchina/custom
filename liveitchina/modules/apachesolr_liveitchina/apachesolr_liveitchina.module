@@ -93,6 +93,14 @@ function apachesolr_liveitchina_facetapi_facet_info(array $searcher_info) {
     'alter callbacks' => array('facetapi_map_liveitchina_distance'),
     'default widget' => 'facetapi_checkbox_links',
   );
+  $facets['map_location'] = array(
+    'label' => t('Map Location'),
+    'description' => t('Filter by Location (Hardcoded)'),
+    'field alias' => 'distance',
+    'field api name' => FALSE,
+    'alter callbacks' => array('facetapi_map_liveitchina_location'),
+    'default widget' => 'facetapi_checkbox_links',
+  );
   $facets['location'] = array(
     'label' => t('Location'),
     'description' => t('Filter by Location.'),
@@ -144,6 +152,23 @@ function facetapi_map_liveitchina_distance(&$build, $adapter, $facet){
     $build[$ind] = array(
      '#markup'=> $opt,
      '#count'=> NULL,
+    );
+  }
+}
+
+function facetapi_map_liveitchina_location(&$build, $adapter, $facet){
+  $options = array(
+    'Hong Kong',
+    'Shenzhen',
+    'Macau',
+    'Zhuhai',
+    'Guangzhou',
+  );
+
+  foreach ($options as $opt){
+    $build[$opt] = array(
+      '#markup'=> t($opt),
+      '#count'=> NULL,
     );
   }
 }
