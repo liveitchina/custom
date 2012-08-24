@@ -281,7 +281,7 @@ function liveitchina_block_info() {
     'info' => t('Current search information'),
     'cache' => DRUPAL_NO_CACHE,
   );
-  $block['filter_location'] = array(
+  $blocks['filter_location'] = array(
     'info' => t('Filter Location'),
     'cache' => DRUPAL_CACHE_PER_PAGE,
   );
