@@ -29,7 +29,7 @@ function liveitchina_form_search_block_form_alter(&$form, &$form_state, $form_id
     $q = $query->getParam('q');
     $default_search = $q;
   }
-  
+  $form['#prefix'] = '<div class="lic-slogan-logo"></div>';
   $form['search_block_form']['#prefix'] = '<div class="grid-8 omega">';
   $form['search_block_form']['#suffix'] = '</div>';
   $form['search_block_form']['#default_value'] = $default_search;
