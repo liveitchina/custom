@@ -384,6 +384,7 @@ function liveitchina_block_view($delta = '') {
           'attributes' => array('class' => array('filter-location'))
         )
       );
+      $block['subject'] = t('Location');
       $block['content'] = $data;
       break;
   }
