@@ -32,17 +32,6 @@ function og_school_views_api() {
 
 //*
 function og_school_form_school_node_form_alter(&$form, &$form_state, $form_id) {
-  $options_city = _liveitchina_select_city_dropdown_options();
-  $cities = _og_school_get_city();
-  drupal_add_js(array('lic_city'=> $cities), 'setting');
-
-  $area_options = _og_school_district_dropdown_options($city_selected, 'area');
-  $area_selected = '';
-
-  if ($area_selected == ''){
-    $mode = next($area_options);
-    $area_selected = key($area_options);
-  }
 
   $form['#attached']['js'] = array(
     drupal_get_path('module','og_school') . '/js/others_hide.js'=> array(
@@ -99,7 +88,6 @@ function og_school_form_school_node_form_alter(&$form, &$form_state, $form_id) {
   foreach ($hide_elements as $element){
     $form[$element]['#access'] = FALSE;
   }
-  //print_r($form); exit;
 }
 //*
 
@@ -163,6 +151,12 @@ function og_school_preprocess_search_result(&$vars) {
 
   switch ($result['bundle']){
     case 'school':
+      $vars += array(
+        'city_name'=>'',
+        'city' => '',
+        'district_name' => '',
+        'district' => ''
+      );
       $fieldDefaults = array(
         'im_field_lang_offered'=> array(),
         'sm_field_price'=> array(0),
@@ -214,7 +208,6 @@ function og_school_preprocess_search_result(&$vars) {
           'css' => drupal_get_path('module', 'liveitchina') . '/widget/star/star.css',
         )
       );
-      $vars['city_name'] = $vars['city'] = $vars['district_name'] = $vars['district'] = '';
       $vars['rating'] = theme('fivestar_static', $fivestar);
       //$vars['teaches'] = facetapi_map_taxonomy_terms($fields['im_field_lang_offered']);
       if (!is_array($fields['sm_lang_offered'])){
@@ -421,17 +414,6 @@ function _og_school_ds_school_links($field){
   return $data;
 }
 
-function _liveitchina_select_city_dropdown_options() {
-  $options = array();
-  $v = taxonomy_vocabulary_machine_name_load('liveitchina_city');
-  $terms = taxonomy_get_tree($v->vid, 0 , 1);
-  foreach ($terms as $term) {
-    $options[$term->tid] = $term->name;
-  }
-
-  return $options;
-}
-
 function _og_school_school_administrator($field){
   $entity = $field['entity'];
   $user_admin = user_load($entity->uid);
@@ -549,18 +531,6 @@ function og_school_node_presave($node) {
       $node->field_map_api['und'][0]['value'] = serialize($reverseGeocode);
     }
   }
-}
-
-function _og_school_get_city() {
-  $city_terms = $options = array();
-
-  $v = taxonomy_vocabulary_machine_name_load('liveitchina_city');
-  $terms = taxonomy_get_tree($v->vid);
-  foreach ($terms as $term) {
-    $parent = $term->parents[0];
-    $city_terms[$parent][$term->tid]['name'] = $term->name;
-  }
-  return $city_terms;
 }
 
 function _og_school_school_title_feat($field){
