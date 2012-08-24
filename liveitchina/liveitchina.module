@@ -915,9 +915,6 @@ function liveitchina_block_view_facetapi_3IHTw7DdTZX1DkaTSxdUQpWnwQJGuBIx_alter(
 function liveitchina_block_view_facetapi_GiIy4zr9Gu0ZSa0bumw1Y9qIIpIDf1wu_alter(&$data, $block) {
   $data['subject'] = t('Method'). ':';
 }
-function liveitchina_block_view_facetapi_8NiHeeHn1euMEuNXgw3WAb6Qh3uBSQe4_alter(&$data, $block) {
-  $data['subject'] = t('Select Location'). ':';
-}
 
 function _liveitchina_get_map($address){
   $point = geocoder('google',$address);
