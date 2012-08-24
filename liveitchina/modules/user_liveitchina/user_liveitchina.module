@@ -159,27 +159,10 @@ function user_liveitchina_form_profile2_edit_user_form_alter(&$form, &$form_stat
   $area_options = _user_liveitchina_district_dropdown_options($city_selected, 'area');
   $area_selected = '';
 
-  if (isset($form_state['values']['profile_user']['field_area']['und'][0]['tid'])) {
-    $area_selected = $form_state['values']['profile_user']['field_area']['und'][0]['tid'];
-  }
-  elseif(isset($form['profile_user']['field_area']['und']['#default_value'][0])) {
-    $area_selected = $form['profile_user']['field_area']['und']['#default_value'][0];
-  }
-
   if ($area_selected == ''){
     $mode = next($area_options);
     $area_selected = key($area_options);
   }
-
-  $form['profile_user']['field_area']['#access'] = FALSE;
-  $form['profile_user']['field_area']['#prefix'] = '<div id="dropdown-select-area-replace">';
-  $form['profile_user']['field_area']['#suffix'] = '</div>';
-  $form['profile_user']['field_area']['#attributes']['class'][] = 'enabled-for-ajax';
-  $form['profile_user']['field_area']['und']['#options'] = $area_options;
-  $form['profile_user']['field_area']['und']['#ajax'] = array(
-      'callback' => '_liveitchina_dependent_dropdown_area_callback',
-      'wrapper' => 'dropdown-select-district-replace',
-  );
 
   $form['profile_user']['field_district']['#access'] = FALSE;
   $form['profile_user']['field_district']['#prefix'] = '<div id="dropdown-select-district-replace">';
@@ -223,9 +206,6 @@ function liveitchina_dependent_dropdown_city_callback($form, &$form_state) {
   return $form[$profile_type]['field_district']['und'];
 }
 */
-function _liveitchina_dependent_dropdown_city_callback($form, &$form_state) {
-  return $form['profile_user']['field_area'];
-}
 
 function _liveitchina_dependent_dropdown_area_callback($form, &$form_state) {
   return $form['profile_user']['field_district'];

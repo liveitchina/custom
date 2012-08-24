@@ -39,26 +39,10 @@ function og_school_form_school_node_form_alter(&$form, &$form_state, $form_id) {
   $area_options = _og_school_district_dropdown_options($city_selected, 'area');
   $area_selected = '';
 
-  if (isset($form_state['values']['field_area']['und'][0]['tid'])) {
-    $area_selected = $form_state['values']['field_area']['und'][0]['tid'];
-  }
-  elseif(isset($form['field_area']['und']['#default_value'][0])) {
-    $area_selected = $form['field_area']['und']['#default_value'][0];
-  }
-
   if ($area_selected == ''){
     $mode = next($area_options);
     $area_selected = key($area_options);
   }
-
-  $form['field_area']['#prefix'] = '<div id="dropdown-select-area-replace">';
-  $form['field_area']['#suffix'] = '</div>';
-  $form['field_area']['#attributes']['class'][] = 'enabled-for-ajax';
-  $form['field_area']['und']['#options'] = $area_options;
-  $form['field_area']['und']['#ajax'] = array(
-      'callback' => '_og_school_dependent_dropdown_area_callback',
-      'wrapper' => 'dropdown-select-district-replace',
-  );
 
   $form['field_district']['#prefix'] = '<div id="dropdown-select-district-replace">';
   $form['field_district']['#suffix'] = '</div>';
@@ -134,10 +118,6 @@ function _og_school_district_dropdown_options($key = '', $text = 'city') {
     }
     return $options;
   }
-}
-
-function _og_school_dependent_dropdown_city_callback($form, &$form_state) {
-  return $form['field_area'];
 }
 
 function _og_school_dependent_dropdown_area_callback($form, &$form_state) {

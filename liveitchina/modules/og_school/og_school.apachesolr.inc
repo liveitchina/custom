@@ -66,10 +66,6 @@ function og_school_apachesolr_index_document_build_node(ApacheSolrDocument $docu
           'source' => 'tid',
           'field' => 'im_field_lang_others',
         ),
-        'field_area'=> array(
-          'source' => 'tid',
-          'field' => 'filter_area',
-        ),
         'field_rating'=> array(
           'source' => 'average',
           'field' => 'fs_rating',
