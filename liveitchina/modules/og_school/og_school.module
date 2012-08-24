@@ -210,7 +210,7 @@ function og_school_preprocess_search_result(&$vars) {
       );
       $vars['rating'] = theme('fivestar_static', $fivestar);
       //$vars['teaches'] = facetapi_map_taxonomy_terms($fields['im_field_lang_offered']);
-      if (!is_array($fields['sm_lang_offered'])){
+      if (is_array($fields['sm_lang_offered'])){
         $vars['teaches_list'] = implode(', ', $fields['sm_lang_offered']);
       }
       if (isset($fields['sm_lang_others'])){
