@@ -99,17 +99,7 @@ function og_school_apachesolr_index_document_build_node(ApacheSolrDocument $docu
                 $document->addField($fieldInfo['field'], $latlon );
                 break;
               case 'map':
-                $reverseGeocode = unserialize( $item['value'] );
-                if (is_array($reverseGeocode)){
-                  foreach ($reverseGeocode as $geoInd=>$geoValue) {
-                    $document->addField("ts_mapapi_{$geoInd}", $geoValue );
-                    $document->addField("ss_mapapi_{$geoInd}", $geoValue );
-                    if (in_array($geoInd, $neighbors)){
-                      $document->addField('sm_filter_neighborhood', $geoValue );
-                    }
-                  }
-                }
-                $document->addField($fieldInfo['field'], $item['value']);
+                _apachesolr_liveitchina_index_map($item['value'], $document);
                 break;
               case 'label':
                 $document->label = $item['value'];

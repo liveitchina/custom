@@ -515,6 +515,14 @@ function profile2_liveitchina_form_user_relationships_ui_request_alter(&$form, &
  * Implements hook_profile2_presave()
  */
 function profile2_liveitchina_profile2_presave($profile) {
+  if ($address = field_get_items('profile2', $profile, 'field_location')){
+    if (($lat = $address[0]['lat']) && ($lng = $address[0]['lng'])){
+      $latlon = $lat . ','. $lng;
+      $reverseGeocode = liveitchina_reverse_geocode( $latlon );
+      $profile->field_map_api['und'][0]['value'] = serialize($reverseGeocode);
+    }
+  }
+
   if (isset($profile->uid)){
     $user = user_load($profile->uid);
     user_save($user);

@@ -150,6 +150,10 @@ function profile2_liveitchina_apachesolr_index_document_build_profile2(ApacheSol
       'source'=>'lat',
       'field'=>'coordinates',
     ),
+    'field_map_api'=> array(
+      'source'=>'map',
+      'field'=>'zs_mapresult',
+    ),
   );
 
   foreach ($fields as $field=>$field_info){
@@ -165,21 +169,11 @@ function profile2_liveitchina_apachesolr_index_document_build_profile2(ApacheSol
           case 'value':
             $document->addField($field_info['field'], apachesolr_clean_text($value['value']));
             break;
+          case 'map':
+            _apachesolr_liveitchina_index_map($value['value'], $document);
+            break;
           case 'lat':
             $latlon = $value['lat'] . ','. $value['lng'];
-            $reverseGeocode = liveitchina_reverse_geocode( $latlon );
-            if (is_array($reverseGeocode)){
-              foreach ($reverseGeocode as $geoInd=>$geoValue) {
-                $document->addField("ts_mapapi_{$geoInd}", $geoValue );
-                $document->addField("ss_mapapi_{$geoInd}", $geoValue );
-              }
-              if (isset($reverseGeocode['sublocality'])){
-                $document->addField("ss_location", $reverseGeocode['locality'] );
-              }
-              elseif(isset($reverseGeocode['country'])){
-                $document->addField("ss_location", $reverseGeocode['country'] );
-              }
-            }
             $document->addField($field_info['field'], $latlon );
             break;
         }
