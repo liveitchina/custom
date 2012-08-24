@@ -173,10 +173,14 @@ function profile2_liveitchina_apachesolr_index_document_build_profile2(ApacheSol
                 $document->addField("ts_mapapi_{$geoInd}", $geoValue );
                 $document->addField("ss_mapapi_{$geoInd}", $geoValue );
               }
+              if (isset($reverseGeocode['sublocality'])){
+                $document->addField("ss_location", $reverseGeocode['locality'] );
+              }
+              elseif(isset($reverseGeocode['country'])){
+                $document->addField("ss_location", $reverseGeocode['country'] );
+              }
             }
-            //$document->addField("zs_mapresult", serialize($reverseGeocode) );
             $document->addField($field_info['field'], $latlon );
-            //print_r($reverseGeocode);
             break;
         }
       }

@@ -96,9 +96,9 @@ function apachesolr_liveitchina_facetapi_facet_info(array $searcher_info) {
   $facets['location'] = array(
     'label' => t('Location'),
     'description' => t('Filter by Location.'),
-    'field' => 'ts_mapapi_formatted_address',
+    'field' => 'ss_location',
     'field alias' => 'location',
-    'field api name' => 'ts_mapapi_formatted_address',
+    'field api name' => 'ss_location',
     'default widget' => 'facetapi_checkbox_links',
   );
   $facets['neighborhood'] = array(
