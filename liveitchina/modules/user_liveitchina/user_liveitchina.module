@@ -154,31 +154,10 @@ function user_liveitchina_form_user_profile_form_alter_weight($elements) {
 * User Profile Form
 */
 function user_liveitchina_form_profile2_edit_user_form_alter(&$form, &$form_state, $form_id) {
-  
-  $options_city = _liveitchina_city_dropdown_options();
-  $area_options = _user_liveitchina_district_dropdown_options($city_selected, 'area');
-  $area_selected = '';
-
-  if ($area_selected == ''){
-    $mode = next($area_options);
-    $area_selected = key($area_options);
-  }
-
   $form['profile_user']['field_map_api']['#access'] = FALSE;
 }
 
 //*/
-
-function _liveitchina_city_dropdown_options() {
-  $options = array();
-  $v = taxonomy_vocabulary_machine_name_load('liveitchina_city');
-  $terms = taxonomy_get_tree($v->vid, 0 , 1);
-  foreach ($terms as $term) {
-    $options[$term->tid] = $term->name;
-  }
-
-  return $options;
-}
 
 function _user_liveitchina_district_dropdown_options($key = '', $text = 'city') {
 
@@ -339,10 +318,13 @@ function _user_liveitchina_name_title($field){
   $entity = $field['entity'];
   $user_profile = user_load($entity->uid);
   $profile_user = profile2_load_by_user($entity->uid, 'user');
-  $city = '';
-  $city_name = facetapi_map_taxonomy_terms(array($city));
+  $city_name = '';
+  if ($city = field_get_items('profile2', $profile_user, 'field_map_api')){
+    $city_name = print_r($city_name, true);
+  }
+
   return '<h2 class="block-title">'. l($user_profile->realname, 'profile-tutor/' . $user_profile->uid) .
-      '<span class="field-city"> ('.$city_name[$city].')</span>'.
+      '<span class="field-city"> ('.$city_name.')</span>'.
       '</h2>';
 }
 

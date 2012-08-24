@@ -234,51 +234,13 @@ function og_school_preprocess_search_result(&$vars) {
       );
 
       if (isset($fields['zs_mapresult'])) {
-        $mapdetail = unserialize($fields['zs_mapresult']);
+        $mapdetail = $fields['zs_mapresult'];
         $vars['city_name'] = _liveitchina_check_map_address( $mapdetail );
       }
 
       $vars['actions'] = _og_school_ds_school_search($field);
     break;
   }
-}
-
-function _liveitchina_check_map_address($mapdetail){
-  $mapFields = array(
-    'street_address'=>'',
-    'route'=>'',
-    'intersection'=>'',
-    'political'=>'',
-    'country'=>'',
-    'administrative_area_level_1'=>'',
-    'administrative_area_level_2'=>'',
-    'administrative_area_level_3'=>'',
-    'colloquial_area'=>'',
-    'locality'=>'',
-    'sublocality'=>'',
-    'neighborhood'=>'',
-    'premise'=>'',
-    'subpremise'=>'',
-    'postal_code'=>'',
-    'natural_feature'=>'',
-    'airport'=>'',
-    'park'=>'',
-    'point_of_interest'=>'',
-    'post_box'=>'',
-    'street_number'=>'',
-    'floor'=>'',
-    'room'=>'',
-  );
-  $ret = '';
-  if ($mapdetail){
-    if (isset($mapdetail['sublocality'])){
-      $ret = $mapdetail['locality'] . ', ' . $mapdetail['sublocality'];
-    }
-   else {
-      $ret = $mapdetail['country'] . ', ' . $mapdetail['locality'];
-    }
-  }
-  return $ret;
 }
 
 function _og_school_get_connect($result){
@@ -348,19 +310,17 @@ function _og_school_school_information($field){
   $display[] = field_view_field($field['entity_type'], $entity, 'field_add_info_text');
   return render($display);
 }
+
 function _og_school_school_title($field){
-  $city = array();
-  $district = array(); 
+  $city = '';
   $entity = $field['entity'];
   $node = node_load($entity->nid);
-  $city['id'] = '';
-  $district['id'] = '';
-  $city['name'] = facetapi_map_taxonomy_terms(array($city['id']));
-  $city['display'] = isset($city['name'][$city['id']]) ? $city['name'][$city['id']] : '';
-  $district['name'] = facetapi_map_taxonomy_terms(array($district['id']));
-  $district['display'] = isset($district['name'][$district['id']])? $district['name'][$district['id']]: '';
-  return '<h2 class="block-title">'. $node->title .
-    '<span class="field-city"> ('. $city['display'] . ', ' . $district['display'] .')</span>'.
+  if ($mapApi = field_get_items('node', $node, 'field_map_api')){
+    $map = $mapApi[0]['value'];
+    $cityLoc = _liveitchina_check_map_address($map);
+    $city = '<span class="field-city"> ('. $cityLoc .')</span>';
+  }
+  return '<h2 class="block-title">'. $node->title . $city .
     '</h2>';
 }
 
