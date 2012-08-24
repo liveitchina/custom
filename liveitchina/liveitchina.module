@@ -376,7 +376,7 @@ function liveitchina_block_view($delta = '') {
       $links = array();
       foreach ($options as $opt){
         $build[$opt] = t($opt);
-        $links[] = l($opt, $_GET['q'], array('query'=> array('loc'=>$opt)));
+        $links[] = l($opt, $_GET['q'], array('query'=> array('loc'=>urlencode($opt))));
       }
 
       $data = theme('item_list',
