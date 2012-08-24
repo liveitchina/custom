@@ -58,7 +58,7 @@ function profile2_liveitchina_preprocess_search_result(&$variables) {
       $variables['teaches'] = $fields['zs_teaches'];
       $variables['language_offered'] = implode(', ', (array)$fields['sm_lang_offered']);
       if (is_numeric($fields['tutor_price'])){
-        $variables['cost'] = _liveitchina_price_table($fields['im_field_city'][0], $fields['tutor_price']);//$cost[$fields['tutor_price']];
+        $variables['cost'] = _liveitchina_price_table(0, $fields['tutor_price']);
       }
       break;
     case 'exchange_partner':
@@ -75,14 +75,8 @@ function profile2_liveitchina_preprocess_search_result(&$variables) {
 }
 
 function _profile2_liveitchina_result_vars(&$vars, &$result){
-  if ($city = $result['fields']['im_field_city'][0]){
-    $vars['cities'] = facetapi_map_taxonomy_terms(array($city));
-    $vars['city'] = $vars['cities'][$city];
-  }
-  else {
-    $vars['city'] = '';
-  }
-  
+  $vars['city'] = '';
+
   if (!empty($result['fields']['user_avatar'])) {
     $file_main = file_load($result['fields']['user_avatar']);
   }
@@ -326,9 +320,7 @@ function _profile2_liveitchina_ds_field_user_profile_name($field){
   $entity = $field['entity'];
   $user = user_load($entity->uid);
   $profile_user = profile2_load_by_user($entity->uid, 'user');
-  if ($city = _liveitchina_field_get_field('profile2', $profile_user, 'field_city', 'tid')){
-    $city_name = facetapi_map_taxonomy_terms(array($city));
-  } 
+  $city_name = '';
   return '<h2 class="block-title">'.
     l($user->realname, 'profile-'.$entity->type.'/'. $entity->uid) .
     '<span class="field-city"> ('.$city_name[$city].')</span>'.
@@ -463,13 +455,7 @@ function _profile2_liveitchina_ds_user_field($field) {
   switch ($field['title']){
     case 'city':
       $terms = array();
-      if ($field_values = field_get_items('user', $profile, 'field_city')){
-        foreach($field_values as $field_city){
-          $terms[] = $field_city['tid'];
-        }
-        $terms = _profile2_liveitchina_taxonomy_terms($terms);
-        return implode(',', $terms);
-      }
+      return '';
       break;
     default:
       return $field['title'];
@@ -576,7 +562,7 @@ function _profile2_liveitchina_learning($profile){
 function _profile2_liveitchina_ds_profile_cost($field){
   $entity = $field['entity'];
   $profile_user = profile2_load_by_user($entity->uid, 'user');
-  $city = _liveitchina_field_get_field('profile2', $profile_user, 'field_city', 'tid');
+  $city = '';
   $cost_value = _liveitchina_field_get_field('profile2', $entity, 'field_user_tutor_price', 'value');
   $price = _liveitchina_price_table($city, $cost_value);
   return $price;

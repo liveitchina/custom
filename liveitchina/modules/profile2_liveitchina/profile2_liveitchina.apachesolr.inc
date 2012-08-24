@@ -10,7 +10,6 @@ function profile2_liveitchina_apachesolr_query_alter($query) {
       $query->addFilter('user_role', 6);
       $query->addParam('fl', 'user_avatar');
       $query->addParam('fl', 'fs_rating');
-      $query->addParam('fl', 'im_field_city');
       $query->addParam('fl', 'sm_vid_language');
       $query->addParam('fl', 'ts_summary');
       $query->addParam('fl', 'sm_lang_offered');
@@ -21,7 +20,6 @@ function profile2_liveitchina_apachesolr_query_alter($query) {
       $query->addFilter('user_role', 4);
       $query->addParam('fl', 'user_avatar');
       $query->addParam('fl', 'fs_rating');
-      $query->addParam('fl', 'im_field_city');
       $query->addParam('fl', 'sm_vid_language');
       $query->addParam('fl', 'ts_summary');
       $query->addParam('fl', 'sm_lang_offered');
@@ -84,9 +82,6 @@ function profile2_liveitchina_apachesolr_index_document_build_profile2(ApacheSol
   
   //index TERMIDs from user
   $fields = array(
-    'field_city'=> array(
-      'source'=>'tid'
-    ),
     'field_area'=> array(
       'source'=>'tid'
     ),

@@ -15,36 +15,6 @@ function liveitchina_fields_install() {
 function _liveitchina_fields(){
   $fields = array();
 
-  $fields['field_city'] = array(
-      'cardinality' => '1',
-      'entity_types' => array(),
-      'field_name' => 'field_city',
-      'foreign keys' => array(
-          'tid' => array(
-              'columns' => array(
-                  'tid' => 'tid',
-              ),
-              'table' => 'taxonomy_term_data',
-          ),
-      ),
-      'indexes' => array(
-          'tid' => array(
-              0 => 'tid',
-          ),
-      ),
-      'module' => 'taxonomy',
-      'settings' => array(
-          'allowed_values' => array(
-              0 => array(
-                  'vocabulary' => 'city',
-                  'parent' => '0',
-              ),
-          ),
-          'options_list_callback' => 'i18n_taxonomy_allowed_values',
-      ),
-      'type' => 'taxonomy_term_reference',
-  );
-
   $fields['field_description'] = array(
       'cardinality' => '1',
       'entity_types' => array(),

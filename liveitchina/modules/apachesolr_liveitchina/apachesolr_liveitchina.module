@@ -76,15 +76,6 @@ function apachesolr_liveitchina_facetapi_facet_info(array $searcher_info) {
     'map callback' => 'facetapi_map_taxonomy_terms',
     'default widget' => 'facetapi_checkbox_links',
   );
-  $facets['im_field_city'] = array(
-    'label' => t('Location'),
-    'description' => t('Filter by location.'),
-    'field' => 'im_field_city',
-    'field alias' => 'city',
-    'field api name' => 'im_field_city',
-    'map callback' => 'facetapi_map_taxonomy_terms',
-    'default widget' => 'facetapi_checkbox_links',
-  );
   $facets['filter_area'] = array(
     'label' => t('Division'),
     'description' => t('Filter by Division.'),

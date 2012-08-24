@@ -416,10 +416,6 @@ function liveitchina_account_block() {
     //$first_name = field_get_items('profile2', $user_data, 'field_user_first_name');
     $data['user_full_name'] = '';//$first_name[0]['value'];
 
-    if (isset($user_data->field_city['und'][0]['tid'])){
-      $user_location = taxonomy_term_load($user_data->field_city['und'][0]['tid']);
-      $data['user_location'] = ($user_location)?$user_location->name:'';
-    }
     $pcp_percentage = pcp_get_complete_percentage_data('profile2', 'user', $user);
     $data['pcp_percentage'] = theme('pcp_template', $pcp_percentage);
     $menu[] = array(

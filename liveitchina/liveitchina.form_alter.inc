@@ -31,16 +31,6 @@ function liveitchina_form_search_block_form_alter(&$form, &$form_state, $form_id
     // We use the presence of filter query params as a flag for the retain filters checkbox.
     $q = $query->getParam('q');
     $default_search = $q;
-    /*
-    print_r($query);exit;
-    $default_location = $query->getParam('fq');
-    foreach($default_location as $loc){
-      list($lic_filter, $lic_value) = explode(':', $loc);
-      if ($lic_filter == 'im_field_city'){
-        $opt_query = array ('f' => array('city:' . $lic_value));
-        $default['location'] = $opt_query;
-      }
-    }//*/
   }
   
   $form['search_block_form']['#prefix'] = '<div class="grid-8 omega">';

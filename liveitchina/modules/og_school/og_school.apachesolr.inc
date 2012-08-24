@@ -15,7 +15,6 @@ function og_school_apachesolr_query_alter($query) {
       $query->addParam('fl', 'fs_rating');
       $query->addParam('fl', 'ts_summary');
       $query->addParam('fl', 'sm_field_price');
-      $query->addParam('fl', 'im_field_city');
       $query->addParam('fl', 'im_field_district');
       $query->addParam('fl', 'zs_teaches');
       $query->addParam('fl', 'zs_image');
