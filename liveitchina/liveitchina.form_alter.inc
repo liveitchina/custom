@@ -51,7 +51,7 @@ function liveitchina_form_search_block_form_alter(&$form, &$form_state, $form_id
     '#title_display' => 'before',
     '#type' => 'textfield',
     //'#size' => 40,
-    '#default_value' => $default['location'],
+    '#default_value' => urldecode($default['location']),
   );
   $form['actions']['#attributes']['class'] = array('grid-2 omega');
   $form['actions']['#attributes']['id'] = array('edit-actions1');
