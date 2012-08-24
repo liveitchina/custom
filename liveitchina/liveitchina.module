@@ -254,30 +254,34 @@ function liveitchina_field_formatter_view ($entity_type, $entity, $field, $insta
  */
 function liveitchina_block_info() {
   $blocks['liveitchina_footer'] = array(
-    'info' => t('Liveitchina Footer'), //The name that will appear in the block list.
-    'cache' => DRUPAL_CACHE_PER_ROLE, //Default
+    'info' => t('Liveitchina Footer'),
+    'cache' => DRUPAL_CACHE_PER_ROLE,
   );
   $blocks['account'] = array(
-    'info' => t('My Account'), //The name that will appear in the block list.
-    'cache' => DRUPAL_NO_CACHE, //No cache
+    'info' => t('My Account'),
+    'cache' => DRUPAL_NO_CACHE,
   );
   $blocks['account_menu'] = array(
-    'info' => t('Account Menu'), //The name that will appear in the block list.
-    'cache' => DRUPAL_NO_CACHE, //No cache
+    'info' => t('Account Menu'),
+    'cache' => DRUPAL_NO_CACHE,
   );
   $blocks['login_user'] = array(
-    'info' => t('Login Module Block'),//The name that will appear in the block list.
-    'cache' => DRUPAL_NO_CACHE, //No cache
+    'info' => t('Login Module Block'),
+    'cache' => DRUPAL_NO_CACHE,
   );
   $blocks['todays_promotion'] = array(
     'info' => t('Featured promotions'),
-    'cache' => DRUPAL_CACHE_PER_PAGE, //No cache
+    'cache' => DRUPAL_CACHE_PER_PAGE,
   );
-  $block['share_this'] = array(
+  $blocks['share_this'] = array(
     'info' => t('Sharethis Footer'),
     'cache'=> DRUPAL_CACHE_PER_PAGE,
   );
-  
+  $blocks['lic_search_info'] = array(
+    'info' => t('Current search information'),
+    'cache' => DRUPAL_NO_CACHE,
+  );
+
   return $blocks;
 }
 
@@ -309,7 +313,7 @@ function liveitchina_theme($existing, $type, $theme, $path) {
 function liveitchina_block_view($delta = '') {
 
   switch ($delta) {
-    case 'liveitchina_footer':      
+    case 'liveitchina_footer':
       $block['content'] = t('Copyright &copy; 2011 Live it China. All Rights Reserved.');//print_r($footer_menu, true);//render($footer_menu);
       break;
     case 'account':
@@ -338,6 +342,23 @@ function liveitchina_block_view($delta = '') {
       <script type="text/javascript">var switchTo5x=true;</script>
       <script type="text/javascript" src="http://w.sharethis.com/button/buttons.js"></script>
       <script type="text/javascript">stLight.options({publisher:"fc9c6124-783e-462c-b6f2-946cadffd8a3"});</script>';
+      break;
+    case 'lic_search_info':
+      //$block['subject'] = t('Searching...');
+      $block['content'] = '';
+      $search_page = apachesolr_search_page_load('core_search');
+      $apachesolr_has_searched = apachesolr_has_searched($search_page->env_id);
+      $searcher = NULL;
+
+      if ($apachesolr_has_searched) {
+        $query = apachesolr_current_query($search_page->env_id);
+        $searcher = $query->getSearcher();
+        $q = $query->getParam('q');
+        $block['content'] = t('Browsing') . ' "<strong>' . $q . '</strong>"';
+        if (isset($_GET['loc'])){
+          $block['content'] .= ' ' . t('in') . ' <strong>'. $_GET['loc'] . '</strong>';
+        }
+      }
       break;
   }
 

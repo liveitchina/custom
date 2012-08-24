@@ -325,7 +325,8 @@ function facetapi_select_form_submit($form, &$form_state) {
   $form_state['redirect'] = array($_GET['q'], $param);
 }
 
-function _apachesolr_liveitchina_index_map($item, &document){
+
+function _apachesolr_liveitchina_index_map($item, &$document){
   $reverseGeocode = unserialize( $item );
   if (is_array($reverseGeocode)){
     foreach ($reverseGeocode as $geoInd=>$geoValue) {

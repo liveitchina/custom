@@ -15,10 +15,8 @@ function liveitchina_form_reply_add_form_alter(&$form, &$form_state, $form_id) {
     '#weight'=> -1,
   );
 }
-//*
+
 function liveitchina_form_search_block_form_alter(&$form, &$form_state, $form_id) {
-  //print_r($form); exit;
-  //unset($form['search_block_form']);
   $search_page = apachesolr_search_page_load('core_search');
   $apachesolr_has_searched = apachesolr_has_searched($search_page->env_id);
   $searcher = NULL;
@@ -28,7 +26,6 @@ function liveitchina_form_search_block_form_alter(&$form, &$form_state, $form_id
   if ($apachesolr_has_searched) {
     $query = apachesolr_current_query($search_page->env_id);
     $searcher = $query->getSearcher();
-    // We use the presence of filter query params as a flag for the retain filters checkbox.
     $q = $query->getParam('q');
     $default_search = $q;
   }
@@ -60,64 +57,6 @@ function liveitchina_form_search_block_form_alter(&$form, &$form_state, $form_id
   $form['actions']['#attributes']['id'] = array('edit-actions1');
   $form['actions']['submit']['#value'] = t('Go');
   $form['#submit'] = array('liveitchina_search_box_form_submit');
-/*
-  $form['search_form_key'] = array(
-    '#type' => 'container',
-    '#attributes' => array(
-      'class' => array(
-        'grid-8 omega'
-      ),
-    )
-  );
-  $form['search_form_key']['search_block_form'] = array(
-    '#title' => t('Search').' <span>('.t('e.g. Mandarin School, Tutor, learn Cantonese').')</span>',
-    '#title_display' => 'before',
-    '#type' => 'textfield',
-    '#size' => 40,
-    '#default_value' => $default_search,
-    '#attributes' => array(
-      'title' => t('Enter the terms you wish to search for.'),
-      'onblur' => "if (this.value == '') {this.value = '" . t(DEFAULT_SEARCH_TERM) . "';jQuery(this).css('color','#b9b9b9');}",
-      'onfocus' => "if (this.value == '" . t(DEFAULT_SEARCH_TERM) . "') {this.value = '';}jQuery(this).css('color','#7b7a7a !important');",
-    )
-  );
-  $form['search_form_location'] = array(
-    '#type' => 'container',
-    '#attributes' => array(
-      'class' => array(
-        'grid-4 omega'
-      ),
-    )
-  );
-  $form['search_form_location']['location'] = array(
-    '#title' => t('Choose your Location') ,
-    '#title_display' => 'before',
-    '#type' => 'select',
-    '#multiple' => FALSE,
-    '#options' => _liveitchina_location(),
-    '#default_value' => $default['location'],
-    '#attributes' => array(
-      'title' => t('Choose your Location'),
-    )
-  );
-  
-  $form['actions']['city-add']['#markup'] = ' <span id ="city-add">' . 
-                                            t('Add Your ') . 
-                                            l(t('City'),'contact-us',array('query'=>array('city'=>'X'))) . '?</span>';
-  $form['actions']['city-add']['#weight'] = '-500';
-  
-  $form['actions']['#attributes'] = array(
-    'class' => array(
-      'grid-2 omega'
-    ),
-    'id' => array(
-      'edit-actions1'
-    )
-  );
-  
-  $form['actions']['submit']['#value'] = t('Go');
-  $form['#submit'] = array('liveitchina_search_box_form_submit');
-  //*/
 }
 //*/
 /*
