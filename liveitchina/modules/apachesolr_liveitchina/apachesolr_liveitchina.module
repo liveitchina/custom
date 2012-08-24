@@ -96,7 +96,7 @@ function apachesolr_liveitchina_facetapi_facet_info(array $searcher_info) {
   $facets['map_location'] = array(
     'label' => t('Map Location'),
     'description' => t('Filter by Location (Hardcoded)'),
-    'field alias' => 'distance',
+    'field alias' => 'loc',
     'field api name' => FALSE,
     'alter callbacks' => array('facetapi_map_liveitchina_location'),
     'default widget' => 'facetapi_checkbox_links',

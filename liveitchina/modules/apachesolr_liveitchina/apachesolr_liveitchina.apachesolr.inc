@@ -15,11 +15,9 @@ function apachesolr_liveitchina_apachesolr_query_alter($query) {
     if ($dist = $query->getFilters('distance')){
       $query->removeFilter('distance');
       if ($coordinates = _liveitchina_get_map($location)){
-        //print_r($coordinates);exit;
         $coordinate = $coordinates['lat'].','.$coordinates['lon'];
         $distance = str_replace(array('(',')'),'', $dist[0]['#value']);
         $query->addParam('fq', "{!geofilt sfield=coordinates pt=$coordinate d=$distance}");
-        //print_r($query);exit;
       }
     }
   }
