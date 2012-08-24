@@ -85,15 +85,6 @@ function apachesolr_liveitchina_facetapi_facet_info(array $searcher_info) {
     'map callback' => 'facetapi_map_taxonomy_terms',
     'default widget' => 'facetapi_checkbox_links',
   );
-  $facets['im_field_district'] = array(
-    'label' => t('District'),
-    'description' => t('Filter by District.'),
-    'field' => 'im_field_district',
-    'field alias' => 'district',
-    'field api name' => 'im_field_district',
-    'map callback' => 'facetapi_map_taxonomy_terms',
-    'default widget' => 'facetapi_checkbox_links',
-  );
   $facets['bundle'] = array(
     'label' => t('Method'),
     'description' => t('Filter by Method.'),

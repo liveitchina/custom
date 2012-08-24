@@ -82,9 +82,6 @@ function profile2_liveitchina_apachesolr_index_document_build_profile2(ApacheSol
   
   //index TERMIDs from user
   $fields = array(
-    'field_district'=> array(
-      'source'=>'tid'
-    ),
     'field_user_nationality'=> array(
       'source'=>'tid'
     ),

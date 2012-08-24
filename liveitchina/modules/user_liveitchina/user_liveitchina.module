@@ -164,12 +164,6 @@ function user_liveitchina_form_profile2_edit_user_form_alter(&$form, &$form_stat
     $area_selected = key($area_options);
   }
 
-  $form['profile_user']['field_district']['#access'] = FALSE;
-  $form['profile_user']['field_district']['#prefix'] = '<div id="dropdown-select-district-replace">';
-  $form['profile_user']['field_district']['#suffix'] = '</div>';
-  $form['profile_user']['field_district']['#attributes']['class'][] = 'enabled-for-ajax';
-  $form['profile_user']['field_district']['und']['#options'] = _user_liveitchina_district_dropdown_options($area_selected, 'district');
-
   $form['profile_user']['field_map_api']['#access'] = FALSE;
 }
 
@@ -198,17 +192,6 @@ function _user_liveitchina_district_dropdown_options($key = '', $text = 'city') 
     return $options;
   }
   
-}
-/*
-function liveitchina_dependent_dropdown_city_callback($form, &$form_state) {
-  $keys = array_keys($form);
-  $profile_type = array_shift($keys);
-  return $form[$profile_type]['field_district']['und'];
-}
-*/
-
-function _liveitchina_dependent_dropdown_area_callback($form, &$form_state) {
-  return $form['profile_user']['field_district'];
 }
 
 /*

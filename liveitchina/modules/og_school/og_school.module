@@ -44,11 +44,6 @@ function og_school_form_school_node_form_alter(&$form, &$form_state, $form_id) {
     $area_selected = key($area_options);
   }
 
-  $form['field_district']['#prefix'] = '<div id="dropdown-select-district-replace">';
-  $form['field_district']['#suffix'] = '</div>';
-  $form['field_district']['#attributes']['class'][] = 'enabled-for-ajax';
-  $form['field_district']['und']['#options'] = _og_school_district_dropdown_options($area_selected, 'district');
-
   $form['#attached']['js'] = array(
     drupal_get_path('module','og_school') . '/js/others_hide.js'=> array(
       'type'=>'file',
@@ -118,10 +113,6 @@ function _og_school_district_dropdown_options($key = '', $text = 'city') {
     }
     return $options;
   }
-}
-
-function _og_school_dependent_dropdown_area_callback($form, &$form_state) {
-  return $form['field_district'];
 }
 
 /**
@@ -236,12 +227,6 @@ function og_school_preprocess_search_result(&$vars) {
         $vars['cost'] = apachesolr_liveitchina_facetapi_cost_bundle($fields['sm_field_price']);
         $vars['cost_value'] = $vars['cost'][$fields['sm_field_price'][0]];
       }
-
-      if (isset($fields['im_field_district'])){
-        $vars['district'] = facetapi_map_taxonomy_terms($fields['im_field_district']);
-        $vars['district_name'] = implode(', ', $vars['district']);
-      }
-
       $entities = entity_load($fields['entity_type'], array($fields['entity_id']));
       $field = array(
        'entity_type' => $fields['entity_type'],
@@ -369,7 +354,7 @@ function _og_school_school_title($field){
   $entity = $field['entity'];
   $node = node_load($entity->nid);
   $city['id'] = '';
-  $district['id'] = _liveitchina_field_get_field('node', $node, 'field_district', 'tid');
+  $district['id'] = '';
   $city['name'] = facetapi_map_taxonomy_terms(array($city['id']));
   $city['display'] = isset($city['name'][$city['id']]) ? $city['name'][$city['id']] : '';
   $district['name'] = facetapi_map_taxonomy_terms(array($district['id']));

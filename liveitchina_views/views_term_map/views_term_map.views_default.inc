@@ -77,8 +77,8 @@ function views_term_map_views_default_views() {
   $handler->display->display_options['fields']['field_map']['click_sort_column'] = 'wkt';
   $handler->display->display_options['fields']['field_map']['type'] = 'geofield_openlayers';
   $handler->display->display_options['fields']['field_map']['settings'] = array(
-  		'map_preset' => 'liveitchina_geofield_widget_map',
-  		'data' => 'full',
+    'map_preset' => 'liveitchina_geofield_widget_map',
+    'data' => 'full',
   );
   $handler->display->display_options['fields']['field_map']['field_api_classes'] = 0;
   /* Contextual filter: Taxonomy term: Term ID */
@@ -89,10 +89,6 @@ function views_term_map_views_default_views() {
   $handler->display->display_options['arguments']['tid']['default_argument_type'] = 'php';
   $handler->display->display_options['arguments']['tid']['default_argument_options']['code'] = '
   $field_values = array();
-  $load = profile2_load_by_user(arg(1), \'user\');
-  if (is_object($load)){
-  $field_values = field_get_items(\'profile2\', $load, \'field_district\');
-  }
   $district =  array_shift($field_values);
   //drupal_set_message(print_r($district, true));
   return $district[\'tid\'];';
@@ -107,22 +103,22 @@ function views_term_map_views_default_views() {
   $handler->display->display_options['filters']['machine_name']['table'] = 'taxonomy_vocabulary';
   $handler->display->display_options['filters']['machine_name']['field'] = 'machine_name';
   $handler->display->display_options['filters']['machine_name']['value'] = array(
-  		'city' => 'city',
+    'city' => 'city',
   );
   
   /* Display: Block */
   $handler = $view->new_display('block', 'Block', 'block_district');
   $translatables['term_map'] = array(
-  		t('Master'),
-  		t('Term Map'),
-  		t('more'),
-  		t('Apply'),
-  		t('Reset'),
-  		t('Sort by'),
-  		t('Asc'),
-  		t('Desc'),
-  		t('All'),
-  		t('Block'),
+    t('Master'),
+    t('Term Map'),
+    t('more'),
+    t('Apply'),
+    t('Reset'),
+    t('Sort by'),
+    t('Asc'),
+    t('Desc'),
+    t('All'),
+    t('Block'),
   );
   
 
