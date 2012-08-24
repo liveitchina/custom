@@ -360,7 +360,7 @@ function liveitchina_block_view($delta = '') {
         $q = $query->getParam('q');
         $block['content'] = t('Browsing') . ' "<strong>' . $q . '</strong>"';
         if (isset($_GET['loc'])){
-          $block['content'] .= ' ' . t('in') . ' <strong>'. $_GET['loc'] . '</strong>';
+          $block['content'] .= ' ' . t('in') . ' <strong>'. urldecode($_GET['loc']) . '</strong>';
         }
       }
       break;
