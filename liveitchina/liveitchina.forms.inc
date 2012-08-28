@@ -2,45 +2,20 @@
 /**
  * Page callback for the two user
  */
-function liveitchina_user_connectivity_form($form, &$form_state, $requestee, $relationship){
-  //$form['user']['#markup'] = 'Here you will find the greatest tools for mutual learning with your Tutor / Exchange Partner. Keep Tuned!';
-  //print_r($form_state);
+function liveitchina_user_connectivity_form($requestee, $relationship){
   $recipients = array($requestee);
-  $subject = 'testing subject';
-  //print_r($recipients);
   module_load_include('pages.inc','privatemsg');
-  $form = drupal_get_form('privatemsg_new',$recipients,$subject);
-  drupal_set_title('My Tutor/Exchange Partner');
-  $form['recipient']['#input'] = false;
-  /*
-  $form = array('form_title' => array('#markup' => '<div class = "block-title-highlight"><div> <h7>Here you will find the greatest tools for mutual learning with your Tutor / Exchange Partner.</h7></div><div><h7> Stay Tuned!</h7></div></div>'),
-                        'field_subject' => array('#type' => 'textfield',
-                                                 '#title' => t('Subject'),
-                                                 '#weightl' => '100',
-                                                 '#required' => FALSE,
-                                                ),
-                        'field_conversation' => array('#type' => 'text_format',
-                                                 '#format'      => 'plain_text',
-                                                 '#rows'        => '6',
-                                                 '#resizable'   => '0',
-                                                 '#weight' => '200',
-                                                 '#required' => FALSE,
-                                                ),
-                        );
-  $form['submit'] = array( '#type' => 'submit' ,
-                           '#value' => 'Submit',
-                           '#prefix' => '<div class="grid-3 alpha omega">',
-                           '#suffix' => '</div>',
-                           '#weight' => '1100',
-  );
   
-  $form['availability'] = array( '#type' => 'submit' ,
-                             '#value' => t('See Availability'),
-                             '#prefix' => '<div class="grid-3 alpha omega">',
-                             '#suffix' => '</div>',
-                             '#weight' => '1000',
-  );
-  //*/
+  $form = drupal_get_form('privatemsg_new',$recipients,'');
+  
+  $form['recipient']['#input'] = false;
+  $form['recipient']['#prefix'] = '<div class = "block-remove-recipient" style="display:none">';
+  $form['recipient']['#suffix'] = '</div>';
+
+  $form['reply']['#markup'] = '<div class = "block-title-highlight"><div> <h7>Here you will find the greatest tools for mutual learning with your Tutor / Exchange Partner.</h7></div><div><h7> Stay Tuned!</h7></div></div>';
+  $form['reply']['#weight'] = '-100';
+  
+  drupal_set_title('My Tutor/Exchange Partner');
   //print_r($form);
   return $form;
 }

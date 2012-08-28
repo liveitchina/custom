@@ -38,6 +38,7 @@ function liveitchina_menu() {
     'page arguments' => array(1, 3),
   );
   $items['user/connectivity/%user/%'] = array(
+    /*
     'title' => 'My Tutor / Exchange Partner',//'My Relationship',
     //'title callback' => 'liveitchina_relationship_name',
     //'title arguments' => array('user_relationships'),
@@ -46,6 +47,13 @@ function liveitchina_menu() {
     'access callback' => 'user_is_logged_in',//TRUE,
     'page callback' => 'drupal_get_form',
     'page arguments' => array('liveitchina_user_connectivity_form', 2, 3),
+    */
+    'type' => MENU_CALLBACK,
+    'file' => 'liveitchina.forms.inc',
+    'page callback'      => 'liveitchina_user_connectivity_form',//'drupal_get_form',
+    'page arguments' => array(2, 3),//'apachesolr_settings', 1),
+    'access callback' => 'user_is_logged_in',
+    'title' => 'My Tutor / Exchange Partner',
   );
   //*
   $items['connect/%user/request/%/%ctools_js'] = array(
