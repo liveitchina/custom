@@ -230,6 +230,18 @@ function og_school_preprocess_search_result(&$vars) {
         $mapdetail = $fields['zs_mapresult'];
         $vars['city_name'] = _liveitchina_check_map_address( $mapdetail );
       }
+      elseif(isset($fields['ss_geo_wkt'])) {
+        $start = strpos($fields['ss_geo_wkt'],'(')+1; //adjustment
+        $end = strpos($fields['ss_geo_wkt'],')')-7; //remove POINT (
+        $location = substr($fields['ss_geo_wkt'], $start, $end);
+        $location = str_replace(' ', ',', $location);
+        $location = liveitchina_reverse_geocode($location);
+        
+        if (is_array($location)){
+          $location = _liveitchina_check_map_address($location);
+          $vars['city_name'] = print_r($location, true);// . '.........' . $start . '|'. $end. '|'. $fields['ss_geo_wkt'];
+        }
+      }
 
       $vars['actions'] = _og_school_ds_school_search($field);
     break;

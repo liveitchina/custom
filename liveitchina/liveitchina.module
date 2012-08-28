@@ -1226,7 +1226,7 @@ function _liveitchina_retrieve_map_address($type, $source){
   elseif ($address = field_get_items($type, $source, 'field_location')){
     $latlng = $address[0]['lat'] . ',' . $address[0]['lat'];
     $geoLocation = liveitchina_reverse_geocode($latlng);
-    $sGeoLocation = serialize($geoLocation);
+    $sGeoLocation = $geoLocation;
     $data = _liveitchina_check_map_address($sGeoLocation);
   }
 
@@ -1258,13 +1258,16 @@ function _liveitchina_check_map_address($mapdetail){
     'floor'=>'',
     'room'=>'',
   );
-  $txtMapdetail = unserialize($mapdetail);
+  $txtMapdetail = @unserialize($mapdetail);
+  if ($txtMapdetail === FALSE){
+    $txtMapdetail = $mapdetail;
+  }
   $ret = '';
   if ($txtMapdetail){
     if (isset($txtMapdetail['sublocality'])){
       $ret = $txtMapdetail['locality'] . ', ' . $txtMapdetail['sublocality'];
     }
-    elseif(isset($txtMapdetail['sublocality'])) {
+    elseif(isset($txtMapdetail['locality'])) {
       $ret = $txtMapdetail['country'] . ', ' . $txtMapdetail['locality'];
     }
     else {

@@ -9,6 +9,7 @@ function og_school_apachesolr_query_alter($query) {
       $query->addFilter('bundle', 'school');
     case 'site':
       $query->addParam('fl', 'zs_mapresult');
+      $query->addParam('fl', 'ss_geo_wkt');
       $query->addParam('fl', 'im_field_lang_offered');
       $query->addParam('fl', 'im_field_lang_others');
       $query->addParam('fl', 'is_logo');
@@ -128,6 +129,7 @@ function og_school_apachesolr_index_document_build_node(ApacheSolrDocument $docu
         $document->addField('zs_image', $school_logo->uri);
         $document->addField('is_logo', $school_logo->fid);
       }
+
     break;
   }
 }

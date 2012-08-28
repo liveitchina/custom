@@ -18,6 +18,13 @@ function apachesolr_liveitchina_apachesolr_query_alter($query) {
         $coordinate = $coordinates['lat'].','.$coordinates['lon'];
         $distance = str_replace(array('(',')'),'', $dist[0]['#value']);
         $query->addParam('fq', "{!geofilt sfield=coordinates pt=$coordinate d=$distance}");
+        /*
+        $query->addParam('fq','{!geofilt}' );
+   $query->addParam('sfield','coordinates' );
+   $query->addParam('pt', '21.346617,-82.098747');
+   $query->addParam('d', 5);
+   $query->addParam('sort', 'geodist() asc');
+         */
       }
     }
   }
