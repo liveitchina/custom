@@ -320,10 +320,10 @@ function _profile2_liveitchina_ds_field_user_profile_name($field){
   $entity = $field['entity'];
   $user = user_load($entity->uid);
   $profile_user = profile2_load_by_user($entity->uid, 'user');
-  $city_name = '';
+  $city_name = _liveitchina_retrieve_map_address($field['entity_type'], $profile_user);
   return '<h2 class="block-title">'.
     l($user->realname, 'profile-'.$entity->type.'/'. $entity->uid) .
-    '<span class="field-city"> ('.$city_name[$city].')</span>'.
+    '<span class="field-city"> ('.$city_name.')</span>'.
     '</h2>';
 }
 
